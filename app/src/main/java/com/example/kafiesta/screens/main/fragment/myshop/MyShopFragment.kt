@@ -55,9 +55,7 @@ class MyShopFragment : Fragment() {
     }
 
     private fun initListener() {
-        binding.buttonLogout.setOnClickListener {
 
-        }
     }
 
     private fun initLiveData() {

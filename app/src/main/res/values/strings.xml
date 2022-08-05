@@ -8,6 +8,11 @@
     <string name="login_button_login">Login</string>
     <string name="login_button_logout">Logout</string>
     <string name="start">Start</string>
+    <string name="login_username_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="login_something_went_wrong">Invalid Email or Password</string>
+    <string name="login_empty_username_email">Empty username/email</string>
+    <string name="login_empty_password">Empty password</string>
 
     <!--    Fragment Title-->
     <string name="fragment_title_my_shop">My Shop</string>
@@ -25,4 +30,12 @@
 
     <!--    Error Message -->
     <string name="error_message_illegal_argument_exception">Unable to construct action bar</string>
+
+    <!--    Actions -->
+    <string name="action_label_login">login</string>
+
+    <!--    Check Permission -->
+    <string name="permission_denied_warning">Some of your permission is permanently denied. Please allow it before proceeding</string>
+    <string name="permission_warning">All permissions must be allow in order to work the app properly</string>
+
 </resources>

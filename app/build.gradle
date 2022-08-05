@@ -109,4 +109,7 @@ dependencies {
 
     // Logging for data
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    //Dexter for permissions
+    implementation 'com.karumi:dexter:6.0.0'
 }

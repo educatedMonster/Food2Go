@@ -1,5 +1,6 @@
 package com.example.kafiesta.network
 
+import com.example.kafiesta.BuildConfig
 import com.example.kafiesta.constants.ServerConst.API_SERVER_URL
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -17,7 +18,7 @@ interface AppService {
     @POST("login")
     fun loginAsync(
         @PartMap params: HashMap<String, RequestBody>,
-    ): Deferred<UserResponse>
+    ): Deferred<UserBaseNetwork>
 
     @GET("auth/logout")
     fun onLogoutAsync(
@@ -49,8 +50,12 @@ object AppNetwork {
         .setLenient()
         .create()
 
-    private val interceptor = HttpLoggingInterceptor()
-        .setLevel(HttpLoggingInterceptor.Level.BODY)
+    private val interceptor = HttpLoggingInterceptor().apply {
+        level = if(BuildConfig.DEBUG)
+            HttpLoggingInterceptor.Level.BODY
+        else
+            HttpLoggingInterceptor.Level.NONE
+    }
 
     private val client = OkHttpClient.Builder()
         .writeTimeout(30, java.util.concurrent.TimeUnit.MINUTES)

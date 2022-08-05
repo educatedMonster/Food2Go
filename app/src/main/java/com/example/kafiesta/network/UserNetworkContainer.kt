@@ -1,10 +1,23 @@
 package com.example.kafiesta.network
 
 import com.example.kafiesta.domain.ProfileDomain
+import com.example.kafiesta.domain.DataDomain
 import com.example.kafiesta.domain.UserDomain
 import com.google.gson.annotations.SerializedName
 
-data class UserResponse(
+data class UserBaseNetwork (
+    @SerializedName("status")
+    val status: String,
+
+    @SerializedName("data")
+    val data: Data,
+
+    @SerializedName("message")
+    val message: String
+)
+
+data class Data(
+    @SerializedName("token")
     val token: String,
 
     @SerializedName("token_type")
@@ -13,11 +26,13 @@ data class UserResponse(
     @SerializedName("expires_in")
     val expiresIn: Long,
 
-    val profile: Profile,
+    @SerializedName("profile")
+    val profile: Profile
 )
 
 
 data class Profile(
+    @SerializedName("id")
     val id: Long,
 
     @SerializedName("first_name")
@@ -39,8 +54,16 @@ data class Profile(
     val userInformations: Any? = null,
 )
 
-fun UserResponse.asDomainModel(): UserDomain {
+fun UserBaseNetwork.asDomainModel(): UserDomain {
     return UserDomain(
+        status = status,
+        data = data,
+        message = message,
+    )
+}
+
+fun Data.asDomainModel(): DataDomain {
+    return DataDomain(
         token = token,
         tokenType = tokenType,
         expiresIn = expiresIn,

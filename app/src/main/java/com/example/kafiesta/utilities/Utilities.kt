@@ -1,5 +1,6 @@
 package com.example.kafiesta.utilities
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.view.View
@@ -8,6 +9,13 @@ import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
+import com.example.kafiesta.R
+import com.example.kafiesta.utilities.extensions.showToast
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 
 fun setFullscreen(activity: Activity) {
     activity.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -42,4 +50,35 @@ fun shakeView(view: View, duration: Int, offset: Int): View {
     anim.repeatCount = 5
     view.startAnimation(anim)
     return view
+}
+
+/**
+ * In this function we will need to initialize the permissions needed to this app in order to used it by the user
+ *
+ * @param activity we need the activity class here to
+ */
+fun initMultiplePermission(activity: Activity) {
+    Dexter.withActivity(activity)
+        .withPermissions(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ).withListener(object :
+            MultiplePermissionsListener {
+            override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+                if (!report.areAllPermissionsGranted()) {
+                    if (report.isAnyPermissionPermanentlyDenied) {
+                        activity.showToast(activity.getString(R.string.permission_denied_warning))
+                    } else {
+                        activity.showToast(activity.getString(R.string.permission_warning))
+                    }
+                }
+            }
+
+            override fun onPermissionRationaleShouldBeShown(
+                permissions: List<PermissionRequest>,
+                token: PermissionToken
+            ) {
+                token.continuePermissionRequest()
+            }
+        }).check()
 }

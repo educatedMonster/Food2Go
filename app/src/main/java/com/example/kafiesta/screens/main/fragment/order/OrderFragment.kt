@@ -56,9 +56,7 @@ class OrderFragment : Fragment() {
     }
 
     private fun initListener() {
-        binding.buttonLogout.setOnClickListener {
 
-        }
     }
 
     private fun initLiveData() {

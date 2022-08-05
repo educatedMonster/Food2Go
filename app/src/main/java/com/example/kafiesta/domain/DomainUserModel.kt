@@ -1,8 +1,14 @@
 package com.example.kafiesta.domain
 
-import com.google.gson.JsonObject
+import com.example.kafiesta.network.Data
 
 data class UserDomain(
+    val status: String,
+    val data: Data,
+    val message: String,
+)
+
+data class DataDomain(
     val token: String,
     val tokenType: String,
     val expiresIn: Long,

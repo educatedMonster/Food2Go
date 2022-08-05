@@ -19,13 +19,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
     private val loginRepository = LoginRepository(SharedPrefs(getSecurePrefs(application)))
 
-    val userDomain = loginRepository.networkUserResponse
+    val userDomain = loginRepository.networkDataResponse
     val isLoading = loginRepository.isLoading
 
-    fun login(username: String, password: String) {
+    fun login(email: String, password: String) {
         viewModelScope.launch {
             try {
-                loginRepository.onLogin(username, password)
+                loginRepository.onLogin(email, password)
             } catch (e: IOException) {
                 Timber.d(e)
             }

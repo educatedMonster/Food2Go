@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.domain.ProfileDomain
-import com.example.kafiesta.domain.UserDomain
+import com.example.kafiesta.domain.DataDomain
 import com.example.kafiesta.network.AppNetwork
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.setBearer
@@ -39,7 +39,7 @@ class MainRepository (private val sharedPrefs: SharedPrefs) {
         }
     }
 
-    private fun saveToSecurePreference(userDomain: UserDomain, profileDomain: ProfileDomain) {
+    private fun saveToSecurePreference(dataDomain: DataDomain, profileDomain: ProfileDomain) {
         sharedPrefs.save(UserConst.ID, profileDomain.id)
         sharedPrefs.save(UserConst.FIRSTNAME, profileDomain.firstName)
         sharedPrefs.save(UserConst.LASTNAME, profileDomain.lastName)
@@ -47,7 +47,7 @@ class MainRepository (private val sharedPrefs: SharedPrefs) {
         sharedPrefs.save(UserConst.ADDRESS, profileDomain.status)
         sharedPrefs.save(UserConst.ROLE, profileDomain.role)
         sharedPrefs.save(UserConst.USERINFORMATION, profileDomain.userInformations ?: "")
-        sharedPrefs.save(UserConst.TOKEN, userDomain.token)
+        sharedPrefs.save(UserConst.TOKEN, dataDomain.token)
     }
 
     private fun clearSecurePreference() {
