@@ -1,4 +1,4 @@
-package com.trackerteer.taskmanagement.utilities.extensions
+package com.example.kafiesta.utilities.extensions
 
 import android.content.Context
 import android.net.ConnectivityManager

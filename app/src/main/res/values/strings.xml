@@ -2,4 +2,27 @@
     <string name="app_name">KaFiesta</string>
     <string name="image_content_description">Image Content</string>
     <string name="check_internet_connection">Please check your internet connection</string>
+
+
+    <!--    Login-->
+    <string name="login_button_login">Login</string>
+    <string name="login_button_logout">Logout</string>
+    <string name="start">Start</string>
+
+    <!--    Fragment Title-->
+    <string name="fragment_title_my_shop">My Shop</string>
+    <string name="fragment_title_home">Home</string>
+    <string name="fragment_title_order">Order</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navigation_title_my_shop">My Shop</string>
+    <string name="navigation_title_home">Home</string>
+    <string name="navigation_title_order">Order</string>
+    <string name="navigation_title_error">Error</string>
+
+    <!--    Activity Title-->
+    <string name="title_activity_main">MainActivity</string>
+    <string name="layout_toolbar_title_name">Title</string>
+
+    <!--    Error Message -->
+    <string name="error_message_illegal_argument_exception">Unable to construct action bar</string>
 </resources>

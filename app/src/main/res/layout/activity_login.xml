@@ -7,19 +7,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/custom_background_gradient_45deg"
-        tools:context=".screens.main.LoginActivity">
+        tools:context=".screens.login.LoginActivity">
 
 
-        <TextView
-            android:id="@+id/tv_text"
+        <FrameLayout
+            android:id="@+id/layout_button_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progress_loading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
 
 

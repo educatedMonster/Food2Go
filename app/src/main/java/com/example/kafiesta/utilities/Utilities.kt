@@ -17,8 +17,8 @@ fun setFullscreen(activity: Activity) {
     )
 }
 
-fun setToken(token: String): String {
-    return token
+fun setBearer(token: String): String {
+    return "bearer $token"
 }
 
 fun hideKeyboard(activity: Activity?) {

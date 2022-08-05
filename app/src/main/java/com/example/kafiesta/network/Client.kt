@@ -1,12 +1,15 @@
 package com.example.kafiesta.network
 
 import com.example.kafiesta.utilities.helpers.UploadRequestBody
+import com.google.gson.JsonElement
+import com.google.gson.JsonNull
+import com.google.gson.JsonObject
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONObject
 import java.io.File
-import java.util.HashMap
+
 
 fun toRequestBody(value: Long?): RequestBody {
     return RequestBody.create(MediaType.parse("text/plain"), (value!!).toString())

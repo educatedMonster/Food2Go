@@ -5,7 +5,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.ActivitySplashBinding
 import com.example.kafiesta.screens.BaseActivity
-import com.example.kafiesta.screens.main.LoginActivity
+import com.example.kafiesta.screens.login.LoginActivity
 
 class SplashActivity : BaseActivity() {
 

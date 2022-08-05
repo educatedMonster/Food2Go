@@ -1,22 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#FF5757</color>
+    <color name="colorPrimaryDark">#FBB63B</color>
+    <color name="colorAccent">#000</color>
 
-    <color name="colorSecondary">#55C2F8</color>
-    <color name="colorSecondaryVariant">#838384</color>
-    <color name="colorOnSecondary">#AAAAAA</color>
-
-    <!-- Theme 3 -->
-    <color name="strong_green_forest">#366b3e</color>
-    <color name="green_forest">#76e588</color>
-    <color name="light_green_forest">#a2d6ab</color>
+    <color name="colorSecondary">#366b3e</color>
+    <color name="colorSecondaryVariant">#21C1D6</color>
+    <color name="colorOnSecondary">#000</color>
 
     <!-- Global Colors - this can be use all themes -->
-    <color name="gray">#838384</color>
+    <color name="color_white">#FFF</color>
     <color name="light_gray">#ABABAB</color>
+    <color name="gray">#838384</color>
+    <color name="g_black">#33405f</color>
+    <color name="color_black">#000</color>
     <color name="green">#9ACE29</color>
-    <color name="orange">#FBB63B</color>
-    <color name="red">#FF5757</color>
+
+    <color name="transparent_white_percent_0">#00ffffff</color>
+    <color name="transparent_white_percent_5">#0Dffffff</color>
+    <color name="transparent_white_percent_10">#1Affffff</color>
+    <color name="transparent_white_percent_15">#26ffffff</color>
+    <color name="transparent_white_percent_20">#33ffffff</color>
+    <color name="transparent_white_percent_25">#40ffffff</color>
+    <color name="transparent_white_percent_30">#4Dffffff</color>
+    <color name="transparent_white_percent_35">#59ffffff</color>
+    <color name="transparent_white_percent_40">#66ffffff</color>
+    <color name="transparent_white_percent_45">#73ffffff</color>
+    <color name="transparent_white_percent_50">#80ffffff</color>
+    <color name="transparent_white_percent_55">#8Cffffff</color>
+    <color name="transparent_white_percent_60">#99ffffff</color>
+    <color name="transparent_white_percent_65">#A6ffffff</color>
+    <color name="transparent_white_percent_70">#B3ffffff</color>
+    <color name="transparent_white_percent_75">#BFffffff</color>
+    <color name="transparent_white_percent_80">#CCffffff</color>
+    <color name="transparent_white_percent_85">#D9ffffff</color>
+    <color name="transparent_white_percent_90">#E6ffffff</color>
+    <color name="transparent_white_percent_95">#F2ffffff</color>
+
+    <color name="shimmer_background">#dddddd</color>
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navi_my_shop"
+        android:title="My Shop"
+        android:icon="@drawable/ic_store_24" />
+
+    <item
+        android:id="@+id/nav_home"
+        android:title="Home"
+        android:icon="@drawable/ic_home_24" />
+
+    <item
+        android:id="@+id/nav_order"
+        android:title="Order"
+        android:icon="@drawable/ic_order_24" />
+</menu>

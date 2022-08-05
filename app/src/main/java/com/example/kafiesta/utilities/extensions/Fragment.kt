@@ -1,6 +1,9 @@
 package com.trackerteer.taskmanagement.utilities.extensions
 
 import androidx.fragment.app.Fragment
+import com.example.kafiesta.utilities.extensions.hasInternet
+import com.example.kafiesta.utilities.extensions.showToast
+import com.example.kafiesta.utilities.extensions.showToastLong
 
 fun Fragment.hasInternet(): Boolean = context!!.hasInternet()
 

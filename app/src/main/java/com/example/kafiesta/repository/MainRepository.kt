@@ -6,55 +6,36 @@ import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.domain.ProfileDomain
 import com.example.kafiesta.domain.UserDomain
 import com.example.kafiesta.network.AppNetwork
-import com.example.kafiesta.network.asDomainModel
-import com.example.kafiesta.network.paramsToRequestBody
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.setBearer
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
-class LoginRepository(private val sharedPrefs: SharedPrefs) {
-
-    private val _networkUserResponse = MutableLiveData<UserDomain>()
-    val networkUserResponse: LiveData<UserDomain> get() = _networkUserResponse
+class MainRepository (private val sharedPrefs: SharedPrefs) {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    suspend fun onLogin(username: String, password: String) {
+    suspend fun onLogout() {
         withContext(Dispatchers.IO) {
             _isLoading.postValue(true)
 
-            val params = HashMap<String, Any>()
-            params["email"] = username
-            params["password"] = password
-
-            val network = AppNetwork.service.loginAsync(
-                paramsToRequestBody(params)
+            val token = sharedPrefs.getString(UserConst.TOKEN)!!
+            val network =  AppNetwork.service.onLogoutAsync(
+                bearer = setBearer(token)
             ).await()
-            val a = network
-            Timber.d(Gson().toJson(network))
-            _networkUserResponse.postValue(network.asDomainModel())
-            saveToSecurePreference(network.asDomainModel(), network.profile.asDomainModel())
+//            Timber.d(Gson().toJson(network))
 
+            clearSecurePreference()
             _isLoading.postValue(false)
         }
-    }
 
-    suspend fun getUserId(userId: Int) {
-        withContext(Dispatchers.IO) {
-            val token = sharedPrefs.getString(UserConst.TOKEN)!!
-            val params = HashMap<String, Any>()
-            params["id"] = userId
-
-            val network = AppNetwork.service.getUserIdAsync(
-                bearer = setBearer(token),
-                userId = userId
-            ).await()
-            val a = network
-            Timber.d(Gson().toJson(network))
+        suspend fun onLogoutOffline() {
+            withContext(Dispatchers.IO) {
+                _isLoading.postValue(true)
+                clearSecurePreference()
+                _isLoading.postValue(true)
+            }
         }
     }
 
@@ -72,5 +53,4 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
     private fun clearSecurePreference() {
         sharedPrefs.clearAll()
     }
-
 }

@@ -22,19 +22,12 @@
     </style>
 
     <style name="AppTheme.Theme.GreenForest" parent="AppThemeMaterialComponents">
-        <item name="themeColorPrimary">@color/green_forest</item>
-        <item name="themeColorPrimaryDark">@color/strong_green_forest</item>
-        <item name="themeColorAccent">@color/gray</item>
-        <item name="themeColorLightPrimary">@color/light_green_forest</item>
-        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
-    </style>
-
-    <!--        https://stackoverflow.com/questions/30174042/how-to-switch-themes-night-mode-without-restarting-the-activity-->
-    <!--        How to switch themes without restarting the activity-->
-    <!-- This will set the fade in animation on all your activities by default -->
-    <style name="WindowAnimationTransition">
-        <item name="android:windowEnterAnimation">@anim/stay</item>
-        <item name="android:windowExitAnimation">@anim/stay</item>
+        <item name="themeColorPrimary">@color/colorSecondary</item>
+        <item name="themeColorPrimaryDark">@color/colorSecondaryVariant</item>
+        <item name="themeColorAccent">@color/colorOnSecondary</item>
+        <item name="themeColorLightPrimary">@color/color_white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 </resources>
