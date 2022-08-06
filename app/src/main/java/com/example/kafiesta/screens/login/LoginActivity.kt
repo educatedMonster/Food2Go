@@ -19,10 +19,8 @@ import timber.log.Timber
 
 class LoginActivity : BaseActivity() {
 
-    override val hideStatusBar: Boolean
-        get() = false
-    override val showBackButton: Boolean
-        get() = false
+    override val hideStatusBar: Boolean get() = false
+    override val showBackButton: Boolean get() = false
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var viewModel: LoginViewModel
@@ -103,19 +101,10 @@ class LoginActivity : BaseActivity() {
     private fun initLiveData() {
         //Observe `userDomain` live data from our LoginViewModel
         viewModel.userDomain.observe(this) { userDomain ->
-            //if user.message does not contains "successfully" that means user inputted wrong
-            //credentials or doesn't have a data on our server that needed to register first
-            if (!userDomain.message.contains("administrator")) {
-                showToast(userDomain.message)
-            }
-
             //if the user.status is true we can now proceed to the MainActivity activity
-            if (userDomain.message.matches("success".toRegex())) {
+            if (userDomain.status.matches("success".toRegex())) {
                 //proceedToActivity function can be found at BaseActivity.kt
                 proceedToActivity(MainActivity::class.java, true)
-            } else {
-                //setLoading function to false
-                viewModel.setLoading(false)
             }
         }
 
@@ -134,9 +123,9 @@ class LoginActivity : BaseActivity() {
             )
         }
 
-        //Observe `networkFormState` live data from our LoginViewModel
+        //Observe `networkFormStateLogin` live data from our LoginViewModel
         viewModel.networkFormState.observe(this) {
-            //it: NetworkFormState class
+            //it: NetworkFormStateLogin class
             if (it.serverError) {
                 Timber.d(it.message)
                 showToast(getString(R.string.login_something_went_wrong))
@@ -167,28 +156,28 @@ class LoginActivity : BaseActivity() {
     /**
      * In  this function will set the validation of the text view username and password given from our LoginViewModel
      *
-     * @param isInvalidUsername boolean to show the @invalidUsernameMessage data on text view error
-     * @param invalidUsernameMessage string data on text view error
+     * @param isInvalidEmail boolean to show the @invalidUsernameMessage data on text view error
+     * @param invalidEmailMessage string data on text view error
      * @param isInvalidPassword boolean to show the @invalidPasswordMessage data on text view error
      * @param invalidPasswordMessage string data on text view error
      */
     private fun setValidation(
-        isInvalidUsername: Boolean, invalidUsernameMessage: String,
-        isInvalidPassword: Boolean, invalidPasswordMessage: String
+        isInvalidEmail: Boolean, invalidEmailMessage: String,
+        isInvalidPassword: Boolean, invalidPasswordMessage: String,
     ) {
         binding.apply {
             //if both isInvalidUsername and isInvalidPassword are true
             //we will set an error given from @param invalidUsernameMessage and @param invalidPasswordMessage
             //from both text view textEditUser and textEditPassword
-            if (isInvalidUsername && isInvalidPassword) {
-                etEmail.error = invalidUsernameMessage
+            if (isInvalidEmail && isInvalidPassword) {
+                etEmail.error = invalidEmailMessage
                 etPassword.error = invalidPasswordMessage
             }
             //if isInvalidUsername is true
             //we will set an error text given from @param invalidUsernameMessage
             //to this text view textEditUser
-            else if (isInvalidUsername) {
-                etEmail.error = invalidUsernameMessage
+            else if (isInvalidEmail) {
+                etEmail.error = invalidEmailMessage
             }
             //if isInvalidPassword is true
             //we will set an error text given from @param invalidPasswordMessage
@@ -207,6 +196,7 @@ class LoginActivity : BaseActivity() {
         //Get the user name and password on this lines of code inputted by user
         val username = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
-        viewModel.validateLoginCredentials(this, username, password)
+        viewModel.validateLoginCredentials(this, "jadalmario.freelancer@gmail.com", "@Unknown0322")
+//        viewModel.validateLoginCredentials(this, username, password)
     }
 }

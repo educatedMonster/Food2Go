@@ -26,10 +26,39 @@
 
     <!--    Activity Title-->
     <string name="title_activity_main">MainActivity</string>
-    <string name="layout_toolbar_title_name">Title</string>
+    <string name="title_layout_toolbar_name">Toolbar Title</string>
+    <string name="title_activity_user_info">User Information</string>
+    <string name="title_activity_contact_info">Contact Information</string>
+    <string name="title_activity_shop_info">Shop Information</string>
+    <string name="title_activity_shop">My Shop</string>
+
+    <!--    Drawer Activity Title-->
+    <string name="title_nav_drawer_dashboard">Dashboard</string>
+    <string name="title_nav_drawer_profile">Profile</string>
+    <string name="title_nav_drawer_my_shop">My Shop</string>
+    <string name="title_nav_drawer_products">Products</string>
+    <string name="title_nav_drawer_inventory">Inventory</string>
+    <string name="title_nav_drawer_logout">Logout</string>
+    <string name="title_layout_nav_header_name">Kervin Jumar Lopez</string>
+    <string name="title_layout_nav_header_email">test@gmail.com</string>
+    <string name="title_layout_nav_header_role">Admin</string>
+
+    <!--    Activity -->
+    <string name="activity_profile_settings_upload">Upload</string>
+    <string name="activity_user_info_first_name">First Name</string>
+    <string name="activity_user_info_last_name">Last Name</string>
+    <string name="activity_user_info__email_address">Email address</string>
+    <string name="activity_user_info_update">Update</string>
+    <string name="activity_contact_info_address">Complete Address</string>
+    <string name="activity_contact_info_address_primary">Primary Contact</string>
+    <string name="activity_contact_info_address_secondary">Secondary Contact</string>
+    <string name="activity_shop_name">Shop Name</string>
+    <string name="activity_shop_address">Shop Complete Address</string>
+    <string name="activity_shop_contact">Shop Contact Number</string>
 
     <!--    Error Message -->
     <string name="error_message_illegal_argument_exception">Unable to construct action bar</string>
+    <string name="required">Required</string>
 
     <!--    Actions -->
     <string name="action_label_login">login</string>
@@ -37,5 +66,22 @@
     <!--    Check Permission -->
     <string name="permission_denied_warning">Some of your permission is permanently denied. Please allow it before proceeding</string>
     <string name="permission_warning">All permissions must be allow in order to work the app properly</string>
+
+    <!--    Navigation Drawer -->
+    <string name="nav_bar_open">Navigation Bar Open</string>
+    <string name="nav_bar_close">Navigation Bar Close</string>
+
+    <!--    Dialog -->
+    <string name="dialog_cancel_button">Cancel</string>
+    <string name="dialog_no_button">No</string>
+    <string name="dialog_yes_button">Yes</string>
+    <string name="main_activity_title_logout">Logout?</string>
+    <string name="main_activity_are_you_sure_you_want_to_logout">Are  you sure you want to logout?</string>
+    <string name="main_activity_button_yes">Yes</string>
+    <string name="main_activity_button_no">No</string>
+    <string name="main_activity_preparing_logout">Preparing to Logout</string>
+    <string name="profile_user_information">User Information</string>
+    <string name="profile_contact_information">Contanct Information</string>
+    <string name="profile_shop_information">Shop Information</string>
 
 </resources>

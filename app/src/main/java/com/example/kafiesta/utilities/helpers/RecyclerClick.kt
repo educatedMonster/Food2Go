@@ -21,3 +21,7 @@ class RecyclerClickView(
 ) {
     fun onClick(model: Any, view: View) = click(model, view)
 }
+
+class GlobalDialogClicker(val click: () -> Unit) {
+    fun onClick() = click()
+}

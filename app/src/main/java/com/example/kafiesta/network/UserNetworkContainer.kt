@@ -57,7 +57,7 @@ data class Profile(
 fun UserBaseNetwork.asDomainModel(): UserDomain {
     return UserDomain(
         status = status,
-        data = data,
+        data =  data.asDomainModel(),
         message = message,
     )
 }

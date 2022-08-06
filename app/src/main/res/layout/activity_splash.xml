@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/custom_background_gradient_45deg"
+        android:background="@drawable/custom_background_gradient_270deg"
         tools:context=".screens.splash.SplashActivity">
 
         <RelativeLayout

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="configureDialog"
+            type="com.example.kafiesta.utilities.dialog.ConfigureDialog" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_rounded_box"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_avg"
+            android:layout_marginTop="@dimen/margin_avg"
+            android:layout_marginEnd="@dimen/margin_avg"
+            android:fontFamily="@font/aileron_bold"
+            android:text="@{configureDialog.title}"
+            android:textSize="@dimen/text_size_normal_plus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_avg"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_avg"
+            android:paddingBottom="@dimen/padding_avg"
+            app:layout_constraintBottom_toTopOf="@+id/layout_button_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_title">
+
+            <TextView
+                android:id="@+id/text_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/aileron_regular"
+                android:text="@{configureDialog.message}"
+                android:textSize="@dimen/text_size_normal"
+                android:textIsSelectable="false"
+                android:visibility="@{configureDialog.showDescription ? View.VISIBLE: View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@tools:sample/lorem" />
+
+            <ProgressBar
+                android:id="@+id/progress_loading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressBackgroundTint="?themeColorPrimary"
+                android:visibility="@{configureDialog.showDescription ? View.GONE: View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_button_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{configureDialog.showLayoutButton ? View.VISIBLE: View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_content">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_neutral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{configureDialog.neutralButtonName}"
+                android:textAllCaps="false"
+                android:visibility="@{configureDialog.showNeutralButton ? View.VISIBLE: View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:onClick="@{() -> configureDialog.neutralButtonListener.onClick()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Neutral"
+                android:background="@color/transparent_white_percent_5"
+                android:textColor="@color/light_gray"
+                android:layout_marginStart="@dimen/margin_avg" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_negative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{configureDialog.negativeButtonName}"
+                android:textAllCaps="false"
+                android:visibility="@{configureDialog.showNegativeButton ? View.VISIBLE: View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_positive"
+                android:onClick="@{() -> configureDialog.negativeButtonListener.onClick()}"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Negative"
+                android:background="@color/transparent_white_percent_5"
+                android:textColor="@color/gray" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_positive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent_white_percent_5"
+                android:onClick="@{() -> configureDialog.positiveButtonListener.onClick()}"
+                android:text="@{configureDialog.positiveButtonName}"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary"
+                android:visibility="@{configureDialog.showPositiveButton ? View.VISIBLE: View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="@dimen/margin_avg"
+                tools:text="Positive" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

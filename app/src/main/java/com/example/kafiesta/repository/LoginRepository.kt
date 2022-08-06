@@ -10,7 +10,6 @@ import com.example.kafiesta.network.AppNetwork
 import com.example.kafiesta.network.asDomainModel
 import com.example.kafiesta.network.paramsToRequestBody
 import com.example.kafiesta.utilities.helpers.SharedPrefs
-import com.example.kafiesta.utilities.setBearer
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -22,8 +21,8 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
     private val _networkUserResponse = MutableLiveData<UserDomain>()
     val networkDataResponse: LiveData<UserDomain> get() = _networkUserResponse
 
-    private val _networkFormState = MutableLiveData<NetworkFormState>()
-    val networkFormState: LiveData<NetworkFormState> get() = _networkFormState
+    private val _networkFormState = MutableLiveData<NetworkFormStateLogin>()
+    val networkFormStateLogin: LiveData<NetworkFormStateLogin> get() = _networkFormState
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -43,45 +42,30 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
                 Timber.d(Gson().toJson(network))
                 if (network.status.matches("success".toRegex())) {
                     _networkUserResponse.postValue(network.asDomainModel())
-                    saveToSecurePreference(network.data.asDomainModel(),
+                    saveToSecurePreference(
+                        network.data.asDomainModel(),
                         network.data.profile.asDomainModel())
-                } else if (network.status.matches("failed".toRegex())) {
-                    _networkUserResponse.postValue(network.asDomainModel())
-                    _networkFormState.postValue(
-                        NetworkFormState(
-                            serverError = true,
-                            message = network.message
-                        )
-                    )
                 }
-            } catch (network: HttpException) {
-                Timber.e(network)
+            } catch (e: HttpException) {
+                Timber.e(e)
                 _networkFormState.postValue(
-                    NetworkFormState(
+                    NetworkFormStateLogin(
                         serverError = true,
-                        message = network.message
+                        message = e.message
                     )
                 )
+                _isLoading.postValue(false)
             }
         }
     }
 
-    suspend fun getUserId(userId: Int) {
-        withContext(Dispatchers.IO) {
-            val token = sharedPrefs.getString(UserConst.TOKEN)!!
-            val params = HashMap<String, Any>()
-            params["id"] = userId
-
-            val network = AppNetwork.service.getUserIdAsync(
-                bearer = setBearer(token),
-                userId = userId
-            ).await()
-            val a = network
-            Timber.d(Gson().toJson(network))
-        }
-    }
-
-    private fun saveToSecurePreference(dataDomain: DataDomain, profileDomain: ProfileDomain) {
+    private fun saveToSecurePreference(
+        dataDomain: DataDomain,
+        profileDomain: ProfileDomain,
+    ) {
+        sharedPrefs.save(UserConst.TOKEN, dataDomain.token)
+        sharedPrefs.save(UserConst.TOKEN_TYPE, dataDomain.tokenType)
+        sharedPrefs.save(UserConst.EXPIRES_IN, dataDomain.expiresIn)
         sharedPrefs.save(UserConst.ID, profileDomain.id)
         sharedPrefs.save(UserConst.FIRSTNAME, profileDomain.firstName)
         sharedPrefs.save(UserConst.LASTNAME, profileDomain.lastName)
@@ -89,10 +73,9 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
         sharedPrefs.save(UserConst.ADDRESS, profileDomain.status)
         sharedPrefs.save(UserConst.ROLE, profileDomain.role)
         sharedPrefs.save(UserConst.USERINFORMATION, profileDomain.userInformations ?: "")
-        sharedPrefs.save(UserConst.TOKEN, dataDomain.token)
     }
 
-    data class NetworkFormState(
+    data class NetworkFormStateLogin(
         val serverError: Boolean = false,
         val message: String? = "",
     )

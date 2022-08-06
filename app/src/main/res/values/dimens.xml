@@ -15,9 +15,13 @@
 
     <dimen name="padding_extra_min">2dp</dimen>
     <dimen name="padding_min">4dp</dimen>
+    <dimen name="padding_semi_small">6dp</dimen>
     <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_semi_avg">12dp</dimen>
     <dimen name="padding_avg">16dp</dimen>
+    <dimen name="padding_semi_big">24dp</dimen>
     <dimen name="padding_big">32dp</dimen>
+    <dimen name="padding_semi_huge">48dp</dimen>
     <dimen name="padding_huge">64dp</dimen>
 
     <dimen name="margin_extra_min">2dp</dimen>
@@ -33,11 +37,17 @@
     <dimen name="header_height">250dp</dimen>
     <dimen name="header_logo_size">100dp</dimen>
 
+    <dimen name="text_size_medium_plus_plus">37sp</dimen>
+    <dimen name="text_size_medium_plus_semi">35sp</dimen>
+    <dimen name="text_size_medium_plus">32sp</dimen>
+    <dimen name="text_size_semi_medium">30sp</dimen>
+    <dimen name="text_size_medium">27sp</dimen>
     <dimen name="text_size_normal_plus_plus">25sp</dimen>
     <dimen name="text_size_normal_plus_semi">23sp</dimen>
     <dimen name="text_size_normal_plus">20sp</dimen>
     <dimen name="text_size_semi_normal">18sp</dimen>
     <dimen name="text_size_normal">15sp</dimen>
+
     <dimen name="text_size_normal_small">13sp</dimen>
     <dimen name="text_size_normal_small_light">12sp</dimen>
     <dimen name="text_size_small">11sp</dimen>

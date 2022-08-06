@@ -25,17 +25,19 @@ interface AppService {
         @Header("Authorization") bearer: String,
     ): Deferred<Any>
 
-    @GET("me")
+
+    @GET("user")
     fun getProfileAsync(
         @Header("Authorization") bearer: String,
     ): Deferred<Any>
 
-    @Multipart
+
+    // https://kafiesta-api.osc-fr1.scalingo.io/v1/user/{id}
     @GET("user/{id}")
     fun getUserIdAsync(
         @Header("Authorization") bearer: String,
-        @Path("id") userId: Int,
-    ): Deferred<Any>
+        @Path("id") userId: Long,
+    ): Deferred<UserResultBaseNetwork>
 
 
     @POST("user/list")

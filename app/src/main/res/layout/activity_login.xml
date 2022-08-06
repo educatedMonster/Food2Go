@@ -6,7 +6,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/custom_background_gradient_45deg"
+        android:background="@drawable/custom_background_gradient_270deg"
+        android:focusableInTouchMode="true"
         tools:context=".screens.login.LoginActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_huge"
                 android:fontFamily="@font/aileron_bold"
-                android:textSize="@dimen/text_size_normal_plus_plus"
+                android:textSize="@dimen/text_size_medium_plus_plus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -92,17 +93,16 @@
                 android:layout_marginEnd="@dimen/margin_big"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_password">
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_login"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_min"
+                    android:layout_height="match_parent"
                     android:background="@drawable/layer_button_login"
-                    android:padding="@dimen/padding_min"
+                    android:fontFamily="@font/aileron_regular"
                     android:text="@string/login_button_login"
                     android:textAllCaps="false"
-                    android:textSize="@dimen/text_size_normal_plus"
-                    android:textColor="@color/color_white" />
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/text_size_normal_plus" />
 
                 <ProgressBar
                     android:id="@+id/progress_loading"

@@ -1,10 +1,8 @@
 package com.example.kafiesta.domain
 
-import com.example.kafiesta.network.Data
-
 data class UserDomain(
     val status: String,
-    val data: Data,
+    val data: DataDomain,
     val message: String,
 )
 
@@ -12,7 +10,7 @@ data class DataDomain(
     val token: String,
     val tokenType: String,
     val expiresIn: Long,
-    val profile: ProfileDomain,
+    val profile: ProfileDomain
 )
 
 data class ProfileDomain(
@@ -22,5 +20,5 @@ data class ProfileDomain(
     val email: String,
     val status: String,
     val role: String,
-    val userInformations: Any? = null,
+    val userInformations: Any? = null
 )

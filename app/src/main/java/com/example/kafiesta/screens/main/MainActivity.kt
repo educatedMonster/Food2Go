@@ -1,34 +1,50 @@
 package com.example.kafiesta.screens.main
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.KaFiestaApplication
 import com.example.kafiesta.R
+import com.example.kafiesta.constants.DialogTag
+import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityMainBinding
+import com.example.kafiesta.databinding.LayoutCustomNavHeaderBinding
 import com.example.kafiesta.databinding.LayoutCustomToolbarBinding
 import com.example.kafiesta.screens.BaseActivity
+import com.example.kafiesta.screens.profile.ProfileSettingActivity
 import com.example.kafiesta.screens.main.fragment.home.HomeFragment
 import com.example.kafiesta.screens.main.fragment.myshop.MyShopFragment
 import com.example.kafiesta.screens.main.fragment.order.OrderFragment
+import com.example.kafiesta.utilities.dialog.ConfigureDialog
+import com.example.kafiesta.utilities.dialog.GlobalDialog
 import com.example.kafiesta.utilities.extensions.showToast
+import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
+import com.example.kafiesta.utilities.helpers.SharedPrefs
+import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.trackerteer.taskmanagement.utilities.extensions.gone
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 
 class MainActivity : BaseActivity(),
-    BottomNavigationView.OnNavigationItemSelectedListener {
+    BottomNavigationView.OnNavigationItemSelectedListener,
+    NavigationView.OnNavigationItemSelectedListener {
 
-    override val hideStatusBar: Boolean
-        get() = false
-    override val showBackButton: Boolean
-        get() = false
+    override val hideStatusBar: Boolean get() = false
+    override val showBackButton: Boolean get() = false
 
+    private var userId = 0L
     private lateinit var binding: ActivityMainBinding
+    private lateinit var mainViewModel: MainViewModel
 
     private val mFragmentList: ArrayList<Fragment> = arrayListOf(
         MyShopFragment(),
@@ -40,10 +56,19 @@ class MainActivity : BaseActivity(),
     private var mCurrentInView = Fragment()
     private var mActionBar: ActionBar? = null
     private lateinit var mToolbarBinding: LayoutCustomToolbarBinding
+    private lateinit var mToggle: ActionBarDrawerToggle
+    private lateinit var mLayoutCustomNavHeaderBinding: LayoutCustomNavHeaderBinding
+    private var mGlobalDialog: GlobalDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.ID)!!.toLong()
         initConfig()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initRequest()
     }
 
     /**
@@ -53,20 +78,36 @@ class MainActivity : BaseActivity(),
         initBinding()
         initActionBar()
         initBottomNavigationView()
+        initDrawerNavigationView()
+        initViewModel()
+    }
+
+    private fun initRequest() {
+        requestMainViewModel()
+    }
+
+    private fun requestMainViewModel() {
+        if (this::mainViewModel.isInitialized) {
+            mainViewModel.getUserId(userId)
+        }
     }
 
     private fun initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
 
+        mainViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+            .create(MainViewModel::class.java)
     }
 
     private fun initActionBar() {
+        setSupportActionBar(binding.toolbar)
         mActionBar = supportActionBar
         if (mActionBar != null) {
             mActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-//            mActionBar!!.setDisplayHomeAsUpEnabled(true)
-//            mActionBar!!.setHomeButtonEnabled(true)
+            mActionBar!!.setHomeAsUpIndicator(R.drawable.ic_menu)
+            mActionBar!!.setDisplayHomeAsUpEnabled(true)
+            mActionBar!!.setHomeButtonEnabled(true)
             mToolbarBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(this),
                 R.layout.layout_custom_toolbar,
@@ -82,8 +123,6 @@ class MainActivity : BaseActivity(),
     }
 
     private fun initBottomNavigationView() {
-        val bottomNavigationView = binding.bottomNavigationView
-
         for (i in 0 until mFragmentList.size) {
             mFragmentManager.beginTransaction()
                 .add(mainContainer, mFragmentList[i], mFragmentList[i]::class.java.simpleName)
@@ -93,8 +132,56 @@ class MainActivity : BaseActivity(),
 
         mFragmentManager.beginTransaction().show(mFragmentList[1]).commit()
         setFragmentView(mFragmentList[1])
-        bottomNavigationView.selectedItemId = R.id.nav_home
-        bottomNavigationView.setOnNavigationItemSelectedListener(this)
+        binding.bottomNavigationView.selectedItemId = R.id.nav_home
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+    }
+
+    private fun initDrawerNavigationView() {
+        mLayoutCustomNavHeaderBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(this),
+            R.layout.layout_custom_nav_header,
+            binding.drawerNavigationView,
+            false
+        )
+        mLayoutCustomNavHeaderBinding.lifecycleOwner = this
+        mLayoutCustomNavHeaderBinding.mainViewModel = mainViewModel
+
+        mToggle = ActionBarDrawerToggle(
+            this,
+            binding.drawableLayout,
+            binding.toolbar,
+            R.string.nav_bar_open,
+            R.string.nav_bar_close
+        )
+        mToggle.syncState()
+        binding.drawableLayout.addDrawerListener(mToggle)
+        binding.drawerNavigationView.addHeaderView(mLayoutCustomNavHeaderBinding.root)
+        binding.drawerNavigationView.setNavigationItemSelectedListener(this)
+
+    }
+
+    private fun initViewModel() {
+        mainViewModel.mainFormState.observe(this) {
+            val tag = DialogTag.DIALOG_MAIN_LOGOUT_FORM_STATE
+            if ((it.onLogoutRequest) && (it.isLoggingOut)) {
+                val configureDialog = ConfigureDialog(
+                    activity = this,
+                    title = getString(R.string.main_activity_preparing_logout)
+                )
+                mGlobalDialog = GlobalDialog(configureDialog)
+                mGlobalDialog?.show(supportFragmentManager, tag)
+            } else if ((it.onLogoutRequest) && (!it.isLoggingOut)) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    mGlobalDialog?.dismiss()
+                    proceedToLogout()
+                }, 1000)
+            }
+        }
+
+        mainViewModel.userResult.observe(this) {
+            showToast(it.fullName)
+        }
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -120,13 +207,12 @@ class MainActivity : BaseActivity(),
                     .show(mFragmentList[1])
                     .commit()
 
-//                refreshHomeFragment()
                 if (mCurrentInView != mFragmentList[1]) {
-                    (mFragmentList[1] as HomeFragment).initRequest()
+//                    (mFragmentList[1] as HomeFragment).initRequest()
+                    refreshHomeFragment()
                 }
 
                 setFragmentView(mFragmentList[1])
-
             }
             R.id.nav_order -> {
                 mFragmentManager.beginTransaction()
@@ -137,15 +223,59 @@ class MainActivity : BaseActivity(),
                 if (mCurrentInView != mFragmentList[2]) {
                     (mFragmentList[2] as OrderFragment).initRequest()
                 }
+                setFragmentView(mFragmentList[2])
+            }
 
+
+            /**
+             * Drawer Navigation View
+             */
+            R.id.nav_dashboard -> {
+                showToast(getString(R.string.title_nav_drawer_dashboard))
+//                proceedToActivity(SettingActivity::class.java)
+//                setFocus(false)
+            }
+            R.id.nav_my_shop -> {
+                proceedToActivity(ProfileSettingActivity::class.java)
+                setFocus(false)
+            }
+            R.id.nav_product -> {
+                showToast(getString(R.string.title_nav_drawer_products))
+//                proceedToActivity(SettingActivity::class.java)
+//                setFocus(false)
+            }
+            R.id.nav_inventory -> {
+                showToast(getString(R.string.title_nav_drawer_inventory))
+//                proceedToActivity(SettingActivity::class.java)
+//                setFocus(false)
+            }
+            R.id.nav_logout -> {
+                val tag = DialogTag.DIALOG_MAIN_LOGOUT
+                val configureDialog = ConfigureDialog(
+                    activity = this,
+                    title = getString(R.string.main_activity_title_logout),
+                    message = getString(R.string.main_activity_are_you_sure_you_want_to_logout),
+                    positiveButtonName = getString(R.string.main_activity_button_yes),
+                    negativeButtonName = getString(R.string.main_activity_button_no),
+                    positiveButtonListener = GlobalDialogClicker {
+                        mGlobalDialog?.dismiss()
+                        mainViewModel.onLogout()
+                    },
+                    negativeButtonListener = GlobalDialogClicker {
+                        mGlobalDialog?.dismiss()
+                    }
+                )
+                mGlobalDialog = GlobalDialog(configureDialog)
+                mGlobalDialog?.show(supportFragmentManager, tag)
             }
         }
+        binding.drawableLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    private fun setFragmentView(fragment: Fragment){
+    private fun setFragmentView(fragment: Fragment) {
         mCurrentInView = fragment
-        val title = when (fragment){
+        val title = when (fragment) {
             is MyShopFragment -> {
                 getString(R.string.navigation_title_my_shop)
             }
@@ -161,7 +291,7 @@ class MainActivity : BaseActivity(),
         }
 
         setActionBarTitle(title)
-//        onResumeRequestMainViewModel()
+//        requestMainViewModel()
         setFocus(mCurrentInView == mFragmentList[1])
     }
 
@@ -182,6 +312,14 @@ class MainActivity : BaseActivity(),
 
     private fun refreshHomeFragment() {
         (mFragmentList[1] as HomeFragment).initRequest()
+    }
+
+    override fun onBackPressed() {
+        if (binding.drawableLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawableLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.moveTaskToBack(true)
+        }
     }
 
 }

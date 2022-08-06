@@ -1,5 +1,7 @@
 package com.example.kafiesta.constants
 
+import com.example.kafiesta.R
+
 object ServerConst {
 
     //https://kafiesta-api.osc-fr1.scalingo.io/v1/login
@@ -21,6 +23,8 @@ object AppConst {
 
 object UserConst {
     const val TOKEN = "key_auth_token"
+    const val TOKEN_TYPE = "key_token_type"
+    const val EXPIRES_IN = "key_expires_in"
     const val ID = "key_id"
     const val FIRSTNAME = "key_firstname"
     const val LASTNAME = "key_lastname"
@@ -28,4 +32,13 @@ object UserConst {
     const val ADDRESS = "key_address"
     const val ROLE = "key_role"
     const val USERINFORMATION = "key_userInformations"
+}
+
+object ThemeConst {
+    const val ColorTheme = R.style.AppTheme_Theme_ColorTheme
+}
+
+object DialogTag {
+    const val DIALOG_MAIN_LOGOUT = "NAV_LOGOUT_GLOBAL_DIALOG"
+    const val DIALOG_MAIN_LOGOUT_FORM_STATE = "FORM_STATE_LOGOUT_GLOBAL_DIALOG"
 }

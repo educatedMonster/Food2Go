@@ -23,7 +23,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val loginRepository = LoginRepository(SharedPrefs(getSecurePrefs(application)))
 
     val userDomain = loginRepository.networkDataResponse
-    val networkFormState = loginRepository.networkFormState
+    val networkFormState = loginRepository.networkFormStateLogin
     val isLoading = loginRepository.isLoading
 
     private val _loginFormState = MutableLiveData<LoginFormState>()
@@ -63,17 +63,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             } catch (networkError: IOException) {
                 Timber.d(networkError)
                 setNetworkError(networkError.message.toString())
-                setLoading(false)
-            }
-        }
-    }
-
-    fun getUserId(context: Context, userId: Int) {
-        viewModelScope.launch {
-            try {
-                loginRepository.getUserId(userId)
-            } catch (networkError: IOException) {
-                networkError.message.toString()
             }
         }
     }
