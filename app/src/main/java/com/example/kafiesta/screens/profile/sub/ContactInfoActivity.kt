@@ -18,7 +18,6 @@ class ContactInfoActivity : BaseActivity() {
     override val hideStatusBar: Boolean get() = false
     override val showBackButton: Boolean get() = true
 
-    private var userId = 0L
     private lateinit var binding: ActivityContactInfoBinding
     private var mActionBar: ActionBar? = null
 
@@ -29,7 +28,6 @@ class ContactInfoActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.ID)!!.toLong()
         initConfig()
     }
     override fun onResume() {
@@ -54,7 +52,7 @@ class ContactInfoActivity : BaseActivity() {
     }
 
     private fun requestMainViewModel() {
-        mainViewModel.getUserId(userId)
+        mainViewModel.getMe()
     }
 
     private fun initBinding() {

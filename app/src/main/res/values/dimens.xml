@@ -27,6 +27,7 @@
     <dimen name="margin_extra_min">2dp</dimen>
     <dimen name="margin_min">4dp</dimen>
     <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_aver_plus">12dp</dimen>
     <dimen name="margin_avg">16dp</dimen>
     <dimen name="margin_big">32dp</dimen>
     <dimen name="margin_huge">64dp</dimen>

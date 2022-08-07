@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF5757</color>
-    <color name="colorPrimaryVariant">#FBB63B</color>
+    <color name="colorPrimary">#F38C8C</color>
+    <color name="colorPrimaryVariant">#FF5757</color>
     <color name="colorAccent">#33405f</color>
 
     <color name="colorSecondary">#366b3e</color>
@@ -15,8 +15,8 @@
     <color name="g_black">#33405f</color>
     <color name="g_loading">#fffafc</color>
     <color name="btn_color_login">@color/colorAccent</color>
-    <color name="background_color_end_colorPrimary">#EEB2B2</color>
-    <color name="background_color_start_colorPrimary">#F38C8C</color>
+    <color name="background_color_normal">#EEB2B2</color>
+    <color name="background_color_pressed">#F38C8C</color>
 
     <color name="transparent_white_percent_0">#00ffffff</color>
     <color name="transparent_white_percent_5">#0Dffffff</color>

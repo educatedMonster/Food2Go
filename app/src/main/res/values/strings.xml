@@ -55,10 +55,13 @@
     <string name="activity_shop_name">Shop Name</string>
     <string name="activity_shop_address">Shop Complete Address</string>
     <string name="activity_shop_contact">Shop Contact Number</string>
+    <string name="activity_shop_time_open">Opening Time</string>
+    <string name="activity_shop_time_close">Closing Time</string>
 
     <!--    Error Message -->
     <string name="error_message_illegal_argument_exception">Unable to construct action bar</string>
     <string name="required">Required</string>
+    <string name="invalid_email">Invalid Email</string>
 
     <!--    Actions -->
     <string name="action_label_login">login</string>

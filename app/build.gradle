@@ -82,7 +82,7 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
-    // Logging for data
+    // Logging for dataResult
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Others
@@ -107,9 +107,12 @@ dependencies {
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
 
-    // Logging for data
+    // Logging for dataResult
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     //Dexter for permissions
     implementation 'com.karumi:dexter:6.0.0'
+
+    //Floating Action Button
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 }

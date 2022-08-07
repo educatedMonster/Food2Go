@@ -84,7 +84,7 @@
                         android:layout_marginEnd="@dimen/margin_avg"
                         android:fontFamily="@font/aileron_semibold"
                         android:maxLines="2"
-                        android:text="@{mainViewModel.userResult.fullName}"
+                        android:text="@{mainViewModel.profile.fullName}"
                         android:textAlignment="center"
                         android:textSize="@dimen/text_size_semi_normal"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +101,7 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/aileron_regular"
                         android:singleLine="true"
-                        android:text="@{mainViewModel.userResult.email}"
+                        android:text="@{mainViewModel.profile.email}"
                         android:textAlignment="center"
                         android:textSize="@dimen/text_size_normal_small"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +146,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraint_layout_header">
 
-                <include layout="@layout/layout_list_divider" />
+                <include layout="@layout/layout_list_horizontal_divider" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_user_info"
@@ -168,14 +168,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:contentDescription="@string/image_content_description"
-                        android:src="@drawable/ic_profile_24"
+                        android:src="@drawable/ic_logout_24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <include layout="@layout/layout_list_divider" />
+                <include layout="@layout/layout_list_horizontal_divider" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_contact_info"
@@ -204,7 +204,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <include layout="@layout/layout_list_divider" />
+                <include layout="@layout/layout_list_horizontal_divider" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_shop_info"
@@ -233,7 +233,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <include layout="@layout/layout_list_divider" />
+                <include layout="@layout/layout_list_horizontal_divider" />
 
             </LinearLayout>
 

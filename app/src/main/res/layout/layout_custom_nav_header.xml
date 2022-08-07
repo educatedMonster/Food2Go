@@ -14,7 +14,7 @@
         android:id="@+id/header_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_header_height"
-        android:background="@color/colorAccent"
+        android:background="@color/background_color_normal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/nav_header_vertical_padding"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -49,7 +49,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/aileron_bold"
                 android:maxLines="1"
-                android:text="@{mainViewModel.userResult.fullName}"
+                android:text="@{mainViewModel.profile.fullName}"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/text_size_normal"
                 tools:text="@string/title_layout_nav_header_name" />
@@ -61,20 +61,10 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/aileron_bold"
                 android:maxLines="1"
-                android:text="@{mainViewModel.userResult.email}"
+                android:text="@{mainViewModel.profile.email}"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/text_size_normal_small_light"
                 tools:text="@string/title_layout_nav_header_email" />
-
-            <TextView
-                android:id="@+id/text_role"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/aileron_regular"
-                android:text="@{mainViewModel.userResult.role}"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/text_size_small"
-                tools:text="@string/title_layout_nav_header_role" />
 
         </LinearLayout>
 

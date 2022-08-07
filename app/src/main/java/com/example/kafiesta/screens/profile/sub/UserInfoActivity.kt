@@ -6,22 +6,22 @@ import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
-import com.example.kafiesta.constants.UserConst
+import com.example.kafiesta.constants.ServerConst.IS_SUCCESS
 import com.example.kafiesta.databinding.ActivityUserInfoBinding
+import com.example.kafiesta.repository.MainRepository.UserInfo
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.main.MainViewModel
-import com.example.kafiesta.utilities.extensions.isEmailValid2
+import com.example.kafiesta.utilities.extensions.isEmailValid
 import com.example.kafiesta.utilities.extensions.isNotEmpty
-import com.example.kafiesta.utilities.helpers.SharedPrefs
-import com.example.kafiesta.utilities.helpers.getSecurePrefs
+import com.example.kafiesta.utilities.extensions.showToast
 import com.google.android.material.textfield.TextInputEditText
 import com.trackerteer.taskmanagement.utilities.extensions.setSafeOnClickListener
+import timber.log.Timber
 
 class UserInfoActivity : BaseActivity() {
     override val hideStatusBar: Boolean get() = false
     override val showBackButton: Boolean get() = true
 
-    private var userId = 0L
     private lateinit var binding: ActivityUserInfoBinding
     private var mActionBar: ActionBar? = null
 
@@ -32,7 +32,6 @@ class UserInfoActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.ID)!!.toLong()
         initConfig()
     }
 
@@ -42,7 +41,7 @@ class UserInfoActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             android.R.id.home -> onBackPressed()
         }
         return super.onOptionsItemSelected(item)
@@ -60,7 +59,7 @@ class UserInfoActivity : BaseActivity() {
     }
 
     private fun requestMainViewModel() {
-        mainViewModel.getUserId(userId)
+        mainViewModel.getMe()
     }
 
     private fun initBinding() {
@@ -70,16 +69,12 @@ class UserInfoActivity : BaseActivity() {
     }
 
     private fun initLiveData() {
-        mainViewModel.userResult.observe(this) {
-//            setLoading(it)
+        mainViewModel.updateFormState.observe(this) {
+            if (it.isSuccess.matches(IS_SUCCESS.toRegex())) {
+                onBackPressed()
+            }
+            showToast(it.message)
         }
-
-
-        mainViewModel.isLoading.observe(this) {
-//            setLoading(it)
-        }
-
-
     }
 
     private fun initEventListener() {
@@ -88,7 +83,15 @@ class UserInfoActivity : BaseActivity() {
                 val firstName = binding.textInputFirstName
                 val lastName = binding.textInputLastName
                 val emailAddress = binding.textInputEmailAddress
-                onValidate(firstName, lastName, emailAddress)
+                if (onValidate(firstName, lastName, emailAddress)) {
+                    mainViewModel?.updateUserInfo(
+                        UserInfo(
+                            firstName = firstName.text.toString(),
+                            lastName = lastName.text.toString(),
+                            email = emailAddress.text.toString()
+                        )
+                    )
+                }
             }
         }
     }
@@ -109,26 +112,20 @@ class UserInfoActivity : BaseActivity() {
         firstName: TextInputEditText,
         lastName: TextInputEditText,
         emailAddress: TextInputEditText,
-    ) {
+    ): Boolean {
         if (!isNotEmpty(firstName, true)) {
-            return
+            return false
+        } else if (!isNotEmpty(lastName, true)) {
+            return false
+        } else if (!isNotEmpty(emailAddress, true)) {
+            return false
+        } else if (!isEmailValid(emailAddress, true)) {
+            return false
         }
+        return true
 
-        if (!isNotEmpty(lastName, true)) {
-            return
-        }
+        Timber.d("Validate")
 
-        if (!isNotEmpty(emailAddress, true) || !isEmailValid2(emailAddress, true)) {
-            return
-        }
-
-//        mainViewModel.updateUserInfo(
-//            BasicInformationData(
-//                firstName = firstName,
-//                lastName = lastName,
-//                address = emailAddress
-//            )
-//        )
     }
 
 }

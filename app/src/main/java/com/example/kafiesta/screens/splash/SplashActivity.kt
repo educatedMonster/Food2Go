@@ -64,7 +64,7 @@ class SplashActivity : BaseActivity() {
              */
             while (progressStatus < 95) {
                 try {
-                    progressStatus += 12
+                    progressStatus += 7
                     Thread.sleep(200)
                 } catch (e: InterruptedException) {
                     e.printStackTrace()

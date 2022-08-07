@@ -20,10 +20,11 @@ import com.example.kafiesta.databinding.ActivityMainBinding
 import com.example.kafiesta.databinding.LayoutCustomNavHeaderBinding
 import com.example.kafiesta.databinding.LayoutCustomToolbarBinding
 import com.example.kafiesta.screens.BaseActivity
-import com.example.kafiesta.screens.profile.ProfileSettingActivity
+import com.example.kafiesta.screens.add_product.ShowProductActivity
 import com.example.kafiesta.screens.main.fragment.home.HomeFragment
 import com.example.kafiesta.screens.main.fragment.myshop.MyShopFragment
 import com.example.kafiesta.screens.main.fragment.order.OrderFragment
+import com.example.kafiesta.screens.profile.ProfileSettingActivity
 import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
 import com.example.kafiesta.utilities.extensions.showToast
@@ -79,7 +80,7 @@ class MainActivity : BaseActivity(),
         initActionBar()
         initBottomNavigationView()
         initDrawerNavigationView()
-        initViewModel()
+        initLiveData()
     }
 
     private fun initRequest() {
@@ -88,7 +89,7 @@ class MainActivity : BaseActivity(),
 
     private fun requestMainViewModel() {
         if (this::mainViewModel.isInitialized) {
-            mainViewModel.getUserId(userId)
+            mainViewModel.getMe()
         }
     }
 
@@ -160,7 +161,7 @@ class MainActivity : BaseActivity(),
 
     }
 
-    private fun initViewModel() {
+    private fun initLiveData() {
         mainViewModel.mainFormState.observe(this) {
             val tag = DialogTag.DIALOG_MAIN_LOGOUT_FORM_STATE
             if ((it.onLogoutRequest) && (it.isLoggingOut)) {
@@ -178,8 +179,8 @@ class MainActivity : BaseActivity(),
             }
         }
 
-        mainViewModel.userResult.observe(this) {
-            showToast(it.fullName)
+        mainViewModel.profile.observe(this) {
+
         }
 
     }
@@ -241,8 +242,8 @@ class MainActivity : BaseActivity(),
             }
             R.id.nav_product -> {
                 showToast(getString(R.string.title_nav_drawer_products))
-//                proceedToActivity(SettingActivity::class.java)
-//                setFocus(false)
+                proceedToActivity(ShowProductActivity::class.java)
+                setFocus(false)
             }
             R.id.nav_inventory -> {
                 showToast(getString(R.string.title_nav_drawer_inventory))
@@ -259,7 +260,7 @@ class MainActivity : BaseActivity(),
                     negativeButtonName = getString(R.string.main_activity_button_no),
                     positiveButtonListener = GlobalDialogClicker {
                         mGlobalDialog?.dismiss()
-                        mainViewModel.onLogout()
+                        mainViewModel.logout()
                     },
                     negativeButtonListener = GlobalDialogClicker {
                         mGlobalDialog?.dismiss()

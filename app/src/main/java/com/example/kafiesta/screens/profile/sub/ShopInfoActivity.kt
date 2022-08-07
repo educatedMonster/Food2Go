@@ -1,18 +1,14 @@
 package com.example.kafiesta.screens.profile.sub
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
-import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityShopInfoBinding
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.main.MainViewModel
-import com.example.kafiesta.utilities.helpers.SharedPrefs
-import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.trackerteer.taskmanagement.utilities.extensions.setSafeOnClickListener
 
 class ShopInfoActivity : BaseActivity() {
@@ -20,7 +16,6 @@ class ShopInfoActivity : BaseActivity() {
     override val hideStatusBar: Boolean get() = false
     override val showBackButton: Boolean get() = true
 
-    private var userId = 0L
     private lateinit var binding: ActivityShopInfoBinding
     private var mActionBar: ActionBar? = null
 
@@ -31,7 +26,6 @@ class ShopInfoActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.ID)!!.toLong()
         initConfig()
     }
 
@@ -41,7 +35,7 @@ class ShopInfoActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             android.R.id.home -> onBackPressed()
         }
         return super.onOptionsItemSelected(item)
@@ -59,24 +53,19 @@ class ShopInfoActivity : BaseActivity() {
     }
 
     private fun requestMainViewModel() {
-        mainViewModel.getUserId(userId)
+        mainViewModel.getMe()
     }
 
     private fun initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_shop_info)
         binding.lifecycleOwner = this
-        binding
+        binding.mainViewModel = mainViewModel
     }
 
     private fun initLiveData() {
-        mainViewModel.userResult.observe(this) {
-//            setLoading(it)
-        }
+        mainViewModel.profile.observe(this) {
 
-        mainViewModel.isLoading.observe(this) {
-//            setLoading(it)
         }
-
     }
 
     private fun initEventListener() {

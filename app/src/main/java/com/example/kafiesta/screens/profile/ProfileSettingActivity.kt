@@ -14,6 +14,7 @@ import com.example.kafiesta.screens.main.MainViewModel
 import com.example.kafiesta.screens.profile.sub.ContactInfoActivity
 import com.example.kafiesta.screens.profile.sub.ShopInfoActivity
 import com.example.kafiesta.screens.profile.sub.UserInfoActivity
+import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.trackerteer.taskmanagement.utilities.extensions.setSafeOnClickListener
@@ -44,7 +45,7 @@ class ProfileSettingActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             android.R.id.home -> onBackPressed()
         }
         return super.onOptionsItemSelected(item)
@@ -62,7 +63,7 @@ class ProfileSettingActivity : BaseActivity() {
     }
 
     private fun requestMainViewModel() {
-        mainViewModel.getUserId(userId)
+        mainViewModel.getMe()
     }
 
     private fun initBinding() {
@@ -84,6 +85,10 @@ class ProfileSettingActivity : BaseActivity() {
     }
 
     private fun initLiveData() {
+        mainViewModel.profile.observe(this) {
+
+        }
+
         mainViewModel.isLoading.observe(this) {
             setLoading(it)
         }
@@ -101,6 +106,7 @@ class ProfileSettingActivity : BaseActivity() {
                 proceedToActivity(ShopInfoActivity::class.java)
             }
             circleImageView.setSafeOnClickListener {
+                showToast("Image click: startGettingImage")
 //                startGettingImage()
             }
         }

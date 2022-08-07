@@ -28,7 +28,7 @@ class KaFiestaApplication : Application() {
          */
         Timber.plant(Timber.DebugTree())
         /**
-         * This is use to see the data on our database
+         * This is use to see the dataResult on our database
          */
         Stetho.initializeWithDefaults(this)
 

@@ -7,6 +7,8 @@ import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
+import com.example.kafiesta.constants.ServerConst.IS_CLIENT
+import com.example.kafiesta.constants.ServerConst.IS_SUCCESS
 import com.example.kafiesta.databinding.ActivityLoginBinding
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.main.MainActivity
@@ -96,15 +98,31 @@ class LoginActivity : BaseActivity() {
     }
 
     /**
-     * Initialize the live data to be observe on this activity
+     * Initialize the live dataResult to be observe on this activity
      */
     private fun initLiveData() {
-        //Observe `userDomain` live data from our LoginViewModel
+        //Observe `userDomain` live dataResult from our LoginViewModel
         viewModel.userDomain.observe(this) { userDomain ->
-            //if the user.status is true we can now proceed to the MainActivity activity
-            if (userDomain.status.matches("success".toRegex())) {
+
+            //testing purpose
+            //if the user.status == "success" we can now proceed to the MainActivity activity
+//            if (userDomain.status.matches(IS_SUCCESS.toRegex())){
+//                //proceedToActivity function can be found at BaseActivity.kt
+//                proceedToActivity(MainActivity::class.java, true)
+//            } else {
+//                viewModel.setLoading(false)
+//                showToast(getString(R.string.login_something_went_wrong))
+//            }
+
+            //if the user.status == "success" and role == "client" we can now proceed to the MainActivity activity
+            if (userDomain.status.matches(IS_SUCCESS.toRegex()) && userDomain.data.profile.role.matches(
+                    IS_CLIENT.toRegex())
+            ) {
                 //proceedToActivity function can be found at BaseActivity.kt
                 proceedToActivity(MainActivity::class.java, true)
+            } else {
+                viewModel.setLoading(false)
+                showToast(getString(R.string.login_something_went_wrong))
             }
         }
 
@@ -112,7 +130,7 @@ class LoginActivity : BaseActivity() {
             setLoading(it)
         }
 
-        //Observe `loginFormState` live data from our LoginViewModel
+        //Observe `loginFormState` live dataResult from our LoginViewModel
         viewModel.loginFormState.observe(this) { formState ->
             //setLoading function will be called here
             setLoading(formState.isLoading)
@@ -123,13 +141,13 @@ class LoginActivity : BaseActivity() {
             )
         }
 
-        //Observe `networkFormStateLogin` live data from our LoginViewModel
+        //Observe `networkFormStateLogin` live dataResult from our LoginViewModel
         viewModel.networkFormState.observe(this) {
             //it: NetworkFormStateLogin class
             if (it.serverError) {
                 Timber.d(it.message)
-                showToast(getString(R.string.login_something_went_wrong))
                 viewModel.setLoading(false)
+                showToast(getString(R.string.login_something_went_wrong))
             }
         }
     }
@@ -156,10 +174,10 @@ class LoginActivity : BaseActivity() {
     /**
      * In  this function will set the validation of the text view username and password given from our LoginViewModel
      *
-     * @param isInvalidEmail boolean to show the @invalidUsernameMessage data on text view error
-     * @param invalidEmailMessage string data on text view error
-     * @param isInvalidPassword boolean to show the @invalidPasswordMessage data on text view error
-     * @param invalidPasswordMessage string data on text view error
+     * @param isInvalidEmail boolean to show the @invalidUsernameMessage dataResult on text view error
+     * @param invalidEmailMessage string dataResult on text view error
+     * @param isInvalidPassword boolean to show the @invalidPasswordMessage dataResult on text view error
+     * @param invalidPasswordMessage string dataResult on text view error
      */
     private fun setValidation(
         isInvalidEmail: Boolean, invalidEmailMessage: String,
@@ -187,6 +205,7 @@ class LoginActivity : BaseActivity() {
             }
         }
     }
+
     /**
      * In this function will initiate the login of the user
      */
@@ -196,7 +215,8 @@ class LoginActivity : BaseActivity() {
         //Get the user name and password on this lines of code inputted by user
         val username = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
-        viewModel.validateLoginCredentials(this, "jadalmario.freelancer@gmail.com", "@Unknown0322")
+//        viewModel.validateLoginCredentials(this, "jadalmario.freelancer@gmail.com", "@Unknown0322") // Admin Account
+        viewModel.validateLoginCredentials(this, "kjdlopez@gmail.com", "@Unknown0322") // Client Account
 //        viewModel.validateLoginCredentials(this, username, password)
     }
 }

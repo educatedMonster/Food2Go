@@ -18,7 +18,7 @@ interface AppService {
     @POST("login")
     fun loginAsync(
         @PartMap params: HashMap<String, RequestBody>,
-    ): Deferred<UserBaseNetwork>
+    ): Deferred<LoginBaseNetwork>
 
     @GET("auth/logout")
     fun onLogoutAsync(
@@ -32,13 +32,27 @@ interface AppService {
     ): Deferred<Any>
 
 
-    // https://kafiesta-api.osc-fr1.scalingo.io/v1/user/{id}
+    //  https://kafiesta-api.osc-fr1.scalingo.io/v1/user/{id}
     @GET("user/{id}")
-    fun getUserIdAsync(
+    fun onGetUserIdAsync(
         @Header("Authorization") bearer: String,
         @Path("id") userId: Long,
-    ): Deferred<UserResultBaseNetwork>
+    ): Deferred<UserBaseNetwork>
 
+    //    https://kafiesta-api.osc-fr1.scalingo.io/v1/user
+    // This APi is use to get Profile of the current user. For security purposes.
+    @GET("user")
+    fun onGetMedAsync(
+        @Header("Authorization") bearer: String,
+    ): Deferred<UserBaseNetwork>
+
+    //    https://kafiesta-api.osc-fr1.scalingo.io/v1/user/update
+    @Multipart
+    @POST("user/update")
+    fun onUpdateUserInfoAsync(
+        @Header("Authorization") bearer: String,
+        @PartMap params: HashMap<String, RequestBody>,
+    ): Deferred<UserBaseNetwork>
 
     @POST("user/list")
     fun getAllUsersAsync(
@@ -53,7 +67,7 @@ object AppNetwork {
         .create()
 
     private val interceptor = HttpLoggingInterceptor().apply {
-        level = if(BuildConfig.DEBUG)
+        level = if (BuildConfig.DEBUG)
             HttpLoggingInterceptor.Level.BODY
         else
             HttpLoggingInterceptor.Level.NONE

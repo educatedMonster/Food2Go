@@ -2,10 +2,12 @@ package com.example.kafiesta.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.kafiesta.constants.ServerConst.IS_SUCCESS
 import com.example.kafiesta.constants.UserConst
-import com.example.kafiesta.domain.DataDomain
-import com.example.kafiesta.domain.ProfileDomain
-import com.example.kafiesta.domain.UserDomain
+import com.example.kafiesta.domain.LoginDataDomain
+import com.example.kafiesta.domain.LoginInformationsDomain
+import com.example.kafiesta.domain.LoginProfileDomain
+import com.example.kafiesta.domain.LoginUserDomain
 import com.example.kafiesta.network.AppNetwork
 import com.example.kafiesta.network.asDomainModel
 import com.example.kafiesta.network.paramsToRequestBody
@@ -18,8 +20,8 @@ import timber.log.Timber
 
 class LoginRepository(private val sharedPrefs: SharedPrefs) {
 
-    private val _networkUserResponse = MutableLiveData<UserDomain>()
-    val networkDataResponse: LiveData<UserDomain> get() = _networkUserResponse
+    private val _networkUserResponse = MutableLiveData<LoginUserDomain>()
+    val networkDataResponse: LiveData<LoginUserDomain> get() = _networkUserResponse
 
     private val _networkFormState = MutableLiveData<NetworkFormStateLogin>()
     val networkFormStateLogin: LiveData<NetworkFormStateLogin> get() = _networkFormState
@@ -40,11 +42,13 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
                     paramsToRequestBody(params)
                 ).await()
                 Timber.d(Gson().toJson(network))
-                if (network.status.matches("success".toRegex())) {
+                if (network.status.matches(IS_SUCCESS.toRegex())) {
                     _networkUserResponse.postValue(network.asDomainModel())
                     saveToSecurePreference(
                         network.data.asDomainModel(),
-                        network.data.profile.asDomainModel())
+                        network.data.profile.asDomainModel(),
+                        network.data.profile.userInformations.asDomainModel()
+                    )
                 }
             } catch (e: HttpException) {
                 Timber.e(e)
@@ -60,8 +64,9 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
     }
 
     private fun saveToSecurePreference(
-        dataDomain: DataDomain,
-        profileDomain: ProfileDomain,
+        dataDomain: LoginDataDomain,
+        profileDomain: LoginProfileDomain,
+        loginInformationsDomain: LoginInformationsDomain,
     ) {
         sharedPrefs.save(UserConst.TOKEN, dataDomain.token)
         sharedPrefs.save(UserConst.TOKEN_TYPE, dataDomain.tokenType)
@@ -70,9 +75,11 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
         sharedPrefs.save(UserConst.FIRSTNAME, profileDomain.firstName)
         sharedPrefs.save(UserConst.LASTNAME, profileDomain.lastName)
         sharedPrefs.save(UserConst.EMAIL, profileDomain.email)
-        sharedPrefs.save(UserConst.ADDRESS, profileDomain.status)
+        sharedPrefs.save(UserConst.STATUS, profileDomain.status)
         sharedPrefs.save(UserConst.ROLE, profileDomain.role)
-        sharedPrefs.save(UserConst.USERINFORMATION, profileDomain.userInformations ?: "")
+        sharedPrefs.save(UserConst.PRIMARY_CONTACT, loginInformationsDomain.primaryContact)
+        sharedPrefs.save(UserConst.SECONDARY_CONTACT, loginInformationsDomain.secondaryContact)
+        sharedPrefs.save(UserConst.COMPLETE_ADDRESS, loginInformationsDomain.completeAddress)
     }
 
     data class NetworkFormStateLogin(
