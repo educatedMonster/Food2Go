@@ -87,4 +87,10 @@
     <string name="profile_contact_information">Contanct Information</string>
     <string name="profile_shop_information">Shop Information</string>
 
+    <!--    Toolbar -->
+    <string name="active_store">Active</string>
+    <string name="inactive_store">Inactive</string>
+    <string name="title_select_image">Select/Get Image</string>
+
+
 </resources>

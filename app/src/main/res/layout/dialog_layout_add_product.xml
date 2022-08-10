@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="productViewModel"
+            type="com.example.kafiesta.screens.add_product.ProductViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_rounded_box"
+        android:orientation="horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_avg">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circle_add_product"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/ic_profile_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+
+                android:fontFamily="@font/aileron_regular"
+                android:gravity="bottom|center_vertical"
+                android:paddingBottom="@dimen/padding_min"
+                android:text="Create Product"
+                android:textSize="@dimen/text_size_normal_plus_plus"
+                app:layout_constraintBottom_toTopOf="@+id/text"
+                app:layout_constraintEnd_toStartOf="@+id/circle_add_product"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/cb_product_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text4" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Product Name"
+                app:endIconMode="clear_text"
+                app:helperTextTextColor="@color/colorAccent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/circle_add_product">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_product_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_small"
+                android:hint="Description"
+                app:endIconMode="clear_text"
+                app:helperTextTextColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="@+id/text"
+                app:layout_constraintStart_toStartOf="@+id/text"
+                app:layout_constraintTop_toBottomOf="@+id/text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_product_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text3"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_small"
+                android:hint="Price"
+                app:endIconMode="clear_text"
+                app:helperTextTextColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="@+id/text2"
+                app:layout_constraintStart_toStartOf="@+id/text2"
+                app:layout_constraintTop_toBottomOf="@+id/text2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_product_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text4"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_small"
+                android:hint="Product Tags"
+                app:endIconMode="clear_text"
+                app:helperTextTextColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="@+id/text3"
+                app:layout_constraintStart_toStartOf="@+id/text3"
+                app:layout_constraintTop_toBottomOf="@+id/text3">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_product_tags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cb_product_check">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/padding_semi_avg"
+                    android:paddingTop="@dimen/padding_semi_avg"
+                    android:paddingEnd="@dimen/padding_semi_avg">
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_create"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/layer_button_dialog_fill"
+                        android:fontFamily="@font/aileron_regular"
+                        android:text="Add"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/text_size_normal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:background="@drawable/layer_button_dialog_stroke"
+                        android:fontFamily="@font/aileron_regular"
+                        android:text="Cancel"
+                        android:textColor="@color/colorPrimaryVariant"
+                        android:textSize="@dimen/text_size_normal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/button_create"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </RelativeLayout>
+
+</layout>

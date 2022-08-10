@@ -7,7 +7,7 @@ import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.domain.LoginDataDomain
 import com.example.kafiesta.domain.LoginInformationsDomain
 import com.example.kafiesta.domain.LoginProfileDomain
-import com.example.kafiesta.domain.LoginUserDomain
+import com.example.kafiesta.domain.LoginBaseDomain
 import com.example.kafiesta.network.AppNetwork
 import com.example.kafiesta.network.asDomainModel
 import com.example.kafiesta.network.paramsToRequestBody
@@ -20,8 +20,8 @@ import timber.log.Timber
 
 class LoginRepository(private val sharedPrefs: SharedPrefs) {
 
-    private val _networkUserResponse = MutableLiveData<LoginUserDomain>()
-    val networkDataResponse: LiveData<LoginUserDomain> get() = _networkUserResponse
+    private val _networkUserResponse = MutableLiveData<LoginBaseDomain>()
+    val networkDataResponse: LiveData<LoginBaseDomain> get() = _networkUserResponse
 
     private val _networkFormState = MutableLiveData<NetworkFormStateLogin>()
     val networkFormStateLogin: LiveData<NetworkFormStateLogin> get() = _networkFormState
@@ -47,7 +47,7 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
                     saveToSecurePreference(
                         network.data.asDomainModel(),
                         network.data.profile.asDomainModel(),
-                        network.data.profile.userInformations.asDomainModel()
+                        network.data.profile.userInformations?.asDomainModel()
                     )
                 }
             } catch (e: HttpException) {
@@ -66,20 +66,24 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
     private fun saveToSecurePreference(
         dataDomain: LoginDataDomain,
         profileDomain: LoginProfileDomain,
-        loginInformationsDomain: LoginInformationsDomain,
+        loginInformationsDomain: LoginInformationsDomain?,
     ) {
         sharedPrefs.save(UserConst.TOKEN, dataDomain.token)
         sharedPrefs.save(UserConst.TOKEN_TYPE, dataDomain.tokenType)
         sharedPrefs.save(UserConst.EXPIRES_IN, dataDomain.expiresIn)
-        sharedPrefs.save(UserConst.ID, profileDomain.id)
+        sharedPrefs.save(UserConst.USER_ID, profileDomain.userId)
         sharedPrefs.save(UserConst.FIRSTNAME, profileDomain.firstName)
         sharedPrefs.save(UserConst.LASTNAME, profileDomain.lastName)
         sharedPrefs.save(UserConst.EMAIL, profileDomain.email)
         sharedPrefs.save(UserConst.STATUS, profileDomain.status)
         sharedPrefs.save(UserConst.ROLE, profileDomain.role)
-        sharedPrefs.save(UserConst.PRIMARY_CONTACT, loginInformationsDomain.primaryContact)
-        sharedPrefs.save(UserConst.SECONDARY_CONTACT, loginInformationsDomain.secondaryContact)
-        sharedPrefs.save(UserConst.COMPLETE_ADDRESS, loginInformationsDomain.completeAddress)
+        if (loginInformationsDomain != null) {
+            sharedPrefs.save(UserConst.INFO_ID, loginInformationsDomain.infoId)
+            sharedPrefs.save(UserConst.INFO_ID_USER_ID, loginInformationsDomain.userID)
+            sharedPrefs.save(UserConst.PRIMARY_CONTACT, loginInformationsDomain.primaryContact)
+            sharedPrefs.save(UserConst.SECONDARY_CONTACT, loginInformationsDomain.secondaryContact)
+            sharedPrefs.save(UserConst.COMPLETE_ADDRESS, loginInformationsDomain.completeAddress)
+        }
     }
 
     data class NetworkFormStateLogin(

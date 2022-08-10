@@ -216,7 +216,7 @@ class LoginActivity : BaseActivity() {
         val username = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
 //        viewModel.validateLoginCredentials(this, "jadalmario.freelancer@gmail.com", "@Unknown0322") // Admin Account
-        viewModel.validateLoginCredentials(this, "kjdlopez@gmail.com", "@Unknown0322") // Client Account
+        viewModel.validateLoginCredentials(this, "test@gmail.com", "@Unknown0322") // Client Account
 //        viewModel.validateLoginCredentials(this, username, password)
     }
 }

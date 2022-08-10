@@ -18,9 +18,9 @@ import com.example.kafiesta.constants.DialogTag
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityMainBinding
 import com.example.kafiesta.databinding.LayoutCustomNavHeaderBinding
-import com.example.kafiesta.databinding.LayoutCustomToolbarBinding
+import com.example.kafiesta.databinding.LayoutCustomToolbarDashboardBinding
 import com.example.kafiesta.screens.BaseActivity
-import com.example.kafiesta.screens.add_product.ShowProductActivity
+import com.example.kafiesta.screens.add_product.ProductActivity
 import com.example.kafiesta.screens.main.fragment.home.HomeFragment
 import com.example.kafiesta.screens.main.fragment.myshop.MyShopFragment
 import com.example.kafiesta.screens.main.fragment.order.OrderFragment
@@ -44,6 +44,8 @@ class MainActivity : BaseActivity(),
     override val showBackButton: Boolean get() = false
 
     private var userId = 0L
+    private var infoId = 0L
+    private var shopId = 0L
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
@@ -56,14 +58,16 @@ class MainActivity : BaseActivity(),
     private val mainContainer = R.id.nav_host_fragment
     private var mCurrentInView = Fragment()
     private var mActionBar: ActionBar? = null
-    private lateinit var mToolbarBinding: LayoutCustomToolbarBinding
+    private lateinit var mToolbarBinding: LayoutCustomToolbarDashboardBinding
     private lateinit var mToggle: ActionBarDrawerToggle
     private lateinit var mLayoutCustomNavHeaderBinding: LayoutCustomNavHeaderBinding
     private var mGlobalDialog: GlobalDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.ID)!!.toLong()
+        userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.USER_ID)?.toLong() ?: 0L
+        infoId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.INFO_ID)?.toLong() ?: 0L
+        shopId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.SHOP_ID)?.toLong() ?: 0L
         initConfig()
     }
 
@@ -111,7 +115,7 @@ class MainActivity : BaseActivity(),
             mActionBar!!.setHomeButtonEnabled(true)
             mToolbarBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(this),
-                R.layout.layout_custom_toolbar,
+                R.layout.layout_custom_toolbar_dashboard,
                 null,
                 false
             )
@@ -238,12 +242,12 @@ class MainActivity : BaseActivity(),
             }
             R.id.nav_my_shop -> {
                 proceedToActivity(ProfileSettingActivity::class.java)
-                setFocus(false)
+//                setFocus(false)
             }
             R.id.nav_product -> {
                 showToast(getString(R.string.title_nav_drawer_products))
-                proceedToActivity(ShowProductActivity::class.java)
-                setFocus(false)
+                proceedToActivity(ProductActivity::class.java)
+//                setFocus(false)
             }
             R.id.nav_inventory -> {
                 showToast(getString(R.string.title_nav_drawer_inventory))

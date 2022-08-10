@@ -29,15 +29,22 @@ object UserConst {
     const val TOKEN = "key_auth_token"
     const val TOKEN_TYPE = "key_token_type"
     const val EXPIRES_IN = "key_expires_in"
-    const val ID = "key_id"
+    const val USER_ID = "key_id"
     const val FIRSTNAME = "key_firstname"
     const val LASTNAME = "key_lastname"
     const val EMAIL = "key_email"
     const val STATUS = "key_address"
     const val ROLE = "key_role"
-    const val COMPLETE_ADDRESS = "key_role"
-    const val PRIMARY_CONTACT = "key_role"
-    const val SECONDARY_CONTACT = "key_role"
+    const val INFO_ID = "key_info_id"
+    const val INFO_ID_USER_ID = "key_info_id"
+    const val COMPLETE_ADDRESS = "key_complete_address"
+    const val PRIMARY_CONTACT = "key_secondary_address"
+    const val SECONDARY_CONTACT = "key_primary_address"
+    const val SHOP_ID = "key_shop_id"
+
+
+    const val PROFILE_STATUS = "active"
+    const val PROFILE_ROLE = "client"
 }
 
 object ThemeConst {
@@ -47,4 +54,16 @@ object ThemeConst {
 object DialogTag {
     const val DIALOG_MAIN_LOGOUT = "NAV_LOGOUT_GLOBAL_DIALOG"
     const val DIALOG_MAIN_LOGOUT_FORM_STATE = "FORM_STATE_LOGOUT_GLOBAL_DIALOG"
+    const val DIALOG_ADD_PRODUCT = "FORM_STATE_LOGOUT_GLOBAL_DIALOG"
+}
+
+object RequestCodeTag {
+    const val UPDATE_REFRESH_TASK = 9991
+    const val REQUEST_CODE_CAMERA = 1001
+    const val REQUEST_CODE_FCM = 1002
+}
+
+object ProductConst {
+    const val PRODUCT_ACTIVE = "active"
+    const val PRODUCT_IN_ACTIVE = "inactive"
 }

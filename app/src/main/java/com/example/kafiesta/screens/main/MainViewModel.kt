@@ -2,8 +2,8 @@ package com.example.kafiesta.screens.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.example.kafiesta.domain.ProfileDomain
 import com.example.kafiesta.repository.MainRepository
-import com.example.kafiesta.repository.MainRepository.UserInfo
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +21,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val mainFormState = mainRepository.mainFormState
     val updateFormState = mainRepository.updateFormState
+    val data = mainRepository.data
     val profile = mainRepository.profile
+    val contact = mainRepository.contact
+    val userShop = mainRepository.userShop
     val isLoading = mainRepository.isLoading
 
     fun logout() {
@@ -45,16 +48,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun updateUserInfo(userInfo: UserInfo) {
+    fun updateUserInfo(profileDomain: ProfileDomain) {
         viewModelScope.launch {
             try {
-                mainRepository.onUpdateUserInfo(userInfo)
+                mainRepository.onUpdateUserInfo(profileDomain)
             } catch (e: Exception) {
                 e.message.toString()
             }
         }
     }
-
 
     override fun onCleared() {
         super.onCleared()

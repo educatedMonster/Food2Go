@@ -48,7 +48,6 @@
     <dimen name="text_size_normal_plus">20sp</dimen>
     <dimen name="text_size_semi_normal">18sp</dimen>
     <dimen name="text_size_normal">15sp</dimen>
-
     <dimen name="text_size_normal_small">13sp</dimen>
     <dimen name="text_size_normal_small_light">12sp</dimen>
     <dimen name="text_size_small">11sp</dimen>

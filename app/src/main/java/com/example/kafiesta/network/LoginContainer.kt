@@ -3,22 +3,16 @@ package com.example.kafiesta.network
 import com.example.kafiesta.domain.LoginDataDomain
 import com.example.kafiesta.domain.LoginInformationsDomain
 import com.example.kafiesta.domain.LoginProfileDomain
-import com.example.kafiesta.domain.LoginUserDomain
+import com.example.kafiesta.domain.LoginBaseDomain
 import com.google.gson.annotations.SerializedName
 
 data class LoginBaseNetwork(
-    @SerializedName("status")
     val status: String,
-
-    @SerializedName("data")
-    val data: LoginData,
-
-    @SerializedName("message")
+    val data: LoginResponse,
     val message: String,
 )
 
-data class LoginData(
-    @SerializedName("token")
+data class LoginResponse(
     val token: String,
 
     @SerializedName("token_type")
@@ -27,14 +21,13 @@ data class LoginData(
     @SerializedName("expires_in")
     val expiresIn: Long,
 
-    @SerializedName("profile")
     val profile: LoginProfile,
 )
 
 
 data class LoginProfile(
     @SerializedName("id")
-    val id: Long,
+    val userID: Long,
 
     @SerializedName("first_name")
     val firstName: String,
@@ -52,7 +45,7 @@ data class LoginProfile(
     val role: String,
 
     @SerializedName("user_informations")
-    val userInformations: LoginUserInformations,
+    val userInformations: LoginUserInformations?= null
 )
 
 data class LoginUserInformations(
@@ -69,20 +62,18 @@ data class LoginUserInformations(
     val secondaryContact: String,
 
     @SerializedName("complete_address")
-    val completeAddress: String,
-
+    val completeAddress: String
     )
 
-
-fun LoginBaseNetwork.asDomainModel(): LoginUserDomain {
-    return LoginUserDomain(
+fun LoginBaseNetwork.asDomainModel(): LoginBaseDomain {
+    return LoginBaseDomain(
         status = status,
         data = data.asDomainModel(),
         message = message,
     )
 }
 
-fun LoginData.asDomainModel(): LoginDataDomain {
+fun LoginResponse.asDomainModel(): LoginDataDomain {
     return LoginDataDomain(
         token = token,
         tokenType = tokenType,
@@ -93,19 +84,19 @@ fun LoginData.asDomainModel(): LoginDataDomain {
 
 fun LoginProfile.asDomainModel(): LoginProfileDomain {
     return LoginProfileDomain(
-        id = id,
+        userId = userID,
         firstName = firstName,
         lastName = lastName,
         email = email,
         status = status,
         role = role,
-        userInformations = userInformations.asDomainModel()
+        userInformations = userInformations?.asDomainModel()
     )
 }
 
 fun LoginUserInformations.asDomainModel(): LoginInformationsDomain {
     return LoginInformationsDomain(
-        id = id,
+        infoId = id,
         userID = userID,
         primaryContact = primaryContact,
         secondaryContact = secondaryContact,

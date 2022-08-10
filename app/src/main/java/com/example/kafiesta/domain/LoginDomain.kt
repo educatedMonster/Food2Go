@@ -1,8 +1,6 @@
 package com.example.kafiesta.domain
 
-import java.io.Serializable
-
-data class LoginUserDomain(
+data class LoginBaseDomain(
     val status: String,
     val data: LoginDataDomain,
     val message: String,
@@ -16,22 +14,22 @@ data class LoginDataDomain(
 )
 
 data class LoginProfileDomain(
-    val id: Long,
+    val userId: Long,
     val firstName: String,
     val lastName: String,
     val email: String,
     val status: String,
     val role: String,
-    val userInformations: LoginInformationsDomain,
-) : Serializable {
+    val userInformations: LoginInformationsDomain? = null,
+) {
     val fullName = "$firstName $lastName"
 }
 
 
 data class LoginInformationsDomain(
-    val id: Long,
+    val infoId: Long,
     val userID: Long,
     val primaryContact: String,
     val secondaryContact: String,
     val completeAddress: String,
-) : Serializable
+)

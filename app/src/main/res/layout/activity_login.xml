@@ -97,7 +97,7 @@
                     android:id="@+id/button_login"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/layer_button_login"
+                    android:background="@drawable/layer_button_login_fill"
                     android:fontFamily="@font/aileron_regular"
                     android:text="@string/login_button_login"
                     android:textAllCaps="false"

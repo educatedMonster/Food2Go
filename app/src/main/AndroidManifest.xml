@@ -16,32 +16,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KaFiesta">
         <activity
-            android:name=".screens.add_product.ShowProductActivity"
+            android:name=".screens.add_product.AddProductActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.profile.sub.ShopInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.profile.sub.ContactInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.profile.sub.UserInfoActivity"
-            android:exported="false" />
+            android:name=".screens.add_product.ProductActivity"
+            android:exported="false" >
+        </activity>
         <activity
             android:name=".screens.profile.ProfileSettingActivity"
             android:exported="false" />
         <activity
             android:name=".screens.splash.SplashActivity"
-            android:exported="true">
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".screens.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".screens.login.LoginActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".screens.main.MainActivity"
             android:screenOrientation="portrait" />

@@ -6,239 +6,790 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="mainViewModel"
             type="com.example.kafiesta.screens.main.MainViewModel" />
+
+        <variable
+            name="onClickCallBack"
+            type="com.example.kafiesta.utilities.helpers.RecyclerClick" />
+
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:elevation="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:elevation="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_header"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/themeColorLightPrimary"
-                android:padding="@dimen/margin_avg"
+                app:layout_constraintBottom_toTopOf="@id/layout_button_update"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraint_layout_header_content"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/circle_image_view"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/ic_profile_24"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/button_upload_profile"
-                        style="@style/UploadImageButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/activity_profile_settings_upload"
-                        android:textSize="@dimen/text_size_small"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="@id/circle_image_view"
-                        app:layout_constraintStart_toStartOf="@id/circle_image_view"
-                        app:layout_constraintTop_toBottomOf="@+id/circle_image_view" />
-
-                    <TextView
-                        android:id="@+id/text_view_full_name"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_avg"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:layout_marginEnd="@dimen/margin_avg"
-                        android:fontFamily="@font/aileron_semibold"
-                        android:maxLines="2"
-                        android:text="@{mainViewModel.profile.fullName}"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/text_size_semi_normal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/circle_image_view"
-                        tools:text="@tools:sample/full_names" />
-
-                    <TextView
-                        android:id="@+id/text_view_email"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_avg"
-                        android:layout_marginEnd="@dimen/margin_avg"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/aileron_regular"
-                        android:singleLine="true"
-                        android:text="@{mainViewModel.profile.email}"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/text_size_normal_small"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/text_view_full_name"
-                        tools:text="@tools:sample/lorem/random" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraint_layout_shimmer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <com.facebook.shimmer.ShimmerFrameLayout
-                        android:id="@+id/shimmer_view_container"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <include layout="@layout/shimmer_placeholder_layout_settings" />
-
-                    </com.facebook.shimmer.ShimmerFrameLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:id="@+id/constraint_layout_content"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraint_layout_header">
-
-                <include layout="@layout/layout_list_horizontal_divider" />
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_user_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_avg">
+                    android:padding="@dimen/padding_avg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraint_layout_header_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/aileron_semibold"
-                        android:text="@string/profile_user_information"
-                        android:textSize="@dimen/text_size_normal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/image_content_description"
-                        android:src="@drawable/ic_logout_24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/circle_add_product"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:src="@drawable/ic_profile_24"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Button
+                            android:id="@+id/button_upload_profile"
+                            style="@style/UploadImageButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activity_profile_settings_upload"
+                            android:textSize="@dimen/text_size_small"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="@id/circle_add_product"
+                            app:layout_constraintStart_toStartOf="@id/circle_add_product"
+                            app:layout_constraintTop_toBottomOf="@+id/circle_add_product" />
+
+                        <TextView
+                            android:id="@+id/text_view_full_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_avg"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:layout_marginEnd="@dimen/margin_avg"
+                            android:fontFamily="@font/aileron_semibold"
+                            android:maxLines="2"
+                            android:text="@{mainViewModel.profile.fullName}"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/text_size_semi_normal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/circle_add_product"
+                            tools:text="@tools:sample/full_names" />
+
+                        <TextView
+                            android:id="@+id/text_view_email"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_avg"
+                            android:layout_marginEnd="@dimen/margin_avg"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/aileron_regular"
+                            android:singleLine="true"
+                            android:text="@{mainViewModel.profile.email}"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/text_size_normal_small"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/text_view_full_name"
+                            tools:text="@tools:sample/lorem/random" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraint_layout_shimmer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmer_view_container"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <include layout="@layout/shimmer_placeholder_layout_settings" />
+
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <include layout="@layout/layout_list_horizontal_divider" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_contact_info"
+                    android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_avg">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_user_info">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/constraint_layout_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/aileron_semibold"
-                        android:text="@string/profile_contact_information"
-                        android:textSize="@dimen/text_size_normal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/image_content_description"
-                        android:src="@drawable/ic_profile_24"
+                        android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <include layout="@layout/layout_list_horizontal_divider" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_contact_user"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_avg">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/aileron_semibold"
+                                android:text="@string/profile_contact_information"
+                                android:textSize="@dimen/text_size_normal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/imageView1"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/image_content_description"
+                                android:src="@drawable/ic_profile_24"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <include layout="@layout/layout_list_horizontal_divider" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_include_user"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="@dimen/margin_aver_plus"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/text_input_first_name"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/activity_user_info_first_name"
+                                        android:inputType="text"
+                                        android:text="@{mainViewModel.profile.firstName}" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_avg">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/text_input_last_name"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/activity_user_info_last_name"
+                                        android:inputType="text"
+                                        android:text="@{mainViewModel.profile.lastName}" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_avg">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/text_input_email_address"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/activity_user_info__email_address"
+                                        android:inputType="text"
+                                        android:text="@{mainViewModel.profile.email}" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                            </LinearLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_contact_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_avg">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/aileron_semibold"
+                                android:text="@string/profile_contact_information"
+                                android:textSize="@dimen/text_size_normal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/image_content_description"
+                                android:src="@drawable/ic_profile_24"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <include layout="@layout/layout_list_horizontal_divider" />
+
+                        <!--                    contact-->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_include_contact"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="@dimen/margin_aver_plus"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/text_input_address"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/activity_contact_info_address"
+                                        android:inputType="text"
+                                        android:text="@{mainViewModel.profile.userInformations.complete_address}" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_avg">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/text_input_primary_number"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/activity_contact_info_address_primary"
+                                        android:inputType="text"
+                                        android:text="@{mainViewModel.profile.userInformations.primary_contact}" />
+
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_avg">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/text_input_second_number"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/activity_contact_info_address_secondary"
+                                        android:inputType="text"
+                                        android:text="@{mainViewModel.profile.userInformations.secondary_contact}" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                            </LinearLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_shop_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_avg">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/aileron_semibold"
+                                android:text="@string/profile_shop_information"
+                                android:textSize="@dimen/text_size_normal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/imageView"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/image_content_description"
+                                android:src="@drawable/ic_profile_24"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <include layout="@layout/layout_list_horizontal_divider" />
+
+                        <!--                    shop-->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_include_shop"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="@dimen/margin_aver_plus"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/layout_shop_name"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/text_input_shop_name"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/activity_shop_name"
+                                        android:inputType="text"
+                                        android:text="@{mainViewModel.profile.user_shop.name}" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/layout_shop_address"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_avg">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/text_input_shop_address"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/activity_shop_address"
+                                        android:inputType="text"
+                                        android:text="@{mainViewModel.profile.user_shop.address}" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/layout_shop_contact"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_avg">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/text_input_shop_contact"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/activity_shop_contact"
+                                        android:inputType="text"
+                                        android:text="@{mainViewModel.profile.user_shop.contact}" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/layout_shop_opening"
+                                    style="@style/EditShopHoursSection">
+
+                                    <View
+                                        android:id="@+id/divider"
+                                        android:layout_width="0.1dp"
+                                        android:layout_height="0dp"
+                                        android:background="@color/transparent_white_percent_0"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/label_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Opening hours"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/text_input_time_open"
+                                        style="@style/ButtonEditShopHoursSection"
+                                        android:text="@string/activity_shop_time_open"
+                                        app:icon="@drawable/ic_open_time_24"
+                                        app:iconGravity="textEnd"
+                                        app:iconTint="@color/color_white"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toStartOf="@+id/divider"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/label_time" />
+
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/text_input_time_close"
+                                        style="@style/ButtonEditShopHoursSection"
+                                        android:text="@string/activity_shop_time_close"
+                                        app:icon="@drawable/ic_close_24"
+                                        app:iconGravity="textEnd"
+                                        app:iconTint="@color/color_white"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/divider"
+                                        app:layout_constraintTop_toBottomOf="@+id/label_time" />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <!--            Available Days Section-->
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/layout_shop_available_days"
+                                    style="@style/EditShopHoursSection">
+
+                                    <View
+                                        android:id="@+id/divider2"
+                                        android:layout_width="0.1dp"
+                                        android:layout_height="0dp"
+                                        android:background="@color/transparent_white_percent_0"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/label_time2" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/label_time2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Available Days"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/layout_shop_time_open2"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_min"
+                                        app:layout_constraintEnd_toStartOf="@+id/divider2"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/label_time2">
+
+                                        <com.google.android.material.checkbox.MaterialCheckBox
+                                            android:id="@+id/cb_day_1"
+                                            style="@style/CheckBoxShopDaysSection"
+                                            android:checked="@{mainViewModel.profile.user_shop.is_monday}"
+                                            android:text="Monday" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/layout_shop_time_close2"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_min"
+                                        app:layout_constraintEnd_toStartOf="@+id/divider2"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_open2">
+
+                                        <com.google.android.material.checkbox.MaterialCheckBox
+                                            android:id="@+id/cb_day_2"
+                                            style="@style/CheckBoxShopDaysSection"
+                                            android:checked="@{mainViewModel.profile.user_shop.is_tuesday}"
+                                            android:text="Tuesday" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/layout_shop_time_close3"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_min"
+                                        app:layout_constraintEnd_toEndOf="@+id/layout_shop_time_open2"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_close2">
+
+                                        <com.google.android.material.checkbox.MaterialCheckBox
+                                            android:id="@+id/cb_day_3"
+                                            style="@style/CheckBoxShopDaysSection"
+                                            android:checked="@{mainViewModel.profile.user_shop.is_wednesday}"
+                                            android:text="Wednesday" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/layout_shop_time_close4"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_min"
+                                        app:layout_constraintEnd_toEndOf="@+id/layout_shop_time_open2"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_close3">
+
+                                        <com.google.android.material.checkbox.MaterialCheckBox
+                                            android:id="@+id/cb_day_4"
+                                            style="@style/CheckBoxShopDaysSection"
+                                            android:checked="@{mainViewModel.profile.user_shop.is_thursday}"
+                                            android:text="Thursday" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/layout_shop_time_close5"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_min"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/layout_shop_time_open2"
+                                        app:layout_constraintTop_toBottomOf="@+id/label_time2">
+
+                                        <com.google.android.material.checkbox.MaterialCheckBox
+                                            android:id="@+id/cb_day_5"
+                                            style="@style/CheckBoxShopDaysSection"
+                                            android:checked="@{mainViewModel.profile.user_shop.is_friday}"
+                                            android:text="Friday" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/layout_shop_time_close6"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_min"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/layout_shop_time_open2"
+                                        app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_close5">
+
+                                        <com.google.android.material.checkbox.MaterialCheckBox
+                                            android:id="@+id/cb_day_6"
+                                            style="@style/CheckBoxShopDaysSection"
+                                            android:checked="@{mainViewModel.profile.user_shop.is_saturday}"
+                                            android:text="Saturday" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/layout_shop_time_close7"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_min"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/layout_shop_time_open2"
+                                        app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_close6">
+
+                                        <com.google.android.material.checkbox.MaterialCheckBox
+                                            android:id="@+id/cb_day_7"
+                                            style="@style/CheckBoxShopDaysSection"
+                                            android:checked="@{mainViewModel.profile.user_shop.is_sunday}"
+                                            android:text="Sunday" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <!--            Payment Method-->
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/layout_shop_opening3"
+                                    style="@style/EditShopHoursSection">
+
+                                    <View
+                                        android:id="@+id/divider3"
+                                        android:layout_width="0.1dp"
+                                        android:layout_height="0dp"
+                                        android:background="@color/transparent_white_percent_0"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/label_payment_method"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Payment Method"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/layout_shop_gcash"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_min"
+                                        app:layout_constraintEnd_toStartOf="@+id/divider3"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/label_payment_method">
+
+                                        <com.google.android.material.checkbox.MaterialCheckBox
+                                            android:id="@+id/cb_gcash"
+                                            style="@style/CheckBoxShopDaysSection"
+                                            android:checked="@{mainViewModel.profile.user_shop.is_pm_gcash}"
+                                            android:text="GCash" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/layout_shop_cod"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_min"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/layout_shop_gcash"
+                                        app:layout_constraintTop_toBottomOf="@+id/label_payment_method">
+
+                                        <com.google.android.material.checkbox.MaterialCheckBox
+                                            android:id="@+id/cb_cod"
+                                            style="@style/CheckBoxShopDaysSection"
+                                            android:checked="@{mainViewModel.profile.user_shop.is_pm_cod}"
+                                            android:text="Cash on Delivery" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            </LinearLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <include layout="@layout/layout_list_horizontal_divider" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_shop_info"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_button_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_avg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintStart_toStartOf="parent">
+
+                <FrameLayout
+                    android:id="@+id/frame_button_update"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_avg">
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/aileron_semibold"
-                        android:text="@string/profile_shop_information"
-                        android:textSize="@dimen/text_size_normal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_update"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/layer_button_login_stroke"
+                        android:fontFamily="@font/aileron_regular"
+                        android:text="@string/activity_user_info_update"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/text_size_normal_plus"
+                        android:visibility="@{mainViewModel.isLoading ? View.GONE : View.VISIBLE}" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/image_content_description"
-                        android:src="@drawable/ic_profile_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    <ProgressBar
+                        android:id="@+id/progress_loading"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:backgroundTint="@color/transparent_white_percent_25"
+                        android:visibility="@{mainViewModel.isLoading ? View.VISIBLE : View.GONE}" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
 
-                <include layout="@layout/layout_list_horizontal_divider" />
-
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </layout>

@@ -2,6 +2,7 @@ package com.example.kafiesta.network
 
 import com.example.kafiesta.BuildConfig
 import com.example.kafiesta.constants.ServerConst.API_SERVER_URL
+import com.example.kafiesta.domain.ListNetworktest
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -29,7 +30,7 @@ interface AppService {
     @GET("user")
     fun getProfileAsync(
         @Header("Authorization") bearer: String,
-    ): Deferred<Any>
+    ): Deferred<UserBaseNetwork>
 
 
     //  https://kafiesta-api.osc-fr1.scalingo.io/v1/user/{id}
@@ -59,6 +60,31 @@ interface AppService {
         @Header("Authorization") bearer: String,
     ): Deferred<List<Any>>
 
+    // https://kafiesta-api.osc-fr1.scalingo.io/v1/product
+    @Multipart
+    @POST("product")
+    fun onAddProductAsync(
+        @Header("Authorization") bearer: String,
+        @PartMap params: HashMap<String, RequestBody>
+    ): Deferred<ProductBaseNetwork>
+
+    //https://kafiesta-api.osc-fr1.scalingo.io/v1/product/list
+    @Multipart
+    @POST("product/list")
+    fun onAddProductListAsync(
+        @Header("Authorization") bearer: String,
+        @PartMap params: HashMap<String, RequestBody>,
+    ): Deferred<ListNetworktest>
+
+
+    //https://kafiesta-api.osc-fr1.scalingo.io/v1/product/upload/{id}
+    @Multipart
+    @POST("product/upload/{id}")
+    fun onAddProductImageAsync(
+        @Header("Authorization") bearer: String,
+        @Path("id") productId: Long,
+        @PartMap params: HashMap<String, RequestBody>,
+    ): Deferred<ProductBaseNetwork>
 }
 
 object AppNetwork {
