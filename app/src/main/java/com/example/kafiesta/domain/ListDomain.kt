@@ -1,5 +1,7 @@
 package com.example.kafiesta.domain
 
+import java.io.File
+
 data class ListDMaintest(
     val status: String,
     val message: String,
@@ -27,13 +29,16 @@ data class ResultDomaintest(
 data class ProductDomaintest(
     val id: Long,
     val userID: Long,
-    val name: String,
-    val description: String,
+    val name: String?,
+    val description: String?,
     val imageURL: String? = null,
-    val price: String,
-    val tags: String? = null,
-    val status: String,
+    val price: Double?,
+    val tags: String?,
+    val status: String?,
 ) {
+    val priceString = price.toString()
+    val statusBool = status!!.matches("active".toRegex())
+    val isIdExist = id != 0L
 }
 
 
@@ -42,3 +47,13 @@ data class LinkDomaintest(
     val label: String,
     val active: Boolean,
 )
+
+data class TestUnit(
+    val prod : ProductDomain,
+    val file : File
+)
+{
+    val priceString = prod.price.toString()
+    val statusBool = prod.status!!.matches("active".toRegex())
+    val isIdExist = prod.id != 0L
+}

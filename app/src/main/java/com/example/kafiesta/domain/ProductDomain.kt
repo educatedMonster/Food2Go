@@ -15,12 +15,13 @@ data class ProductDomain(
     val userID: Long,
     val name: String,
     val description: String,
-    val imageURL: File? = null,
-    val price: Double,
+    val imageURL: String? = "",
+    val price: String,
     val tags: String,
-    val status: String,
+    val status: String
 ){
     val priceString = price.toString()
+    val statusBool = status.matches("active".toRegex())
+    val isIdExist = id != 0L
 }
-
 

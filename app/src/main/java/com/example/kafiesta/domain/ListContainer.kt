@@ -13,33 +13,22 @@ data class ListNetworktest (
 data class Resulttest (
     @SerializedName("current_page")
     val currentPage: Long,
-
     val data: List<Producttest>,
-
     @SerializedName("first_page_url")
     val firstPageURL: String,
-
     val from: Long,
-
     @SerializedName("last_page")
     val lastPage: Long,
-
     @SerializedName("last_page_url")
     val lastPageURL: String,
-
     val links: List<Link>,
-
     @SerializedName("next_page_url")
     val nextPageURL: String? = null,
-
     val path: String,
-
     @SerializedName("per_page")
     val perPage: String,
-
     @SerializedName("prev_page_url")
     val prevPageURL: String? = null,
-
     val to: Long,
     val total: Long
 )
@@ -47,25 +36,15 @@ data class Resulttest (
 
 data class Producttest (
     val id: Long,
-
     @SerializedName("user_id")
     val userID: Long,
-
-    val name: String,
-    val description: String,
-
+    val name: String?,
+    val description: String?,
     @SerializedName("image_url")
-    val imageURL: String? = null,
-
-    val price: String,
-    val tags: String? = null,
-    val status: String,
-
-    @SerializedName("created_at")
-    val createdAt: String,
-
-    @SerializedName("updated_at")
-    val updatedAt: String
+    val imageURL: String?,
+    val price: Double?,
+    val tags: String?,
+    val status: String?
 )
 
 data class Link (

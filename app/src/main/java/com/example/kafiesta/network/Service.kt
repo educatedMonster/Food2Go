@@ -6,6 +6,7 @@ import com.example.kafiesta.domain.ListNetworktest
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -68,6 +69,23 @@ interface AppService {
         @PartMap params: HashMap<String, RequestBody>
     ): Deferred<ProductBaseNetwork>
 
+
+//    https://kafiesta-api.osc-fr1.scalingo.io/v1/product/{id}
+    @DELETE("product/{id}")
+    fun onDeleteProductAsync(
+        @Header("Authorization") bearer: String,
+        @Path("id") productId: Long,
+    ): Deferred<ProductBaseNetwork>
+
+    // https://kafiesta-api.osc-fr1.scalingo.io/v1/product
+    @Multipart
+    @PUT("product")
+    fun onEditProductAsync(
+        @Header("Authorization") bearer: String,
+        @PartMap params: HashMap<String, RequestBody>
+    ): Deferred<ProductBaseNetwork>
+
+
     //https://kafiesta-api.osc-fr1.scalingo.io/v1/product/list
     @Multipart
     @POST("product/list")
@@ -83,8 +101,9 @@ interface AppService {
     fun onAddProductImageAsync(
         @Header("Authorization") bearer: String,
         @Path("id") productId: Long,
-        @PartMap params: HashMap<String, RequestBody>,
-    ): Deferred<ProductBaseNetwork>
+        @Part params: MultipartBody.Part
+    ): Deferred<Any>
+//    ): Deferred<ProductBaseNetwork>
 }
 
 object AppNetwork {

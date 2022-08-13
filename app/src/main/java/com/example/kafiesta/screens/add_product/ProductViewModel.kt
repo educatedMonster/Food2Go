@@ -1,13 +1,12 @@
 package com.example.kafiesta.screens.add_product
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import com.example.kafiesta.domain.ProductDomain
+import com.example.kafiesta.domain.ProductDomaintest
 import com.example.kafiesta.repository.ProductRepository
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
-import id.zelory.compressor.Compressor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -24,6 +23,8 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     val productList = repository.productList
     val isLoading = repository.isLoading
+    val isUpdated = repository.isUpdated
+    val isDeleted = repository.isDeleted
     val isProductCreated = repository.isProductCreated
     val isUploaded = repository.isUploaded
 
@@ -37,21 +38,33 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun addProduct(context: Context, product: ProductDomain, selectedFile: File) {
+    //    fun addProduct(context: Context, product: ProductDomaintest, selectedFile: File?) {
+    fun addProduct(product: ProductDomain, selectedFile: File) {
         viewModelScope.launch {
             try {
-                val compressedFile = Compressor.compress(context, selectedFile)
-                repository.onAddProduct(product, compressedFile)
+//                val compressedFile = Compressor.compress(context, selectedFile!!)
+//                repository.onAddProduct(product, compressedFile)
+                repository.onAddProduct(product, selectedFile)
             } catch (e: IOException) {
                 Timber.d(e)
             }
         }
     }
 
-    fun onUploadProductImage(productId: Long, imageFile: File) {
+    fun editProduct(product: ProductDomain, selectedFile: File) {
         viewModelScope.launch {
             try {
-                repository.onUploadProductImage(productId, imageFile)
+                repository.onEditProduct(product, selectedFile)
+            } catch (e: IOException) {
+                Timber.d(e)
+            }
+        }
+    }
+
+    fun deleteProduct(productId: Long) {
+        viewModelScope.launch {
+            try {
+                repository.onDeleteProductAsync(productId)
             } catch (e: IOException) {
                 Timber.d(e)
             }

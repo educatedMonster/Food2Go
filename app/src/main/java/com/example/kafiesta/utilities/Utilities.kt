@@ -21,10 +21,12 @@ import android.webkit.MimeTypeMap
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.RequestCodeTag
+import com.example.kafiesta.utilities.dialog.ProductFormDialog
 import com.example.kafiesta.utilities.extensions.showToast
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -170,4 +172,8 @@ fun imageUrl(imageView: ImageView?, url: String?) {
                 .into(imageView)
         }
     }
+}
+
+fun getDialog(fragment: FragmentActivity?, dialogTag: String): Any? {
+    return fragment?.supportFragmentManager?.findFragmentByTag(dialogTag)
 }

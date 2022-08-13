@@ -49,6 +49,9 @@
     <string name="activity_user_info_last_name">Last Name</string>
     <string name="activity_user_info__email_address">Email address</string>
     <string name="activity_user_info_update">Update</string>
+    <string name="activity_user_info_add">Add</string>
+    <string name="activity_product_add">Create Product</string>
+    <string name="activity_product_update">Update Product</string>
     <string name="activity_contact_info_address">Complete Address</string>
     <string name="activity_contact_info_address_primary">Primary Contact</string>
     <string name="activity_contact_info_address_secondary">Secondary Contact</string>
@@ -57,6 +60,8 @@
     <string name="activity_shop_contact">Shop Contact Number</string>
     <string name="activity_shop_time_open">Opening Time</string>
     <string name="activity_shop_time_close">Closing Time</string>
+    <string name="activity_shop_open">Open</string>
+    <string name="activity_shop_close">Closed</string>
 
     <!--    Error Message -->
     <string name="error_message_illegal_argument_exception">Unable to construct action bar</string>
@@ -84,8 +89,15 @@
     <string name="main_activity_button_no">No</string>
     <string name="main_activity_preparing_logout">Preparing to Logout</string>
     <string name="profile_user_information">User Information</string>
-    <string name="profile_contact_information">Contanct Information</string>
+    <string name="profile_contact_information">Contact Information</string>
     <string name="profile_shop_information">Shop Information</string>
+
+
+    <!--    ProductFormDialog -->
+    <string name="dialog_product_form_create_button">Create</string>
+    <string name="dialog_product_form_cancel_button">Cancel</string>
+    <string name="dialog_product_form_delete_button">Delete</string>
+    <string name="dialog_product_form_update_button">Update</string>
 
     <!--    Toolbar -->
     <string name="active_store">Active</string>

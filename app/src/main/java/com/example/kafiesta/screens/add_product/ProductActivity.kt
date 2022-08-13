@@ -11,14 +11,19 @@ import com.example.kafiesta.constants.DialogTag
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityProductBinding
 import com.example.kafiesta.domain.ProductDomain
+import com.example.kafiesta.domain.ProductDomaintest
+import com.example.kafiesta.domain.ResultDomaintest
 import com.example.kafiesta.screens.BaseActivity
-import com.example.kafiesta.utilities.adapter.ProductAdapter
+import com.example.kafiesta.utilities.adapter_diffutil.SimpleDiffUtilAdapter
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
-import com.example.kafiesta.utilities.dialog.AddProductDialog
+import com.example.kafiesta.utilities.dialog.ProductDialog
 import com.example.kafiesta.utilities.extensions.showToast
+import com.example.kafiesta.utilities.getDialog
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
+import com.example.kafiesta.utilities.hideKeyboard
+import com.trackerteer.taskmanagement.utilities.extensions.gone
 import timber.log.Timber
 import java.io.File
 
@@ -35,7 +40,7 @@ class ProductActivity : BaseActivity() {
     private lateinit var binding: ActivityProductBinding
     private var mActionBar: ActionBar? = null
 
-    private lateinit var mAdapter: ProductAdapter
+    private lateinit var mAdapter: SimpleDiffUtilAdapter
     private val productViewModel: ProductViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(application)
             .create(ProductViewModel::class.java)
@@ -72,7 +77,6 @@ class ProductActivity : BaseActivity() {
         mCurrentPage = 1L
         mLength = 10L
         mStart = 0L
-        mAdapter.clearAdapter()
         productViewModel.getAllProducts(
             length = mLength,
             start = mStart,
@@ -80,16 +84,23 @@ class ProductActivity : BaseActivity() {
     }
 
     private fun initAdapter() {
-        mAdapter = ProductAdapter(
-            onClickCallBack = RecyclerClick {
-
-            })
+        mAdapter = SimpleDiffUtilAdapter(R.layout.list_item_product, RecyclerClick(
+            click = {
+                ProductDialog(
+                    userId = userId,
+                    listener = object : ProductDialog.Listener {
+                        override fun onAddProductListener(product: ProductDomain, file: File) {
+                            productViewModel.addProduct(product, file)
+                        }
+                    }).show(supportFragmentManager, DialogTag.DIALOG_FORM_EDIT_PRODUCT)
+            }
+        ))
 
         binding.recyclerViewProducts.apply {
             adapter = mAdapter
             addItemDecoration(
                 DividerItemDecoration(
-                    this@ProductActivity,
+                    context,
                     R.drawable.list_divider_decoration
                 )
             )
@@ -111,18 +122,21 @@ class ProductActivity : BaseActivity() {
     private fun initEventListener() {
         binding.apply {
             // Todo - Add product
-            this.fabProductAdd.setOnClickListener {
-                AddProductDialog(userId, object : AddProductDialog.Listener {
-                    override fun onAddProductListener(
-                        product: ProductDomain,
-                        selectedFile: File,
-                    ) {
-                        productViewModel.addProduct(this@ProductActivity, product, selectedFile)
-                    }
-                }).show(supportFragmentManager, DialogTag.DIALOG_ADD_PRODUCT)
+            fabProductAdd.setOnClickListener {
+                ProductDialog(
+                    userId = userId,
+                    listener = object : ProductDialog.Listener {
+                        override fun onAddProductListener(product: ProductDomain, file: File) {
+                            productViewModel.addProduct(product, file)
+                        }
+                    }).show(supportFragmentManager, DialogTag.DIALOG_FORM_INITIAL_PRODUCT)
             }
 
-            this.recyclerViewProducts.apply {
+            swipeRefreshLayout.setOnRefreshListener {
+                initReloadRequest()
+            }
+
+            recyclerViewProducts.apply {
                 this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         if (!recyclerView.canScrollVertically(1)) {
@@ -131,10 +145,6 @@ class ProductActivity : BaseActivity() {
                         super.onScrolled(recyclerView, dx, dy)
                     }
                 })
-            }
-
-            this.swipeRefreshLayout.setOnRefreshListener {
-                initReloadRequest()
             }
         }
     }
@@ -147,29 +157,56 @@ class ProductActivity : BaseActivity() {
 
     private fun initLiveData() {
         productViewModel.apply {
-            this.productList.observe(this@ProductActivity) {
-                mLength += it.data.size.toLong()
-                mStart += it.data.size.toLong()
+            productList.observe(this@ProductActivity) {
+                val listProduct = ArrayList<ProductDomaintest>()
+
+
+                mLength += it.data.size
+                mStart += it.data.size
 
                 mCurrentPage = it.currentPage
                 mLastPage = it.lastPage
 
                 for (model in it.data) {
-                    mAdapter.addData(model)
+                    listProduct.add(model)
                 }
+
+                mAdapter.submitList(listProduct as List<ProductDomaintest>)
             }
 
-            this.isLoading.observe(this@ProductActivity) {
+            isLoading.observe(this@ProductActivity) {
                 setLoading(it)
             }
 
-            this.isProductCreated.observe(this@ProductActivity) {
-                showToast("$it.name has been created \n ${it.imageURL}")
+            isUpdated.observe(this@ProductActivity) {
+                initReloadRequest()
+                setLoading(it)
             }
 
-            this.isUploaded.observe(this@ProductActivity) {
+            isDeleted.observe(this@ProductActivity) {
                 if (it) {
-                    showToast("Uploaded")
+                    initReloadRequest()
+                    setLoading(it)
+                    showToast("Deleted")
+                }
+            }
+
+            isProductCreated.observe(this@ProductActivity) {
+                setLoading(true)
+                showToast("${it.name} has been created.")
+            }
+
+            isUploaded.observe(this@ProductActivity) {
+                if (it) {
+                    setLoading(it)
+                    initReloadRequest()
+                    showToast("Product has been added to the list")
+                    binding.fabProductMenu.gone()
+                    hideKeyboard(this@ProductActivity)
+                    (getDialog(
+                        this@ProductActivity,
+                        DialogTag.DIALOG_FORM_INITIAL_PRODUCT
+                    ) as ProductDialog?)?.dismiss()
                 }
             }
         }
@@ -210,4 +247,11 @@ class ProductActivity : BaseActivity() {
             Timber.e(e)
         }
     }
+
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
 }

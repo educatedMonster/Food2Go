@@ -24,10 +24,10 @@ data class ProductResponse (
 
     val name: String,
     val description: String,
-    val price: Double,
+    val price: String,
     val status: String,
     val tags: String,
-//    val imageURL: File? = null,
+    val imageURL: String,
 )
 
 fun ProductBaseNetwork.asDomainModel(): ProductBaseDomain {
@@ -47,6 +47,6 @@ fun ProductResponse.asDomainModel(): ProductDomain {
         price = price,
         status = status,
         tags = tags,
-//        imageURL = imageURL
+        imageURL = imageURL
     )
 }

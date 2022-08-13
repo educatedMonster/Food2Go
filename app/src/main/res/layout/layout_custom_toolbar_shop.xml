@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -27,36 +28,46 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:fontFamily="@font/aileron_semibold"
+                android:hint="@string/title_layout_toolbar_name"
                 android:paddingTop="@dimen/padding_small"
                 android:paddingBottom="@dimen/padding_small"
+                android:layout_marginEnd="@dimen/margin_small"
                 android:singleLine="true"
-                android:hint="@string/title_layout_toolbar_name"
                 android:textAlignment="textStart"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/text_size_normal_plus_semi"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/layout_switch"
+                app:layout_constraintEnd_toStartOf="@+id/active_inactive_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <FrameLayout
-                android:id="@+id/layout_switch"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/active_inactive_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:fontFamily="@font/aileron_semibold"
+                android:gravity="center_vertical"
+                android:hint="@string/activity_shop_close"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"
+                android:singleLine="true"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:text="@{mainViewModel.profile.user_shop.isStatusString()}"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/text_size_semi_normal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintEnd_toStartOf="@+id/active_inactive_toggle_store"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/active_inactive_toggle_store"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:checked="@{mainViewModel.profile.user_shop.is_Status}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:checked="@{mainViewModel.profile.user_shop.is_active_inactive()}" />
-
-            </FrameLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

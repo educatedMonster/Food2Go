@@ -29,15 +29,17 @@ import com.trackerteer.taskmanagement.utilities.extensions.showToast
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import java.io.File
 
-class AddProductDialog(private val userId: Long, private val listener: Listener) :
-    DialogFragment() {
+class ProductDialog(
+    private val userId: Long,
+    private val listener: Listener,
+) : DialogFragment() {
 
     interface Listener {
-        fun onAddProductListener(product: ProductDomain, selectedFile: File)
+        fun onAddProductListener(product: ProductDomain, file: File)
     }
 
     private var mOutputFileUri: Uri? = null
-    private var mSelectedFile: File? = null
+    private var mFile: File? = null
     private var isGetImage = false
     private lateinit var binding: DialogLayoutAddProductBinding
 
@@ -68,7 +70,7 @@ class AddProductDialog(private val userId: Long, private val listener: Listener)
                     binding.circleAddProduct.visible()
 
                     if (mOutputFileUri != null) {
-                        mSelectedFile = FileUtils.getFile(context, mOutputFileUri)!!
+                        mFile = FileUtils.getFile(context, mOutputFileUri)!!
                     }
 
                     isGetImage = true
@@ -88,54 +90,69 @@ class AddProductDialog(private val userId: Long, private val listener: Listener)
             null,
             false
         ) as DialogLayoutAddProductBinding
-
         val view = binding.root
-
         dialog.setView(view)
 
-        binding.circleAddProduct.setOnClickListener {
-//                mOutputFileUri = createImageFileName()
-//                setFileChooser(this@ProductActivity, mOutputFileUri!!)
-            startGettingImage()
-        }
+//        val executor = Executors.newSingleThreadExecutor()
+//        val handler = Handler(Looper.getMainLooper())
+//        var image: Bitmap?
+//        executor.execute {
+//            try {
+//                val imageUrl =  mFile?.absolutePath
+//                    ?: "https://pbs.twimg.com/profile_images/1048086829143011329/W8R1grIh_400x400.jpg"
+//                val `in` = java.net.URL(imageUrl).openStream()
+//                image = BitmapFactory.decodeStream(`in`)
+//                handler.post {
+//                    binding.circleAddProduct.setImageBitmap(image)
+//                }
+//            } catch (e: Exception) {
+//                Timber.d(e)
+//            }
+//        }
 
+        binding.apply {
+            circleAddProduct.setOnClickListener {
+                startGettingImage()
+            }
 
-        binding.buttonCreate.setOnClickListener {
-            val pName = binding.etProductName.text.toString()
-            val pDesc = binding.etProductDesc.text.toString()
-            val pPrice = binding.etProductPrice.text.toString()
-            val pTags = binding.etProductTags.text.toString()
+//            if (id != 0L) {
+//                buttonDelete.visible()
+//                buttonUpdate.visible()
+//            } else {
+//                buttonCreate.visible()
+//            }
 
-            if (onValidate(
-                    binding.etProductName,
-                    binding.etProductDesc,
-                    binding.etProductPrice,
-                    binding.etProductTags,
-                )
-            ) {
-                val product = ProductDomain(
-                    id = -1L,
-                    userID = userId,
-                    name = pName,
-                    description = pDesc,
-                    imageURL = mSelectedFile,
-                    price = pPrice.toDouble(),
-                    tags = pTags,
-                    status = validateCb(binding.cbProductCheck)
-                )
-
-                if(mSelectedFile != null){
-                    listener.onAddProductListener(product, mSelectedFile!!)
-                } else {
+            buttonCreate.setOnClickListener {
+                if(mFile == null){
                     return@setOnClickListener
-                    showToast("Product image needed.")
+                    showToast("Product image required!")
+                }
+
+                if (onValidate(
+                        binding.etProductName,
+                        binding.etProductDesc,
+                        binding.etProductPrice,
+                        binding.etProductTags,
+                    )
+                ) {
+                    val pName = binding.etProductName.text.toString()
+                    val pDesc = binding.etProductDesc.text.toString()
+                    val pPrice = binding.etProductPrice.text.toString()
+                    val pTags = binding.etProductTags.text.toString()
+                    val pStatus = validateCb(binding.cbProductCheck)
+
+                    val product = ProductDomain(
+                        id = -1L,
+                        userID = userId,
+                        name = pName,
+                        description = pDesc,
+                        price = pPrice,
+                        tags = pTags,
+                        status = pStatus
+                    )
+                    listener.onAddProductListener(product, mFile!!)
                 }
             }
-            dismiss()
-        }
-
-        binding.buttonCancel.setOnClickListener {
-            dismiss()
         }
 
         val alertDialog = dialog.create()

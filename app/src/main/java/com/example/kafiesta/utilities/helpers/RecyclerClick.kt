@@ -1,27 +1,41 @@
 package com.example.kafiesta.utilities.helpers
 
-import android.view.View
+import com.example.kafiesta.domain.TestUnit
 
 class RecyclerClick(
-    val click: (Any) -> Unit
+    val click: (Any) -> Unit,
 ) {
     fun onClick(model: Any) = click(model)
 }
 
-class RecyclerClick2(
-    val click1: (Any) -> Unit,
-    val click2: (Any) -> Unit
+class ProductRecyclerClick(
+    val addClick: (testUnit: TestUnit?) -> Unit,
+    val cancelClick: () -> Unit,
+    val editClick: (testUnit: TestUnit) -> Unit,
+    val removeClick: (Long) -> Unit,
 ) {
-    fun onClick1(model: Any) = click1(model)
-    fun onClick2(model: Any) = click2(model)
-}
-
-class RecyclerClickView(
-    val click: (Any, View) -> Unit
-) {
-    fun onClick(model: Any, view: View) = click(model, view)
+    fun onAddClick(testUnit: TestUnit? = null) = addClick(testUnit)
+    fun onCancelClick() = cancelClick()
+    fun onEditClick(testUnit: TestUnit) = editClick(testUnit)
+    fun onRemoveClick(id: Long) = removeClick(id)
 }
 
 class GlobalDialogClicker(val click: () -> Unit) {
+    fun onClick() = click()
+}
+
+class AddEditProductDialogClicker(
+    val click: (testUnit: TestUnit) -> Unit,
+) {
+    fun onClick(testUnit: TestUnit) =  click(testUnit)
+}
+
+class DeleteProductDialogClicker(
+    val click: (prodId: Long) -> Unit,
+) {
+    fun onClick(prodId: Long) = click(prodId)
+}
+
+class CancelProductDialogClicker(val click: () -> Unit) {
     fun onClick() = click()
 }

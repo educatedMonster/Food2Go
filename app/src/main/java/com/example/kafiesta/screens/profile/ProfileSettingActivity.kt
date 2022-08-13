@@ -1,5 +1,6 @@
 package com.example.kafiesta.screens.profile
 
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -10,10 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.ServerConst.IS_SUCCESS
 import com.example.kafiesta.constants.UserConst
+import com.example.kafiesta.constants.UserConst.PROFILE_ROLE
+import com.example.kafiesta.constants.UserConst.PROFILE_STATUS
 import com.example.kafiesta.databinding.ActivityProfileSettingBinding
 import com.example.kafiesta.databinding.LayoutCustomToolbarShopBinding
 import com.example.kafiesta.domain.ProfileDomain
-import com.example.kafiesta.domain.UserInformationsDomain
+import com.example.kafiesta.domain.UserInformationDomain
 import com.example.kafiesta.domain.UserShopDomain
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.main.MainViewModel
@@ -35,6 +38,10 @@ class ProfileSettingActivity : BaseActivity() {
     private var userId = 0L
     private var infoId = 0L
     private var shopId = 0L
+    private var openHour: Int = 0
+    private var openMinute: Int = 0
+    private var closeHour: Int = 0
+    private var closeMinute: Int = 0
     private lateinit var binding: ActivityProfileSettingBinding
     private lateinit var toolbarShopBinding: LayoutCustomToolbarShopBinding
     private var mActionBar: ActionBar? = null
@@ -47,8 +54,8 @@ class ProfileSettingActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.USER_ID)!!.toLong()
-        infoId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.INFO_ID)?.toLong()?: 0L
-        shopId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.SHOP_ID)?.toLong()?: 0L
+        infoId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.INFO_ID)?.toLong() ?: 0L
+        shopId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.SHOP_ID)?.toLong() ?: 0L
         initConfig()
     }
 
@@ -90,8 +97,10 @@ class ProfileSettingActivity : BaseActivity() {
         setSupportActionBar(binding.toolbar)
         mActionBar = supportActionBar
         if (mActionBar != null) {
-            mActionBar!!.setDisplayHomeAsUpEnabled(true)
-            mActionBar!!.setDisplayShowHomeEnabled(true)
+            mActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+            mActionBar!!.setDisplayHomeAsUpEnabled(false)
+            mActionBar!!.setDisplayUseLogoEnabled(true)
+            mActionBar!!.setDisplayShowHomeEnabled(false)
             toolbarShopBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(this),
                 R.layout.layout_custom_toolbar_shop,
@@ -113,7 +122,7 @@ class ProfileSettingActivity : BaseActivity() {
         }
 
         mainViewModel.data.observe(this) {
-            if(it.status.matches("success".toRegex())){
+            if (it.status.matches(IS_SUCCESS.toRegex())) {
                 showToast(it.result.fullName)
             }
         }
@@ -131,6 +140,11 @@ class ProfileSettingActivity : BaseActivity() {
     }
 
     private fun initEventListener() {
+        toolbarShopBinding.activeInactiveToggleStore.setOnClickListener{
+            if (toolbarShopBinding.activeInactiveToggleStore.isChecked) toolbarShopBinding.activeInactiveText.text =
+                "Open" else toolbarShopBinding.activeInactiveText.text ="Closed"
+        }
+
         binding.apply {
             buttonUpdate.setSafeOnClickListener {
 
@@ -140,14 +154,20 @@ class ProfileSettingActivity : BaseActivity() {
                 val emailAddress = binding.textInputEmailAddress.text.toString()
 
                 //Contact
-                val textInputAddress = binding.textInputAddress.text.toString()
-                val textInputPrimaryNumber = binding.textInputPrimaryNumber.text.toString()
-                val textInputSecondNumber = binding.textInputSecondNumber.text.toString()
+                val inputAddress = binding.textInputAddress.text.toString()
+                val primaryNumber = binding.textInputPrimaryNumber.text.toString()
+                val secondNumber = binding.textInputSecondNumber.text.toString()
 
                 //Shop
-                val textInputShopName = binding.textInputShopName.text.toString()
-                val textInputShopAddress = binding.textInputShopAddress.text.toString()
-                val textInputShopContact = binding.textInputShopContact.text.toString()
+                val shopName = binding.textInputShopName.text.toString()
+                val shopAddress = binding.textInputShopAddress.text.toString()
+                val shopContact = binding.textInputShopContact.text.toString()
+                val shopOpen = binding.textInputTimeOpen.text.toString()
+                val shopClose = binding.textInputTimeClose.text.toString()
+//                val shopStatus = binding.status.text.toString() // status not yet set
+
+
+                val shopStatus = toolbarShopBinding.activeInactiveToggleStore.isChecked
                 val cbDay1 = binding.cbDay1.isChecked
                 val cbDay2 = binding.cbDay2.isChecked
                 val cbDay3 = binding.cbDay3.isChecked
@@ -157,24 +177,25 @@ class ProfileSettingActivity : BaseActivity() {
                 val cbDay7 = binding.cbDay7.isChecked
                 val cbGcash = binding.cbGcash.isChecked
                 val cbCod = binding.cbCod.isChecked
+//                val deliveryCharge = binding.deliveryCharge.text.toString() // deliveryCharge not yet set
 
-                val userInfo = UserInformationsDomain(
+                val userInfo = UserInformationDomain(
                     id = infoId,
                     user_id = userId,
-                    complete_address = textInputAddress,
-                    primary_contact = textInputPrimaryNumber,
-                    secondary_contact = textInputSecondNumber
+                    complete_address = inputAddress,
+                    primary_contact = primaryNumber,
+                    secondary_contact = secondNumber
                 )
 
                 val userShop = UserShopDomain(
                     id = shopId,
                     user_id = userId,
-                    name = textInputShopName,
-                    address = textInputShopAddress,
-                    contact = textInputShopContact,
-                    open_hour = null,
-                    close_hour = null,
-                    status = "open",
+                    name = shopName,
+                    address = shopAddress,
+                    contact = shopContact,
+                    open_hour = shopOpen,
+                    close_hour = shopClose,
+                    status = onValidateStatus(shopStatus),
                     monday = onValidateCb(cbDay1),
                     tuesday = onValidateCb(cbDay2),
                     wednesday = onValidateCb(cbDay3),
@@ -185,6 +206,7 @@ class ProfileSettingActivity : BaseActivity() {
                     pm_gcash = onValidateCb(cbGcash),
                     pm_cod = onValidateCb(cbCod),
                     is_active = 1L
+                    //delivery charge is not yet set
                 )
 
                 val a = ProfileDomain(
@@ -193,9 +215,9 @@ class ProfileSettingActivity : BaseActivity() {
                     lastName = lastName,
                     fullName = "$firstName $lastName",
                     email = emailAddress,
-                    status = "active",
-                    role = "client",
-                    userInformations = userInfo,
+                    status = PROFILE_STATUS,
+                    role = PROFILE_ROLE,
+                    userInformation = userInfo,
                     user_shop = userShop
                 )
 
@@ -230,6 +252,7 @@ class ProfileSettingActivity : BaseActivity() {
                 showToast("Image click: startGettingImage")
 //                startGettingImage()
             }
+
         }
     }
 
@@ -272,4 +295,83 @@ class ProfileSettingActivity : BaseActivity() {
     private fun onValidateCb(b: Boolean): Long {
         return if (b) 1L else 0L
     }
+
+    private fun onValidateStatus(b: Boolean): String {
+        return if (b) "open" else "closed"
+    }
+
+    fun popupOpeningTimePicker(view: View) {
+        val timePickerDialog = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+            this.openHour = hour
+            this.openMinute = minute
+
+            val timeSet: String
+            when {
+                openHour > 12 -> {
+                    openHour -= 12
+                    timeSet = "PM"
+                }
+                openHour == 0 -> {
+                    openHour += 12
+                    timeSet = "AM"
+                }
+                openHour == 12 -> timeSet = "PM"
+                else -> timeSet = "AM"
+            }
+            val minuteString = if (openMinute < 10) "0$openMinute" else "$openMinute"
+            binding.textInputTimeOpen.text = "$openHour:$minuteString $timeSet"
+        }
+        val timePiker = TimePickerDialog(this, style, timePickerDialog, openHour, openMinute, false)
+        timePiker.setTitle("Select Opening Time")
+        timePiker.show()
+    }
+
+    fun popupClosingTimePicker(view: View) {
+        val timePickerDialog = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+            this.closeHour = hour
+            this.closeMinute = minute
+
+            val timeSet: String
+            when {
+                closeHour > 12 -> {
+                    closeHour -= 12
+                    timeSet = "PM"
+                }
+                closeHour == 0 -> {
+                    closeHour += 12
+                    timeSet = "AM"
+                }
+                closeHour == 12 -> timeSet = "PM"
+                else -> timeSet = "AM"
+            }
+            val minuteString = if (closeMinute < 10) "0$closeMinute" else "$closeMinute"
+            binding.textInputTimeClose.text = "$closeHour:$minuteString $timeSet"
+        }
+
+        val timePiker =
+            TimePickerDialog(this, style, timePickerDialog, closeHour, closeMinute, false)
+        timePiker.setTitle("Select Opening Time")
+        timePiker.show()
+    }
+
+    private fun setBusinessHours(hour: Int, minute: Int): String {
+        var myHour: Int = 0
+        val timeSet: String
+        when {
+            hour > 12 -> {
+                myHour -= 12
+                timeSet = "PM"
+            }
+            hour == 0 -> {
+                myHour += 12
+                timeSet = "AM"
+            }
+            hour == 12 -> timeSet = "PM"
+            else -> timeSet = "AM"
+        }
+        val minuteString = if (minute < 10) "0$minute" else "$minute"
+        return "$myHour:$minuteString $timeSet"
+    }
+
+    val style = androidx.navigation.ui.ktx.R.style.Base_Theme_MaterialComponents_Light_Dialog
 }

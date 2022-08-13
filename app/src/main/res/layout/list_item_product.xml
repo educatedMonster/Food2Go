@@ -56,7 +56,7 @@
             android:layout_marginEnd="@dimen/margin_avg"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="@{model.price}"
+            android:text="@{model.priceString}"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_normal"
             android:hint="10.0"

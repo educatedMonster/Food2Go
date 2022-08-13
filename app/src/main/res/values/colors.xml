@@ -10,6 +10,7 @@
 
     <!-- Global Colors - this can be use all themes -->
     <color name="color_white">#FFF</color>
+    <color name="light_gray2">#EBEBEB</color>
     <color name="light_gray">#ABABAB</color>
     <color name="gray">#838384</color>
     <color name="g_black">#33405f</color>
@@ -17,6 +18,8 @@
     <color name="btn_color_login">@color/colorAccent</color>
     <color name="background_color_normal">#EEB2B2</color>
     <color name="background_color_pressed">#F38C8C</color>
+    <color name="background_color_delete">#FF0000</color>
+    <color name="red_icon">#F82D2D</color>
 
     <color name="transparent_white_percent_0">#00ffffff</color>
     <color name="transparent_white_percent_5">#0Dffffff</color>

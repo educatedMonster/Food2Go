@@ -23,8 +23,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val updateFormState = mainRepository.updateFormState
     val data = mainRepository.data
     val profile = mainRepository.profile
-    val contact = mainRepository.contact
-    val userShop = mainRepository.userShop
     val isLoading = mainRepository.isLoading
 
     fun logout() {

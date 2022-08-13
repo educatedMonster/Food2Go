@@ -2,7 +2,6 @@ package com.example.kafiesta.network
 
 import com.example.kafiesta.domain.*
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 data class UserBaseNetwork(
     val status: String,
@@ -35,14 +34,14 @@ data class UserProfileResponse(
     val role: String,
 
     @SerializedName("user_informations")
-    val userInformations: UserInformationsResponse,
+    val userInformation: UserInformationResponse,
 
     @SerializedName("user_shop")
     val userShop: UserShopResponse
 
     )
 
-data class UserInformationsResponse(
+data class UserInformationResponse(
     @SerializedName("id")
     val id: Long,
 
@@ -76,10 +75,10 @@ data class UserShopResponse(
     val contact: String,
 
     @SerializedName("open_hour")
-    val openHour: Any? = null,
+    val openHour: String? = null,
 
     @SerializedName("close_hour")
-    val closeHour: Any? = null,
+    val closeHour: String? = null,
 
     val status: String,
     val monday: Long,
@@ -100,7 +99,7 @@ data class UserShopResponse(
     val isActive: Long,
 
     @SerializedName("delivery_charge")
-    val deliveryCharge: String
+    val deliveryCharge: String? = null
 )
 
 
@@ -121,13 +120,13 @@ fun UserProfileResponse.asDomainModel(): ProfileDomain {
         email = email,
         status = status,
         role = role,
-        userInformations = userInformations.asDomainModel(),
+        userInformation = userInformation.asDomainModel(),
         user_shop = userShop.asDomainModel()
     )
 }
 
-fun UserInformationsResponse.asDomainModel(): UserInformationsDomain {
-    return UserInformationsDomain(
+fun UserInformationResponse.asDomainModel(): UserInformationDomain {
+    return UserInformationDomain(
         id = id,
         user_id = user_id,
         complete_address = complete_address,
@@ -144,7 +143,7 @@ fun UserShopResponse.asDomainModel(): UserShopDomain {
         address = address,
         contact = contact,
         open_hour = openHour,
-        close_hour = contact,
+        close_hour = closeHour,
         status = status,
         monday = monday,
         tuesday = tuesday,
@@ -155,6 +154,7 @@ fun UserShopResponse.asDomainModel(): UserShopDomain {
         sunday = sunday,
         pm_gcash = pmGcash,
         pm_cod = pmCod,
-        is_active = isActive
+        is_active = isActive,
+        delivery_charge = deliveryCharge
     )
 }

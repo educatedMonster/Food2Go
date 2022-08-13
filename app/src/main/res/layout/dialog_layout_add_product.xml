@@ -5,9 +5,8 @@
 
     <data>
 
-        <variable
-            name="productViewModel"
-            type="com.example.kafiesta.screens.add_product.ProductViewModel" />
+        <import type="android.view.View" />
+
     </data>
 
     <RelativeLayout
@@ -34,11 +33,10 @@
                 android:id="@+id/textView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-
                 android:fontFamily="@font/aileron_regular"
                 android:gravity="bottom|center_vertical"
-                android:paddingBottom="@dimen/padding_min"
-                android:text="Create Product"
+                android:hint="Create Product"
+                android:paddingBottom="@dimen/padding_small"
                 android:textSize="@dimen/text_size_normal_plus_plus"
                 app:layout_constraintBottom_toTopOf="@+id/text"
                 app:layout_constraintEnd_toStartOf="@+id/circle_add_product"
@@ -51,6 +49,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text4" />
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text"
@@ -167,17 +166,44 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/layer_button_dialog_fill"
+                        android:fontFamily="@font/aileron_regular"
+                        android:text="Update"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/text_size_normal"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/button_cancel"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="@dimen/margin_small"
                         android:background="@drawable/layer_button_dialog_stroke"
                         android:fontFamily="@font/aileron_regular"
                         android:text="Cancel"
-                        android:textColor="@color/colorPrimaryVariant"
+                        android:textColor="@color/colorAccent"
                         android:textSize="@dimen/text_size_normal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/button_create"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/layer_button_dialog_stroke_delete"
+                        android:fontFamily="@font/aileron_regular"
+                        android:text="Delete"
+                        android:textColor="@color/background_color_delete"
+                        android:textSize="@dimen/text_size_normal"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

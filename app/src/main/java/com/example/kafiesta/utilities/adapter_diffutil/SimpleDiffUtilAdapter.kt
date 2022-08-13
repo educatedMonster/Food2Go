@@ -7,11 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
-import com.example.kafiesta.databinding.ActivityProductBinding
 import com.example.kafiesta.databinding.ListItemProductBinding
-import com.example.kafiesta.domain.ProductDomain
 import com.example.kafiesta.domain.ProductDomaintest
-import com.example.kafiesta.screens.add_product.ProductViewModel
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 
 class SimpleDiffUtilAdapter(
