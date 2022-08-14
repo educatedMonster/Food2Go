@@ -2,6 +2,7 @@ package com.example.kafiesta.network
 
 import com.example.kafiesta.domain.ProductBaseDomain
 import com.example.kafiesta.domain.ProductDomain
+import com.example.kafiesta.domain.ProductDomaintest
 import com.google.gson.annotations.SerializedName
 import java.io.File
 

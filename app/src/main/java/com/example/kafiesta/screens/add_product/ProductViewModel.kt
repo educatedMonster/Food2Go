@@ -38,12 +38,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    //    fun addProduct(context: Context, product: ProductDomaintest, selectedFile: File?) {
     fun addProduct(product: ProductDomain, selectedFile: File) {
         viewModelScope.launch {
             try {
-//                val compressedFile = Compressor.compress(context, selectedFile!!)
-//                repository.onAddProduct(product, compressedFile)
                 repository.onAddProduct(product, selectedFile)
             } catch (e: IOException) {
                 Timber.d(e)
@@ -51,7 +48,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun editProduct(product: ProductDomain, selectedFile: File) {
+    fun editProduct(product: ProductDomaintest, selectedFile: File?) {
         viewModelScope.launch {
             try {
                 repository.onEditProduct(product, selectedFile)

@@ -7,8 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
+import com.example.kafiesta.databinding.DialogLayoutEditProductBinding
 import com.example.kafiesta.databinding.ListItemProductBinding
+import com.example.kafiesta.domain.ProductDomain
 import com.example.kafiesta.domain.ProductDomaintest
+import com.example.kafiesta.domain.Producttest
+import com.example.kafiesta.utilities.dialog.ProductEditDialog
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 
 class SimpleDiffUtilAdapter(
@@ -42,7 +46,12 @@ class SimpleDiffUtilAdapter(
             //deprecated
             is ListItemProductBinding -> {
                 binding.model = item as ProductDomaintest
-                binding.onClickCallBack = onClickCallBack as RecyclerClick?
+                binding.onClickCallBack = onClickCallBack as RecyclerClick
+            }
+
+            is DialogLayoutEditProductBinding -> {
+                binding.model = item as ProductDomaintest
+//                binding.onClickCallBack = onClickCallBack as RecyclerClick
             }
 
         }

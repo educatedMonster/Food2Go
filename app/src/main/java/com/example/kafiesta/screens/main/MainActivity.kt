@@ -245,9 +245,8 @@ class MainActivity : BaseActivity(),
 //                setFocus(false)
             }
             R.id.nav_product -> {
-                showToast(getString(R.string.title_nav_drawer_products))
                 proceedToActivity(ProductActivity::class.java)
-//                setFocus(false)
+                setFocus(false)
             }
             R.id.nav_inventory -> {
                 showToast(getString(R.string.title_nav_drawer_inventory))

@@ -103,6 +103,7 @@
     <string name="active_store">Active</string>
     <string name="inactive_store">Inactive</string>
     <string name="title_select_image">Select/Get Image</string>
+    <string name="layout_empty_list">Empty List</string>
 
 
 </resources>

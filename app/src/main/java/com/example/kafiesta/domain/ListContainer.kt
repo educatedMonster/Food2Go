@@ -35,17 +35,26 @@ data class Resulttest (
 
 
 data class Producttest (
+    @SerializedName("id")
     val id: Long,
+
     @SerializedName("user_id")
     val userID: Long,
+
     val name: String?,
     val description: String?,
+
     @SerializedName("image_url")
-    val imageURL: String?,
-    val price: Double?,
-    val tags: String?,
-    val status: String?
-)
+    val imageURL: String? = null,
+
+    val price: Double,
+    val tags: String,
+    val status: String
+) {
+    val priceString = price.toString()
+    val statusBool = status.matches("active".toRegex())
+    val isIdExist = id != 0L
+}
 
 data class Link (
     val url: String? = null,

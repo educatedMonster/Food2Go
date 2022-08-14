@@ -67,6 +67,8 @@
             android:id="@+id/fab_product_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_aver_plus"
+            android:layout_marginBottom="@dimen/margin_aver_plus"
             app:fab_addButtonColorNormal="@color/background_color_normal"
             app:fab_addButtonColorPressed="@color/colorPrimaryVariant"
             app:fab_labelStyle="@style/FabTextAppearance"
@@ -98,6 +100,11 @@
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/layout_empty_task"
+            layout="@layout/layout_empty_archive"
+            android:visibility="@{model.productList.notEmptyData ? View.GONE : View.VISIBLE}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

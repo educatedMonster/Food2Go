@@ -22,6 +22,7 @@ import com.example.kafiesta.R
 import com.example.kafiesta.constants.RequestCodeTag
 import com.example.kafiesta.databinding.DialogLayoutAddProductBinding
 import com.example.kafiesta.domain.ProductDomain
+import com.example.kafiesta.domain.ProductDomaintest
 import com.example.kafiesta.utilities.extensions.isNotEmpty
 import com.example.kafiesta.utilities.helpers.FileUtils
 import com.google.android.material.textfield.TextInputEditText
@@ -29,7 +30,7 @@ import com.trackerteer.taskmanagement.utilities.extensions.showToast
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import java.io.File
 
-class ProductDialog(
+class ProductAddDialog(
     private val userId: Long,
     private val listener: Listener,
 ) : DialogFragment() {
@@ -93,34 +94,10 @@ class ProductDialog(
         val view = binding.root
         dialog.setView(view)
 
-//        val executor = Executors.newSingleThreadExecutor()
-//        val handler = Handler(Looper.getMainLooper())
-//        var image: Bitmap?
-//        executor.execute {
-//            try {
-//                val imageUrl =  mFile?.absolutePath
-//                    ?: "https://pbs.twimg.com/profile_images/1048086829143011329/W8R1grIh_400x400.jpg"
-//                val `in` = java.net.URL(imageUrl).openStream()
-//                image = BitmapFactory.decodeStream(`in`)
-//                handler.post {
-//                    binding.circleAddProduct.setImageBitmap(image)
-//                }
-//            } catch (e: Exception) {
-//                Timber.d(e)
-//            }
-//        }
-
         binding.apply {
             circleAddProduct.setOnClickListener {
                 startGettingImage()
             }
-
-//            if (id != 0L) {
-//                buttonDelete.visible()
-//                buttonUpdate.visible()
-//            } else {
-//                buttonCreate.visible()
-//            }
 
             buttonCreate.setOnClickListener {
                 if(mFile == null){
@@ -150,15 +127,20 @@ class ProductDialog(
                         tags = pTags,
                         status = pStatus
                     )
+                    binding.progressLoading.visible()
                     listener.onAddProductListener(product, mFile!!)
                 }
+            }
+
+            buttonCancel.setOnClickListener {
+                dismiss()
             }
         }
 
         val alertDialog = dialog.create()
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        alertDialog.setCancelable(true)
-        alertDialog.setCanceledOnTouchOutside(true)
+        alertDialog.setCancelable(false)
+        alertDialog.setCanceledOnTouchOutside(false)
 
         return alertDialog
     }

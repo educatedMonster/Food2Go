@@ -19,21 +19,19 @@ import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
 import android.widget.ImageView
-import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.RequestCodeTag
-import com.example.kafiesta.utilities.dialog.ProductFormDialog
+import com.example.kafiesta.utilities.dialog.GlobalDialog
 import com.example.kafiesta.utilities.extensions.showToast
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 import java.util.*
 
@@ -131,8 +129,10 @@ fun setFileChooser(activity: Activity, uri: Uri) {
     intentGallery.type = "image/*"
     intentGallery.action = Intent.ACTION_PICK
 
-    val intentChooser = Intent.createChooser(intentGallery, activity.getString(R.string.title_select_image))
-    intentChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentCameraArray.toTypedArray<Parcelable>()
+    val intentChooser =
+        Intent.createChooser(intentGallery, activity.getString(R.string.title_select_image))
+    intentChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+        intentCameraArray.toTypedArray<Parcelable>()
     )
 
     activity.startActivityForResult(intentChooser, RequestCodeTag.REQUEST_CODE_CAMERA)
@@ -160,10 +160,10 @@ fun imageUrl(imageView: ImageView?, url: String?) {
     val imageUrl = url ?: "https://pbs.twimg.com/profile_images/1048086829143011329/W8R1grIh_400x400.jpg"
 
     imageUrl.let {
-        val imgUri = imageUrl.toUri().buildUpon().scheme("http").build()
+//        val imgUri = imageUrl.toUri().buildUpon().scheme("http").build()
         if (imageView != null) {
             Glide.with(imageView.context)
-                .load(imgUri)
+                .load(imageUrl)
                 .apply(
                     RequestOptions()
                         .placeholder(R.drawable.loading_animation)
@@ -176,4 +176,8 @@ fun imageUrl(imageView: ImageView?, url: String?) {
 
 fun getDialog(fragment: FragmentActivity?, dialogTag: String): Any? {
     return fragment?.supportFragmentManager?.findFragmentByTag(dialogTag)
+}
+
+fun getGlobalDialog(fragment: FragmentActivity, dialogTag: String): GlobalDialog? {
+    return fragment.supportFragmentManager.findFragmentByTag(dialogTag) as GlobalDialog?
 }

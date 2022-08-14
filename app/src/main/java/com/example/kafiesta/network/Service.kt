@@ -3,6 +3,7 @@ package com.example.kafiesta.network
 import com.example.kafiesta.BuildConfig
 import com.example.kafiesta.constants.ServerConst.API_SERVER_URL
 import com.example.kafiesta.domain.ListNetworktest
+import com.example.kafiesta.domain.Producttest
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -79,11 +80,11 @@ interface AppService {
 
     // https://kafiesta-api.osc-fr1.scalingo.io/v1/product
     @Multipart
-    @PUT("product")
+    @POST("product/update")
     fun onEditProductAsync(
         @Header("Authorization") bearer: String,
         @PartMap params: HashMap<String, RequestBody>
-    ): Deferred<ProductBaseNetwork>
+    ): Deferred<Any>
 
 
     //https://kafiesta-api.osc-fr1.scalingo.io/v1/product/list

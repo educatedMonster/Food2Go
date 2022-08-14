@@ -24,6 +24,9 @@ import java.io.File
 
 class ProductRepository(private val sharedPrefs: SharedPrefs) {
 
+    private val token = sharedPrefs.getString(UserConst.TOKEN)!!
+    private val userid = sharedPrefs.getString(UserConst.USER_ID)!!
+
     private val _productList = MutableLiveData<ResultDomaintest>()
     val productList: LiveData<ResultDomaintest> get() = _productList
 
@@ -39,7 +42,6 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-
     private val _isUploaded = MutableLiveData<Boolean>()
     val isUploaded: LiveData<Boolean> get() = _isUploaded
 
@@ -47,12 +49,11 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
-                val token = sharedPrefs.getString(UserConst.TOKEN)!!
-
                 val params = HashMap<String, Any>()
                 params["length"] = length
                 params["start"] = start
                 params["search"] = search
+
                 val network = AppNetwork.service.onAddProductListAsync(
                     bearer = setBearer(token),
                     params = paramsToRequestBody(params))
@@ -74,7 +75,6 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
-                val token = sharedPrefs.getString(UserConst.TOKEN)!!
                 val network = AppNetwork.service.onDeleteProductAsync(
                     bearer = setBearer(token), productId).await()
                 if (network.status.matches(IS_SUCCESS.toRegex())) {
@@ -94,10 +94,7 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
-                val token = sharedPrefs.getString(UserConst.TOKEN)!!
-                val userid = sharedPrefs.getString(UserConst.USER_ID)!!
                 val params = HashMap<String, Any>()
-
                 params["user_id"] = userid
                 params["name"] = prod.name
                 params["description"] = prod.description
@@ -110,14 +107,11 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
                     bearer = setBearer(token),
                     params = paramsToRequestBody(params))
                     .await()
-
                 if (network.status.matches((IS_SUCCESS.toRegex()))) {
                     val productDomain = network.result.asDomainModel()
                     // when the Product Form successfully created , get the id and pass to the file image
                     onUploadProductImage(productDomain.id, selectedFile)
                 }
-
-
             } catch (e: HttpException) {
                 Timber.e(e.message())
                 _isLoading.postValue(false)
@@ -127,33 +121,28 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
         }
     }
 
-    suspend fun onEditProduct(prod: ProductDomain, selectedFile: File) {
+    suspend fun onEditProduct(prod: ProductDomaintest, selectedFile: File?) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
-                val token = sharedPrefs.getString(UserConst.TOKEN)!!
-                val userid = sharedPrefs.getString(UserConst.USER_ID)!!
                 val params = HashMap<String, Any>()
-
-                params["user_id"] = userid
+                params["id"] = prod.id
                 params["name"] = prod.name!!
                 params["description"] = prod.description!!
-                params["image_url"] = prod.imageURL!!
                 params["price"] = prod.price!!
                 params["status"] = prod.status!!
                 params["tags"] = prod.tags!!
+                params["user_id"] = userid
 
                 val network = AppNetwork.service.onEditProductAsync(
                     bearer = setBearer(token),
-                    params = paramsToRequestBody(params))
-                    .await()
-
-                if (network.status.matches((IS_SUCCESS.toRegex()))) {
-                    val productDomain = network.result.asDomainModel()
-//                    _isProductCreated.postValue(productDomain)
-
+                    params = paramsToRequestBody(params)
+                ).await()
+                    _isLoading.postValue(false)
+                    _isUpdated.postValue(true)
+                if (selectedFile != null) {
                     // when the Product Form successfully created , get the id and pass to the file image
-                    onUploadProductImage(productDomain.id, selectedFile)
+                    onUploadProductImage(prod.id, selectedFile)
                 }
             } catch (e: HttpException) {
                 Timber.e(e.message())
@@ -168,20 +157,16 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
-                val token = sharedPrefs.getString(UserConst.TOKEN)!!
-                val userid = sharedPrefs.getString(UserConst.USER_ID)!!
                 val params = HashMap<String, Any>()
                 params["file"] = file
 
                 val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
                 val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-
                 val network = AppNetwork.service.onAddProductImageAsync(
                     bearer = setBearer(token),
                     productId,
                     params = body
                 ).await()
-//                Timber.d(Gson().toJson(network))
                 _isUploaded.postValue(true)
                 _isLoading.postValue(false)
             } catch (e: HttpException) {
@@ -192,11 +177,4 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
             }
         }
     }
-
-//    fun fileToMultipartBody(partName: String, file: File, fileContentType: String): MultipartBody.Part {
-//        val requestBody = RequestBody.create(MediaType.parse(fileContentType), file)
-//        return MultipartBody.Part.createFormData(partName, file.name, requestBody)
-//    }
-
-
 }

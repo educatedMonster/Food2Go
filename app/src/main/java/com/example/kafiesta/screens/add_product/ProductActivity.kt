@@ -2,6 +2,7 @@ package com.example.kafiesta.screens.add_product
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -12,18 +13,21 @@ import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityProductBinding
 import com.example.kafiesta.domain.ProductDomain
 import com.example.kafiesta.domain.ProductDomaintest
-import com.example.kafiesta.domain.ResultDomaintest
 import com.example.kafiesta.screens.BaseActivity
-import com.example.kafiesta.utilities.adapter_diffutil.SimpleDiffUtilAdapter
+import com.example.kafiesta.utilities.adapter.ProductAdapter
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
-import com.example.kafiesta.utilities.dialog.ProductDialog
+import com.example.kafiesta.utilities.dialog.ConfigureDialog
+import com.example.kafiesta.utilities.dialog.GlobalDialog
+import com.example.kafiesta.utilities.dialog.ProductAddDialog
+import com.example.kafiesta.utilities.dialog.ProductEditDialog
 import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.getDialog
+import com.example.kafiesta.utilities.getGlobalDialog
+import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.example.kafiesta.utilities.hideKeyboard
-import com.trackerteer.taskmanagement.utilities.extensions.gone
 import timber.log.Timber
 import java.io.File
 
@@ -39,8 +43,8 @@ class ProductActivity : BaseActivity() {
     private var mLastPage = 0L
     private lateinit var binding: ActivityProductBinding
     private var mActionBar: ActionBar? = null
+    private lateinit var mAdapter: ProductAdapter
 
-    private lateinit var mAdapter: SimpleDiffUtilAdapter
     private val productViewModel: ProductViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(application)
             .create(ProductViewModel::class.java)
@@ -48,13 +52,21 @@ class ProductActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.USER_ID)?.toLong() ?: 0L
+        userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.USER_ID)!!.toLong()
         initConfig()
+    }
+
+    private fun initConfig() {
+        initBinding()
+        initActionBar()
+        initAdapter()
+        initEventListener()
+        initLiveData()
     }
 
     override fun onResume() {
         super.onResume()
-        initReloadRequest()
+        initRequest()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -64,33 +76,39 @@ class ProductActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initConfig() {
-        initBinding()
-        initActionBar()
-        initAdapter()
-        initEventListener()
-        initLiveData()
-        initReloadRequest()
-    }
-
-    private fun initReloadRequest() {
-        mCurrentPage = 1L
-        mLength = 10L
-        mStart = 0L
-        productViewModel.getAllProducts(
-            length = mLength,
-            start = mStart,
-            search = mSearch)
-    }
-
     private fun initAdapter() {
-        mAdapter = SimpleDiffUtilAdapter(R.layout.list_item_product, RecyclerClick(
+        mAdapter = ProductAdapter(RecyclerClick(
             click = {
-                ProductDialog(
+                ProductEditDialog(
                     userId = userId,
-                    listener = object : ProductDialog.Listener {
-                        override fun onAddProductListener(product: ProductDomain, file: File) {
-                            productViewModel.addProduct(product, file)
+                    product = it as ProductDomaintest,
+                    listener = object : ProductEditDialog.Listener {
+                        override fun onEditProductListener(
+                            product: ProductDomaintest,
+                            file: File?,
+                        ) {
+                            productViewModel.editProduct(product, file)
+                        }
+
+                        override fun onDeleteListener(productId: Long) {
+                            val tag = DialogTag.DIALOG_DELETE_PRODUCT
+                            val configureDialog = ConfigureDialog(
+                                activity = this@ProductActivity,
+                                title = getString(R.string.dialog_product_form_delete_button),
+                                message = "Are uou sure you want to delete this product!",
+                                positiveButtonName = getString(R.string.dialog_yes_button),
+                                positiveButtonListener =
+                                GlobalDialogClicker {
+                                    getGlobalDialog(this@ProductActivity, tag)?.dismiss()
+                                    productViewModel.deleteProduct(productId)
+                                },
+                                negativeButtonName = getString(R.string.dialog_cancel_button),
+                                neutralButtonListener =
+                                GlobalDialogClicker {
+                                    getGlobalDialog(this@ProductActivity, tag)?.dismiss()
+                                },
+                            )
+                            GlobalDialog(configureDialog).show(supportFragmentManager, tag)
                         }
                     }).show(supportFragmentManager, DialogTag.DIALOG_FORM_EDIT_PRODUCT)
             }
@@ -123,9 +141,10 @@ class ProductActivity : BaseActivity() {
         binding.apply {
             // Todo - Add product
             fabProductAdd.setOnClickListener {
-                ProductDialog(
+                binding.fabProductMenu.collapse()
+                ProductAddDialog(
                     userId = userId,
-                    listener = object : ProductDialog.Listener {
+                    listener = object : ProductAddDialog.Listener {
                         override fun onAddProductListener(product: ProductDomain, file: File) {
                             productViewModel.addProduct(product, file)
                         }
@@ -133,14 +152,14 @@ class ProductActivity : BaseActivity() {
             }
 
             swipeRefreshLayout.setOnRefreshListener {
-                initReloadRequest()
+                initRequest()
             }
 
             recyclerViewProducts.apply {
                 this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         if (!recyclerView.canScrollVertically(1)) {
-                            fetch()
+                            initRequestOffset()
                         }
                         super.onScrolled(recyclerView, dx, dy)
                     }
@@ -158,20 +177,18 @@ class ProductActivity : BaseActivity() {
     private fun initLiveData() {
         productViewModel.apply {
             productList.observe(this@ProductActivity) {
-                val listProduct = ArrayList<ProductDomaintest>()
-
-
                 mLength += it.data.size
                 mStart += it.data.size
-
                 mCurrentPage = it.currentPage
                 mLastPage = it.lastPage
 
-                for (model in it.data) {
-                    listProduct.add(model)
+                if (it.isNotEmptyData) {
+                    for (data in it.data) {
+                        mAdapter.addData(data)
+                    }
+                } else {
+                    binding.layoutEmptyTask.root.visibility = View.VISIBLE
                 }
-
-                mAdapter.submitList(listProduct as List<ProductDomaintest>)
             }
 
             isLoading.observe(this@ProductActivity) {
@@ -179,40 +196,62 @@ class ProductActivity : BaseActivity() {
             }
 
             isUpdated.observe(this@ProductActivity) {
-                initReloadRequest()
-                setLoading(it)
+                if (it) {
+                    showToast("Updated")
+                    (getDialog(this@ProductActivity,
+                        DialogTag.DIALOG_FORM_EDIT_PRODUCT) as ProductEditDialog?)?.dismiss()
+                    initRequest()
+                }
+
             }
 
             isDeleted.observe(this@ProductActivity) {
                 if (it) {
-                    initReloadRequest()
-                    setLoading(it)
                     showToast("Deleted")
+                    hideKeyboard(this@ProductActivity)
+                    (getDialog(this@ProductActivity,
+                        DialogTag.DIALOG_FORM_EDIT_PRODUCT) as ProductEditDialog?)?.dismiss()
+                    initRequest()
+
                 }
             }
 
             isProductCreated.observe(this@ProductActivity) {
-                setLoading(true)
-                showToast("${it.name} has been created.")
+                hideKeyboard(this@ProductActivity)
+                (getDialog(
+                    this@ProductActivity,
+                    DialogTag.DIALOG_FORM_INITIAL_PRODUCT
+                ) as ProductAddDialog?)?.dismiss()
+                initRequest()
             }
 
             isUploaded.observe(this@ProductActivity) {
                 if (it) {
-                    setLoading(it)
-                    initReloadRequest()
                     showToast("Product has been added to the list")
-                    binding.fabProductMenu.gone()
                     hideKeyboard(this@ProductActivity)
                     (getDialog(
                         this@ProductActivity,
                         DialogTag.DIALOG_FORM_INITIAL_PRODUCT
-                    ) as ProductDialog?)?.dismiss()
+                    ) as ProductAddDialog?)?.dismiss()
+                    initRequest()
                 }
             }
         }
     }
 
-    private fun fetch() {
+    private fun initRequest() {
+        mAdapter.clearAdapter()
+        mCurrentPage = 1L
+        mLength = 10L
+        mStart = 0L
+
+        productViewModel.getAllProducts(
+            length = mLength,
+            start = mStart,
+            search = mSearch)
+    }
+
+    private fun initRequestOffset() {
         if (mCurrentPage < mLastPage) {
             mCurrentPage++
             productViewModel.getAllProducts(
@@ -221,7 +260,6 @@ class ProductActivity : BaseActivity() {
                 search = mSearch)
         }
     }
-
 
     private fun setLoading(set: Boolean) {
         try {

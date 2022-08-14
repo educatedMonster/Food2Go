@@ -54,8 +54,8 @@ class ProfileSettingActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.USER_ID)!!.toLong()
-        infoId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.INFO_ID)?.toLong() ?: 0L
-        shopId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.SHOP_ID)?.toLong() ?: 0L
+        infoId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.INFO_ID)!!.toLong()
+        shopId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.SHOP_ID)!!.toLong()
         initConfig()
     }
 

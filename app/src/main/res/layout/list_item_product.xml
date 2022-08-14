@@ -20,16 +20,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> onClickCallBack.onClick(model)}"
-        android:padding="@dimen/padding_small">
+        android:paddingStart="@dimen/padding_semi_big"
+        android:paddingTop="@dimen/padding_avg"
+        android:paddingEnd="@dimen/padding_semi_big"
+        android:paddingBottom="@dimen/padding_avg">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_view_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:civ_border_color="@color/gray"
-            android:layout_marginStart="@dimen/margin_small"
-            app:civ_border_width="1dp"
             imageUrl="@{model.imageURL}"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:textSize="@dimen/text_size_semi_normal"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_product_24" />
@@ -37,32 +41,35 @@
         <TextView
             android:id="@+id/text_view_name"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_aver_plus"
+            android:layout_marginEnd="@dimen/margin_aver_plus"
+            android:gravity="start"
+            android:padding="@dimen/padding_min"
             android:text="@{model.name}"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_semi_normal"
-            android:gravity="center_vertical"
-            android:padding="@dimen/padding_semi_avg"
+            android:lines="2"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/text_view_price"
             app:layout_constraintStart_toEndOf="@+id/image_view_image"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/full_names" />
+            tools:text="@tools:sample/lorem/random" />
 
         <TextView
             android:id="@+id/text_view_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_avg"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="@{model.priceString}"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/text_size_normal"
-            android:hint="10.0"
-            app:layout_constraintBottom_toBottomOf="@id/image_view_image"
+            android:textColor="@color/colorOnSecondary"
+            android:textSize="@dimen/text_size_semi_normal"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/image_view_image" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/us_zipcodes" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

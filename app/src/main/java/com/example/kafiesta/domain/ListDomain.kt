@@ -23,15 +23,18 @@ data class ResultDomaintest(
     val prevPageURL: String? = null,
     val to: Long,
     val total: Long,
-)
+) {
+    val isNotEmptyData = data.isNotEmpty()
+}
 
 
+// model - when clicking list_item view return  ProductDomaintest
 data class ProductDomaintest(
     val id: Long,
     val userID: Long,
     val name: String?,
     val description: String?,
-    val imageURL: String? = null,
+    val imageURL: String?,
     val price: Double?,
     val tags: String?,
     val status: String?,
@@ -54,6 +57,6 @@ data class TestUnit(
 )
 {
     val priceString = prod.price.toString()
-    val statusBool = prod.status!!.matches("active".toRegex())
+    val statusBool = prod.status.matches("active".toRegex())
     val isIdExist = prod.id != 0L
 }
