@@ -52,6 +52,18 @@
     <dimen name="text_size_normal_small_light">12sp</dimen>
     <dimen name="text_size_small">11sp</dimen>
 
+    <dimen name="icon_size_create_edit">150dp</dimen>
+    <dimen name="extra_large_icon_size">90dp</dimen>
+    <dimen name="large_icon_size">72dp</dimen>
+    <dimen name="medium_icon_size">56dp</dimen>
+    <dimen name="normal_icon_size">48dp</dimen>
+    <dimen name="semi_normal_icon_size">36dp</dimen>
+    <dimen name="norm_icon_size">32dp</dimen>
+    <dimen name="standard_icon_size">24dp</dimen>
+    <dimen name="sm_icon_size">20dp</dimen>
+    <dimen name="semi_small_icon_size">18dp</dimen>
+    <dimen name="small_icon_size">16dp</dimen>
+
     <dimen name="shimmer_activityPadding">16dp</dimen>
     <dimen name="shimmer_placeholderImage">60dp</dimen>
     <dimen name="shimmer_placeholderTextHeight">8dp</dimen>

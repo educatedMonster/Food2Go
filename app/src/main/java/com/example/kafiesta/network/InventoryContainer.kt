@@ -1,69 +1,80 @@
-package com.example.kafiesta.domain
+package com.example.kafiesta.network
 
+import com.example.kafiesta.domain.InventoryBaseDomain
+import com.example.kafiesta.domain.InventoryBaseNetworkDomain
+import com.example.kafiesta.domain.InventoryDomain
+import com.example.kafiesta.domain.InventoryLinkDomain
 import com.google.gson.annotations.SerializedName
 
 
-data class ListNetworktest (
+data class InventoryBaseNetwork(
     val status: String,
     val message: String,
-    val result: Resulttest
+    val result: InventoryBaseResponse,
 )
 
 
-data class Resulttest (
+data class InventoryBaseResponse(
     @SerializedName("current_page")
     val currentPage: Long,
-    val data: List<Producttest>,
+
+    val data: List<InventorResponse>, // no model yet
+
     @SerializedName("first_page_url")
     val firstPageURL: String,
-    val from: Long,
+
+    val from: String? = null,
+
     @SerializedName("last_page")
     val lastPage: Long,
+
     @SerializedName("last_page_url")
     val lastPageURL: String,
-    val links: List<Link>,
+
+    val links: List<InventoryLinkResponse>,
+
     @SerializedName("next_page_url")
     val nextPageURL: String? = null,
+
     val path: String,
+
     @SerializedName("per_page")
     val perPage: String,
+
     @SerializedName("prev_page_url")
     val prevPageURL: String? = null,
-    val to: Long,
-    val total: Long
+
+    val to: String? = null,
+    val total: Long,
 )
 
-
-data class Producttest (
-    @SerializedName("id")
+data class InventorResponse(
     val id: Long,
-
-    @SerializedName("user_id")
     val userID: Long,
-
-    val name: String?,
-    val description: String?,
-
-    @SerializedName("image_url")
-    val imageURL: String? = null,
-
-    val price: Double,
+    val name: String,
+    val description: String,
+    val imageURL: String,
+    val price: String,
     val tags: String,
-    val status: String
-) {
-    val priceString = price.toString()
-    val statusBool = status.matches("active".toRegex())
-    val isIdExist = id != 0L
-}
+    val status: String,
+)
 
-data class Link (
+data class InventoryLinkResponse(
     val url: String? = null,
     val label: String,
-    val active: Boolean
+    val active: Boolean,
 )
 
-fun Resulttest.asDomainModel(): ResultDomaintest {
-    return ResultDomaintest(
+fun InventoryBaseNetwork.asDomainModel(): InventoryBaseNetworkDomain {
+    return InventoryBaseNetworkDomain(
+        status = status,
+        message = message,
+        result = result.asDomainModel()
+    )
+}
+
+fun InventoryBaseResponse.asDomainModel(): InventoryBaseDomain {
+    return InventoryBaseDomain(
         currentPage = currentPage,
         data = data.map { it.asDomainModel() },
         firstPageURL = firstPageURL,
@@ -78,11 +89,11 @@ fun Resulttest.asDomainModel(): ResultDomaintest {
         to = to,
         total = total,
     )
-
 }
 
-fun Producttest.asDomainModel(): ProductDomaintest {
-    return ProductDomaintest(
+
+fun InventorResponse.asDomainModel(): InventoryDomain {
+    return InventoryDomain(
         id = id,
         userID = userID,
         name = name,
@@ -90,16 +101,24 @@ fun Producttest.asDomainModel(): ProductDomaintest {
         imageURL = imageURL,
         price = price,
         tags = tags,
-        status = status,
+        status = status
     )
-
 }
 
-fun Link.asDomainModel(): LinkDomaintest {
-    return LinkDomaintest(
+fun InventoryLinkResponse.asDomainModel(): InventoryLinkDomain {
+    return InventoryLinkDomain(
         url = url,
         label = label,
         active = active
     )
-
 }
+
+
+
+
+
+
+
+
+
+

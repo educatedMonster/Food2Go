@@ -24,6 +24,7 @@ import com.example.kafiesta.databinding.DialogLayoutEditProductBinding
 import com.example.kafiesta.domain.ProductDomaintest
 import com.example.kafiesta.utilities.extensions.isNotEmpty
 import com.example.kafiesta.utilities.helpers.FileUtils
+import com.example.kafiesta.utilities.imageUrl
 import com.google.android.material.textfield.TextInputEditText
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import java.io.File
@@ -60,13 +61,12 @@ class ProductEditDialog(
                     if (isCamera) {
                         selectedImageUri = mOutputFileUri
                         if (selectedImageUri == null) return
-                        Glide.with(this).load(selectedImageUri).into(binding.circleAddProduct)
+                        imageUrl(binding.circleAddProduct, mOutputFileUri)
                     } else {
                         selectedImageUri = data!!.data
                         if (selectedImageUri == null) return
                         mOutputFileUri = selectedImageUri
-                        Glide.with(this).load(selectedImageUri)
-                            .into(binding.circleAddProduct)
+                        imageUrl(binding.circleAddProduct, mOutputFileUri)
                     }
                     binding.circleAddProduct.visible()
 

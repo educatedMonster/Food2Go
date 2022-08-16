@@ -9,7 +9,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.ProductDomaintest" />
+            type="com.example.kafiesta.domain.ProductInventoryDomain" />
 
         <variable
             name="onClickCallBack"
@@ -51,35 +51,48 @@
 
         </androidx.cardview.widget.CardView>
 
+
         <TextView
             android:id="@+id/text_view_name"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_aver_plus"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="start"
             android:lines="2"
             android:padding="@dimen/padding_min"
             android:text="@{model.name}"
             android:textColor="@color/color_palette_black"
-            android:textSize="@dimen/text_size_semi_normal"
+            android:textSize="@dimen/text_size_normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card_img_profile"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/lorem/random" />
 
         <TextView
-            android:id="@+id/text_view_price"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_price"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:singleLine="true"
-            android:text="@{model.priceString}"
+            android:gravity="start"
+            android:lines="1"
+            android:padding="@dimen/padding_min"
+            android:text="@{model.price}"
             android:textColor="@color/color_palette_black"
-            android:textSize="@dimen/text_size_semi_normal"
+            android:textSize="@dimen/text_size_normal_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_name"
             tools:text="@tools:sample/us_zipcodes" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_tag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_name"
+            app:layout_constraintStart_toEndOf="@+id/card_img_profile"
+            app:layout_constraintTop_toBottomOf="@+id/tv_price"
+            tools:listitem="@layout/list_item_tag" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

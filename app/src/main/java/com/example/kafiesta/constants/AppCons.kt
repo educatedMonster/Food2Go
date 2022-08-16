@@ -8,7 +8,7 @@ object ServerConst {
 
     private const val SERVER_URL = "https://kafiesta-api.osc-fr1.scalingo.io/"
     const val API_SERVER_URL = "${SERVER_URL}v1/"
-    const val IMAGE_PLACE_HOLDER = "${SERVER_URL}public/images/icons/default-user.png"
+    const val IMAGE_PLACE_HOLDER = "https://pbs.twimg.com/profile_images/1048086829143011329/W8R1grIh_400x400.jpg"
 
     //Test Account
     const val TEST_EMAIL = "jadalmario.freelancer@gmail.com"
@@ -57,6 +57,7 @@ object DialogTag {
     const val DIALOG_FORM_INITIAL_PRODUCT = "DIALOG_FORM_INITIAL_PRODUCT"
     const val DIALOG_FORM_EDIT_PRODUCT = "DIALOG_FORM_INITIAL_PRODUCT"
     const val DIALOG_DELETE_PRODUCT = "DIALOG_DELETE_PRODUCT"
+    const val DIALOG_BOTTOM_QUANTITY = "DIALOG_BOTTOM_QUANTITY"
 }
 
 object RequestCodeTag {

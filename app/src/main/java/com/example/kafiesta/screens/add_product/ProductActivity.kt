@@ -14,7 +14,7 @@ import com.example.kafiesta.databinding.ActivityProductBinding
 import com.example.kafiesta.domain.ProductDomain
 import com.example.kafiesta.domain.ProductDomaintest
 import com.example.kafiesta.screens.BaseActivity
-import com.example.kafiesta.utilities.adapter.ProductAdapter
+import com.example.kafiesta.screens.add_product.adapter.ProductAdapter
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
 import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
@@ -182,12 +182,8 @@ class ProductActivity : BaseActivity() {
                 mCurrentPage = it.currentPage
                 mLastPage = it.lastPage
 
-                if (it.isNotEmptyData) {
-                    for (data in it.data) {
-                        mAdapter.addData(data)
-                    }
-                } else {
-                    binding.layoutEmptyTask.root.visibility = View.VISIBLE
+                for (data in it.data) {
+                    mAdapter.addData(data)
                 }
             }
 

@@ -1,5 +1,9 @@
-package com.example.kafiesta.screens.add_product
+package com.example.kafiesta.screens.add_product.adapter
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -9,13 +13,15 @@ import com.example.kafiesta.R
 import com.example.kafiesta.databinding.ListItemProductBinding
 import com.example.kafiesta.domain.ProductDomaintest
 import com.example.kafiesta.utilities.helpers.RecyclerClick
+import timber.log.Timber
+import java.util.concurrent.Executors
 
-class AddProductAdapter(
-    private val onClickCallBack: RecyclerClick,
-) : RecyclerView.Adapter<AddProductViewHolder>() {
-
+class ProductAdapter(
+    private val onClickCallBack: RecyclerClick) :
+    RecyclerView.Adapter<ProductViewHolder>() {
 
     private var list: ArrayList<ProductDomaintest> = arrayListOf()
+    private lateinit var  model : ProductDomaintest
 
     fun addData(model: ProductDomaintest) {
         //to avoid duplication
@@ -30,30 +36,33 @@ class AddProductAdapter(
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddProductViewHolder {
+
+    fun getModel() : ProductDomaintest{
+        return model
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val withDataBinding: ListItemProductBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            AddProductViewHolder.LAYOUT,
+            ProductViewHolder.LAYOUT,
             parent,
             false
         )
-        return AddProductViewHolder(withDataBinding)
+        return ProductViewHolder(withDataBinding)
     }
 
-    override fun onBindViewHolder(holder: AddProductViewHolder, position: Int) {
-        holder.viewBinding.also {
-            val model = list[position]
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+        holder.viewDataBinding.also {
+            model = list[position]
             it.model = model
             it.onClickCallBack = onClickCallBack
         }
     }
 
     override fun getItemCount(): Int = list.size
-
 }
-
-class AddProductViewHolder(val viewBinding: ListItemProductBinding) :
-    RecyclerView.ViewHolder(viewBinding.root) {
+class ProductViewHolder(val viewDataBinding: ListItemProductBinding) :
+    RecyclerView.ViewHolder(viewDataBinding.root) {
     companion object {
         @LayoutRes
         val LAYOUT = R.layout.list_item_product

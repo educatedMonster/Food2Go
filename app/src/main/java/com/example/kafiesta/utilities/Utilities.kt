@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.RequestCodeTag
+import com.example.kafiesta.constants.ServerConst.IMAGE_PLACE_HOLDER
 import com.example.kafiesta.utilities.dialog.GlobalDialog
 import com.example.kafiesta.utilities.extensions.showToast
 import com.karumi.dexter.Dexter
@@ -157,15 +158,32 @@ fun getMimeType(context: Context, uri: Uri?): String? {
 
 @BindingAdapter("imageUrl")
 fun imageUrl(imageView: ImageView?, url: String?) {
-    val imageUrl = url ?: "https://pbs.twimg.com/profile_images/1048086829143011329/W8R1grIh_400x400.jpg"
-
+    val imageUrl = url ?: IMAGE_PLACE_HOLDER
     imageUrl.let {
-//        val imgUri = imageUrl.toUri().buildUpon().scheme("http").build()
         if (imageView != null) {
             Glide.with(imageView.context)
                 .load(imageUrl)
                 .apply(
                     RequestOptions()
+                        .centerCrop()
+                        .placeholder(R.drawable.loading_animation)
+                        .error(R.drawable.ic_broken_image)
+                )
+                .into(imageView)
+        }
+    }
+}
+
+@BindingAdapter("imageUrl")
+fun imageUrl(imageView: ImageView?, url: Uri?) {
+    val imageUrl = url ?: IMAGE_PLACE_HOLDER
+    imageUrl.let {
+        if (imageView != null) {
+            Glide.with(imageView.context)
+                .load(imageUrl)
+                .apply(
+                    RequestOptions()
+                        .centerCrop()
                         .placeholder(R.drawable.loading_animation)
                         .error(R.drawable.ic_broken_image)
                 )

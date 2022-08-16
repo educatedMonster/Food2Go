@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#F38C8C</color>
-    <color name="colorPrimaryVariant">#FF5757</color>
-    <color name="colorAccent">#33405f</color>
+
+    <color name="colorPrimary">@color/color_palette_main</color>
+    <color name="colorPrimaryVariant">@color/color_palette_white</color>
+    <color name="colorAccent">@color/color_palette_accent</color>
+    <color name="colorBlack">@color/color_palette_black</color>
+
+
+<!--    <color name="colorPrimary">#F38C8C</color>-->
+<!--    <color name="colorPrimaryVariant">#FF5757</color>-->
+<!--    <color name="colorAccent">#33405f</color>-->
 
     <color name="colorSecondary">#366b3e</color>
     <color name="colorSecondaryVariant">#21C1D6</color>
@@ -16,10 +23,29 @@
     <color name="g_black">#33405f</color>
     <color name="g_loading">#fffafc</color>
     <color name="btn_color_login">@color/colorAccent</color>
-    <color name="background_color_normal">#EEB2B2</color>
-    <color name="background_color_pressed">#F38C8C</color>
+    <color name="background_color_normal">@color/color_palette_main</color>
+    <color name="background_color_pressed">@color/color_palette_main</color>
     <color name="background_color_delete">#FF0000</color>
     <color name="red_icon">#F82D2D</color>
+
+
+    <!-- My color palette-->
+    <color name="color_palette_main">#b86cde</color>
+    <color name="color_palette_accent">#b59fd4</color>
+    <color name="color_palette_white">#E7DDF0</color>
+    <color name="color_palette_black">#505050</color>
+
+    <!--    Tag-->
+    <color name="tag_color_1">#db8fad</color>
+    <color name="tag_color_2">#a1cf9b</color>
+    <color name="tag_color_3">#d9d2f7</color>
+    <color name="tag_color_4">#e3c1a3</color>
+    <color name="tag_color_5">#c7d4d1</color>
+    <color name="tag_color_6">#e090dc</color>
+    <color name="tag_color_7">#e8fac8</color>
+    <color name="tag_color_8">#b86cde</color>
+    <color name="tag_color_9">#d4858b</color>
+    <color name="tag_color_10">#94d4a2</color>
 
     <color name="transparent_white_percent_0">#00ffffff</color>
     <color name="transparent_white_percent_5">#0Dffffff</color>

@@ -21,6 +21,7 @@ import com.example.kafiesta.databinding.LayoutCustomNavHeaderBinding
 import com.example.kafiesta.databinding.LayoutCustomToolbarDashboardBinding
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.add_product.ProductActivity
+import com.example.kafiesta.screens.inventory_product.ProductInventoryActivity
 import com.example.kafiesta.screens.main.fragment.home.HomeFragment
 import com.example.kafiesta.screens.main.fragment.myshop.MyShopFragment
 import com.example.kafiesta.screens.main.fragment.order.OrderFragment
@@ -242,16 +243,15 @@ class MainActivity : BaseActivity(),
             }
             R.id.nav_my_shop -> {
                 proceedToActivity(ProfileSettingActivity::class.java)
-//                setFocus(false)
+                setFocus(false)
             }
             R.id.nav_product -> {
                 proceedToActivity(ProductActivity::class.java)
                 setFocus(false)
             }
             R.id.nav_inventory -> {
-                showToast(getString(R.string.title_nav_drawer_inventory))
-//                proceedToActivity(SettingActivity::class.java)
-//                setFocus(false)
+                proceedToActivity(ProductInventoryActivity::class.java)
+                setFocus(false)
             }
             R.id.nav_logout -> {
                 val tag = DialogTag.DIALOG_MAIN_LOGOUT
