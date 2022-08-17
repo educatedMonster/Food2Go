@@ -9,7 +9,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.ProductInventoryDomain" />
+            type="com.example.kafiesta.domain.InventoryDomain" />
 
         <variable
             name="onClickCallBack"
@@ -67,6 +67,21 @@
             app:layout_constraintStart_toEndOf="@+id/card_img_profile"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/lorem/random" />
+
+        <TextView
+            android:id="@+id/tv_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:lines="1"
+            android:padding="@dimen/padding_min"
+            android:text="@{model.quantity}"
+            android:textColor="@color/color_palette_black"
+            android:textSize="@dimen/text_size_normal_small"
+            app:layout_constraintStart_toStartOf="@+id/text_view_name"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_name"
+            tools:text="@tools:sample/us_zipcodes" />
 
         <TextView
             android:id="@+id/tv_price"

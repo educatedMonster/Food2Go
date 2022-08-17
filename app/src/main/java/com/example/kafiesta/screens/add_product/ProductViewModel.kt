@@ -25,6 +25,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     val isLoading = repository.isLoading
     val isUpdated = repository.isUpdated
     val isDeleted = repository.isDeleted
+    val isAddedInventory = repository.isAddedInventory
     val isProductCreated = repository.isProductCreated
     val isUploaded = repository.isUploaded
 
@@ -62,6 +63,16 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             try {
                 repository.onDeleteProductAsync(productId)
+            } catch (e: IOException) {
+                Timber.d(e)
+            }
+        }
+    }
+
+    fun addInventory(productId: Long) {
+        viewModelScope.launch {
+            try {
+                repository.onaAddInventory(productId)
             } catch (e: IOException) {
                 Timber.d(e)
             }

@@ -8,7 +8,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.ProductInventoryDomain" />
+            type="com.example.kafiesta.domain.InventoryDomain" />
     </data>
 
 
@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="Insert quantity"
+                android:fontFamily="@font/aileron_bold"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_size_medium"
@@ -52,7 +53,7 @@
                     android:layout_marginStart="@dimen/margin_big"
                     android:layout_marginTop="@dimen/margin_avg"
                     android:layout_marginEnd="@dimen/margin_big"
-                    android:hint="0"
+                    android:hint="Insert quantity"
                     app:helperTextTextColor="@color/colorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +64,8 @@
                         android:id="@+id/et_quantity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/aileron_regular"
+                        android:text="@{model.quantity}"
                         android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -82,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/layer_button_login_fill"
-                    android:fontFamily="@font/aileron_regular"
+                    android:fontFamily="@font/aileron_bold"
                     android:text="Save"
                     android:textAllCaps="false"
                     android:textColor="@color/color_white"

@@ -33,6 +33,9 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
     private val _isProductCreated = MutableLiveData<ProductDomain>()
     val isProductCreated: LiveData<ProductDomain> get() = _isProductCreated
 
+    private val _isAddedInventory = MutableLiveData<Boolean>()
+    val isAddedInventory: LiveData<Boolean> get() = _isAddedInventory
+
     private val _isUpdated = MutableLiveData<Boolean>()
     val isUpdated: LiveData<Boolean> get() = _isUpdated
 
@@ -138,8 +141,8 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
                     bearer = setBearer(token),
                     params = paramsToRequestBody(params)
                 ).await()
-                    _isLoading.postValue(false)
-                    _isUpdated.postValue(true)
+                _isLoading.postValue(false)
+                _isUpdated.postValue(true)
                 if (selectedFile != null) {
                     // when the Product Form successfully created , get the id and pass to the file image
                     onUploadProductImage(prod.id, selectedFile)
@@ -168,6 +171,27 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
                     params = body
                 ).await()
                 _isUploaded.postValue(true)
+                _isLoading.postValue(false)
+            } catch (e: HttpException) {
+                Timber.e(e.message())
+                _isLoading.postValue(false)
+            } finally {
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
+    suspend fun onaAddInventory(productId: Long) {
+        withContext(Dispatchers.IO) {
+            try {
+                _isLoading.postValue(true)
+                val network = AppNetwork.service.onAddInventoryAsync(
+                    bearer = setBearer(token),
+                    productId
+                ).await()
+
+                // notify add inventory
+                _isAddedInventory.postValue(true)
                 _isLoading.postValue(false)
             } catch (e: HttpException) {
                 Timber.e(e.message())

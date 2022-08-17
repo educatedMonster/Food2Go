@@ -1,9 +1,6 @@
 package com.example.kafiesta.screens.add_product.adapter
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Handler
-import android.os.Looper
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -12,12 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.ListItemProductBinding
 import com.example.kafiesta.domain.ProductDomaintest
+import com.example.kafiesta.domain.ProductInventoryDomain
+import com.example.kafiesta.screens.inventory_product.adapter.TagAdapter
+import com.example.kafiesta.utilities.helpers.AddInventoryRecyclerClick
 import com.example.kafiesta.utilities.helpers.RecyclerClick
-import timber.log.Timber
-import java.util.concurrent.Executors
 
 class ProductAdapter(
-    private val onClickCallBack: RecyclerClick) :
+    private val context: Context,
+    private val onClickCallBack: RecyclerClick,
+) :
     RecyclerView.Adapter<ProductViewHolder>() {
 
     private var list: ArrayList<ProductDomaintest> = arrayListOf()
@@ -36,11 +36,6 @@ class ProductAdapter(
         notifyDataSetChanged()
     }
 
-
-    fun getModel() : ProductDomaintest{
-        return model
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val withDataBinding: ListItemProductBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
@@ -56,11 +51,38 @@ class ProductAdapter(
             model = list[position]
             it.model = model
             it.onClickCallBack = onClickCallBack
+
+            holder.viewDataBinding.rcTag.apply {
+                val tags = model.tags.split(",")
+                val arrTags = tags.toTypedArray()
+
+//                val rand = if (arrTags.size <= 9) {
+//                    (1..arrTags.size).random()
+//                } else {
+//                    (1..10).random()
+//                }
+//
+//                val colors = intArrayOf(
+//                    R.drawable.tag_rectangle_round_1,
+//                    R.drawable.tag_rectangle_round_2,
+//                    R.drawable.tag_rectangle_round_3,
+//                    R.drawable.tag_rectangle_round_4,
+//                    R.drawable.tag_rectangle_round_5,
+//                    R.drawable.tag_rectangle_round_6,
+//                    R.drawable.tag_rectangle_round_7,
+//                    R.drawable.tag_rectangle_round_8,
+//                    R.drawable.tag_rectangle_round_9)
+
+                val tagAdapter = TagAdapter(context, arrTags)
+                adapter = tagAdapter
+                setHasFixedSize(false)
+            }
         }
     }
 
     override fun getItemCount(): Int = list.size
 }
+
 class ProductViewHolder(val viewDataBinding: ListItemProductBinding) :
     RecyclerView.ViewHolder(viewDataBinding.root) {
     companion object {

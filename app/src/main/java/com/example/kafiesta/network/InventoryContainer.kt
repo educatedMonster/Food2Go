@@ -53,10 +53,11 @@ data class InventorResponse(
     val userID: Long,
     val name: String,
     val description: String,
-    val imageURL: String,
+    val imageURL: String? = null,
     val price: String,
     val tags: String,
     val status: String,
+    val quantity: String,
 )
 
 data class InventoryLinkResponse(
@@ -101,7 +102,8 @@ fun InventorResponse.asDomainModel(): InventoryDomain {
         imageURL = imageURL,
         price = price,
         tags = tags,
-        status = status
+        status = status,
+        quantity = quantity
     )
 }
 

@@ -1,35 +1,26 @@
 package com.example.kafiesta.screens.inventory_product.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.kafiesta.R
-import com.example.kafiesta.constants.ServerConst
-import com.example.kafiesta.databinding.ListItemProductInventoryBinding
+import com.example.kafiesta.databinding.ListItemInventoryBinding
+import com.example.kafiesta.domain.InventoryDomain
 import com.example.kafiesta.domain.ProductInventoryDomain
 import com.example.kafiesta.utilities.helpers.RecyclerClick
-import timber.log.Timber
-import java.util.concurrent.Executors
 
-class ProductInventoryAdapter(
+class InventoryAdapter(
     private val context: Context,
     private val onClickCallBack: RecyclerClick,
 ) :
     RecyclerView.Adapter<ProductViewHolder>() {
-    private var list: ArrayList<ProductInventoryDomain> = arrayListOf()
-    private lateinit var model: ProductInventoryDomain
+    private var list: ArrayList<InventoryDomain> = arrayListOf()
+    private lateinit var model: InventoryDomain
 
-    fun addData(model: ProductInventoryDomain) {
+    fun addData(model: InventoryDomain) {
         //to avoid duplication
         if (model !in list) {
             list.add(model)
@@ -43,7 +34,7 @@ class ProductInventoryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val withDataBinding: ListItemProductInventoryBinding = DataBindingUtil.inflate(
+        val withDataBinding: ListItemInventoryBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             ProductViewHolder.LAYOUT,
             parent,
@@ -59,28 +50,28 @@ class ProductInventoryAdapter(
             it.onClickCallBack = onClickCallBack
 
             holder.viewDataBinding.rcTag.apply {
-                val rand: Int
+//                val rand: Int
                 val tags = model.tags.split(",")
                 val arrTags = tags.toTypedArray()
 
-                rand = if (arrTags.size <= 9) {
-                    (1..arrTags.size).random()
-                } else {
-                    (1..10).random()
-                }
+//                rand = if (arrTags.size <= 9) {
+//                    (1..arrTags.size).random()
+//                } else {
+//                    (1..9).random()
+//                }
 
-                val colors = intArrayOf(
-                    R.drawable.tag_rectangle_round_1,
-                    R.drawable.tag_rectangle_round_2,
-                    R.drawable.tag_rectangle_round_3,
-                    R.drawable.tag_rectangle_round_4,
-                    R.drawable.tag_rectangle_round_5,
-                    R.drawable.tag_rectangle_round_6,
-                    R.drawable.tag_rectangle_round_7,
-                    R.drawable.tag_rectangle_round_8,
-                    R.drawable.tag_rectangle_round_9)
+//                val colors = intArrayOf(
+//                    R.drawable.tag_rectangle_round_1,
+//                    R.drawable.tag_rectangle_round_2,
+//                    R.drawable.tag_rectangle_round_3,
+//                    R.drawable.tag_rectangle_round_4,
+//                    R.drawable.tag_rectangle_round_5,
+//                    R.drawable.tag_rectangle_round_6,
+//                    R.drawable.tag_rectangle_round_7,
+//                    R.drawable.tag_rectangle_round_8,
+//                    R.drawable.tag_rectangle_round_9)
 
-                val tagAdapter = TagAdapter(context, colors[rand], arrTags)
+                val tagAdapter = TagAdapter(context, arrTags)
                 adapter = tagAdapter
                 setHasFixedSize(false)
             }
@@ -90,10 +81,10 @@ class ProductInventoryAdapter(
     override fun getItemCount(): Int = list.size
 }
 
-class ProductViewHolder(val viewDataBinding: ListItemProductInventoryBinding) :
+class ProductViewHolder(val viewDataBinding: ListItemInventoryBinding) :
     RecyclerView.ViewHolder(viewDataBinding.root) {
     companion object {
         @LayoutRes
-        val LAYOUT = R.layout.list_item_product_inventory
+        val LAYOUT = R.layout.list_item_inventory
     }
 }

@@ -9,10 +9,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import com.example.kafiesta.databinding.DialogLayoutEditProductBinding
 import com.example.kafiesta.databinding.ListItemProductBinding
-import com.example.kafiesta.domain.ProductDomain
 import com.example.kafiesta.domain.ProductDomaintest
-import com.example.kafiesta.domain.Producttest
-import com.example.kafiesta.utilities.dialog.ProductEditDialog
+import com.example.kafiesta.domain.ProductInventoryBaseDomain
+import com.example.kafiesta.domain.ProductInventoryDomain
+import com.example.kafiesta.utilities.helpers.AddInventoryRecyclerClick
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 
 class SimpleDiffUtilAdapter(

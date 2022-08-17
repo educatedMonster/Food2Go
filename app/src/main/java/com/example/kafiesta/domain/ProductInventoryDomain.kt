@@ -20,9 +20,11 @@ data class ProductInventoryBaseDomain(
     val prevPageURL: String? = null,
     val to: Long,
     val total: Long,
-)
+) {
+    val isNotEmptyData = data.isNotEmpty()
+}
 
-data class ProductInventoryDomain(
+    data class ProductInventoryDomain(
     val id: Long,
     val userID: Long,
     val name: String,

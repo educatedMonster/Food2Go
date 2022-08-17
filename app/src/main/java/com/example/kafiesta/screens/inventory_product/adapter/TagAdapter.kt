@@ -13,7 +13,6 @@ import com.example.kafiesta.utilities.extensions.showToast
 
 class TagAdapter(
     private val context: Context,
-    private val colorRand: Int,
     private val list: Array<String>,
 ) : RecyclerView.Adapter<TagViewHolder>() {
 
@@ -35,7 +34,7 @@ class TagAdapter(
             tagString = list[position]
             it.tagString = tagString
             val a: String = it.tagString as String
-            holder.viewDataBinding.layoutTag.setBackgroundResource(colorRand)
+            holder.viewDataBinding.layoutTag.setBackgroundResource(R.drawable.tag_rectangle_round_2)
             holder.viewDataBinding.layoutTag.setOnClickListener {
                 context.showToast(a)
             }

@@ -2,7 +2,6 @@ package com.example.kafiesta.screens.add_product
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -23,10 +22,7 @@ import com.example.kafiesta.utilities.dialog.ProductEditDialog
 import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.getDialog
 import com.example.kafiesta.utilities.getGlobalDialog
-import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
-import com.example.kafiesta.utilities.helpers.RecyclerClick
-import com.example.kafiesta.utilities.helpers.SharedPrefs
-import com.example.kafiesta.utilities.helpers.getSecurePrefs
+import com.example.kafiesta.utilities.helpers.*
 import com.example.kafiesta.utilities.hideKeyboard
 import timber.log.Timber
 import java.io.File
@@ -77,8 +73,9 @@ class ProductActivity : BaseActivity() {
     }
 
     private fun initAdapter() {
-        mAdapter = ProductAdapter(RecyclerClick(
-            click = {
+        mAdapter = ProductAdapter(
+            context = this, RecyclerClick(
+                click = {
                 ProductEditDialog(
                     userId = userId,
                     product = it as ProductDomaintest,
@@ -95,7 +92,7 @@ class ProductActivity : BaseActivity() {
                             val configureDialog = ConfigureDialog(
                                 activity = this@ProductActivity,
                                 title = getString(R.string.dialog_product_form_delete_button),
-                                message = "Are uou sure you want to delete this product!",
+                                message = "Are you sure you want to delete this product!",
                                 positiveButtonName = getString(R.string.dialog_yes_button),
                                 positiveButtonListener =
                                 GlobalDialogClicker {
@@ -230,6 +227,13 @@ class ProductActivity : BaseActivity() {
                         DialogTag.DIALOG_FORM_INITIAL_PRODUCT
                     ) as ProductAddDialog?)?.dismiss()
                     initRequest()
+                }
+            }
+
+            isAddedInventory.observe(this@ProductActivity) {
+                if (it) {
+                    showToast("Product has been added to inventory list")
+                    hideKeyboard(this@ProductActivity)
                 }
             }
         }

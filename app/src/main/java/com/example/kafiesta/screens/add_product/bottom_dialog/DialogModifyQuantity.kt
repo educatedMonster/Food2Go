@@ -1,7 +1,8 @@
-package com.example.kafiesta.screens.inventory_product.bottom_dialog
+package com.example.kafiesta.screens.add_product.bottom_dialog
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.Application
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,26 +11,27 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
-import com.example.kafiesta.databinding.DialogBottomSheetFragmentBinding
+import com.example.kafiesta.databinding.DialogBottomModifyQuantityBinding
+import com.example.kafiesta.domain.InventoryDomain
 import com.example.kafiesta.domain.ProductInventoryDomain
-import com.example.kafiesta.utilities.dialog.ProductAddDialog
+import com.example.kafiesta.screens.inventory_product.InventoryViewModel
 import com.example.kafiesta.utilities.extensions.isNotEmpty
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.dialog_bottom_sheet_fragment.*
 
-class BottomSheetFragment(
+class DialogModifyQuantity(
     private val userId: Long,
-    private val model: ProductInventoryDomain,
-    private val listener: Listener,
+    private val model: InventoryDomain,
+    private val listener: Listener
 ) : BottomSheetDialogFragment() {
 
     interface Listener {
-        fun onAddQuantityListener(quantity: Long, productId: Long)
+        fun onAddQuantityListener(quantity: String, productId: Long)
     }
 
-    private lateinit var binding: DialogBottomSheetFragmentBinding
+    private lateinit var binding: DialogBottomModifyQuantityBinding
 
     @SuppressLint("DefaultLocale")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -38,10 +40,10 @@ class BottomSheetFragment(
 
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.dialog_bottom_sheet_fragment,
+            R.layout.dialog_bottom_modify_quantity,
             null,
             false
-        ) as DialogBottomSheetFragmentBinding
+        ) as DialogBottomModifyQuantityBinding
         binding.model = model
 
         val view = binding.root
@@ -52,13 +54,13 @@ class BottomSheetFragment(
             buttonSave.setOnClickListener {
                 if (onValidate(binding.etQuantity)) {
                     val pQuantity = binding.etQuantity.text.toString()
-                    listener.onAddQuantityListener(pQuantity.toLong(), model!!.id)
+                    listener.onAddQuantityListener(pQuantity, model!!.id)
                 }
             }
         }
 
         val alertDialog = dialog.create()
-        alertDialog.window!!.setLayout(ViewGroup.LayoutParams.FILL_PARENT,
+        alertDialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.window?.attributes!!.windowAnimations = R.style.BottomDialogAnimation

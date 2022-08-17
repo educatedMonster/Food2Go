@@ -55,7 +55,7 @@
             android:id="@+id/text_view_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_aver_plus"
+            android:layout_marginStart="@dimen/margin_small"
             android:ellipsize="end"
             android:gravity="start"
             android:lines="2"
@@ -70,16 +70,37 @@
 
         <TextView
             android:id="@+id/text_view_price"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:gravity="center_horizontal"
             android:singleLine="true"
             android:text="@{model.priceString}"
             android:textColor="@color/color_palette_black"
             android:textSize="@dimen/text_size_semi_normal"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/text_view_name"
             app:layout_constraintTop_toBottomOf="@+id/text_view_name"
             tools:text="@tools:sample/us_zipcodes" />
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/button_add"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:onClick="@{() -> onClickCallBack.onClickAdd(model.id)}"-->
+<!--            android:text="+"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/text_view_name" />-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_tag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_name"
+            app:layout_constraintStart_toStartOf="@+id/text_view_price"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_price"
+            tools:listitem="@layout/list_item_tag" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

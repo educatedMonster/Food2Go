@@ -9,7 +9,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.screens.inventory_product.ProductInventoryViewModel" />
+            type="com.example.kafiesta.screens.inventory_product.InventoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,7 +57,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/toolbar"
                     tools:itemCount="3"
-                    tools:listitem="@layout/list_item_product_inventory" />
+                    tools:listitem="@layout/list_item_inventory" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

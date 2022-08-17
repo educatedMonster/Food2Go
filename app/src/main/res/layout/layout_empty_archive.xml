@@ -8,10 +8,10 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icon_size_create_edit"
+            android:layout_height="@dimen/icon_size_create_edit"
             android:contentDescription="@string/image_content_description"
-            android:src="@drawable/loading_unscreen"
+            android:src="@drawable/open_box"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

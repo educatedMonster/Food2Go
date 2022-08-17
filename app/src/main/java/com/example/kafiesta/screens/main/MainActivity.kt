@@ -21,7 +21,7 @@ import com.example.kafiesta.databinding.LayoutCustomNavHeaderBinding
 import com.example.kafiesta.databinding.LayoutCustomToolbarDashboardBinding
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.add_product.ProductActivity
-import com.example.kafiesta.screens.inventory_product.ProductInventoryActivity
+import com.example.kafiesta.screens.inventory_product.InventoryActivity
 import com.example.kafiesta.screens.main.fragment.home.HomeFragment
 import com.example.kafiesta.screens.main.fragment.myshop.MyShopFragment
 import com.example.kafiesta.screens.main.fragment.order.OrderFragment
@@ -250,7 +250,7 @@ class MainActivity : BaseActivity(),
                 setFocus(false)
             }
             R.id.nav_inventory -> {
-                proceedToActivity(ProductInventoryActivity::class.java)
+                proceedToActivity(InventoryActivity::class.java)
                 setFocus(false)
             }
             R.id.nav_logout -> {

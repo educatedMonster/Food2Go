@@ -36,10 +36,10 @@ data class ProductDomaintest(
     val description: String?,
     val imageURL: String?,
     val price: Double?,
-    val tags: String?,
+    val tags: String,
     val status: String?,
 ) {
-    val priceString = price.toString()
+    val priceString = "P ${price.toString()}"
     val statusBool = status!!.matches("active".toRegex())
     val isIdExist = id != 0L
 }

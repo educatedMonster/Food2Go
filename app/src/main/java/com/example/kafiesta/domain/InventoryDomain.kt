@@ -30,10 +30,12 @@ data class InventoryDomain(
     val userID: Long,
     val name: String,
     val description: String,
-    val imageURL: String,
+    val imageURL: String?,
     val price: String,
     val tags: String,
     val status: String,
+    val quantity: String,
+
 )
 
 data class InventoryLinkDomain(

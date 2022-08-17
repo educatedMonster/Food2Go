@@ -30,8 +30,8 @@
 
 
     <!-- My color palette-->
-    <color name="color_palette_main">#b86cde</color>
-    <color name="color_palette_accent">#b59fd4</color>
+    <color name="color_palette_main">#ffcc00</color>
+    <color name="color_palette_accent">#ff6633</color>
     <color name="color_palette_white">#E7DDF0</color>
     <color name="color_palette_black">#505050</color>
 
