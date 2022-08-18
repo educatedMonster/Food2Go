@@ -8,34 +8,31 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
 import com.example.kafiesta.databinding.DialogBottomProductSearchBinding
-import com.example.kafiesta.domain.InventoryDomain
-import com.example.kafiesta.screens.add_product.bottom_dialog.DialogModifyQuantity
+import com.example.kafiesta.domain.ProductInventoryDomain
 import com.example.kafiesta.screens.inventory_product.InventoryViewModel
 import com.example.kafiesta.screens.inventory_product.adapter.ProductSearchAdapter
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.trackerteer.taskmanagement.utilities.extensions.visible
-import kotlinx.android.synthetic.main.dialog_layout_add_product.view.*
+
 
 class ProductSearchDialog(
     private val userId: Long,
-    private val listener: Listener,
     private val application: Application,
 ) : BottomSheetDialogFragment() {
-
-    interface Listener {
-        fun onAddInventoryWithQuantityListener()
-    }
 
     private lateinit var binding: DialogBottomProductSearchBinding
     private lateinit var mActivity: Activity
@@ -45,6 +42,7 @@ class ProductSearchDialog(
     private var mLength = 10L
     private var mStart = 0L
     private var mSearch = ""
+    private var mNewText = ""
     private var mCurrentPage = 0L
     private var mLastPage = 0L
 
@@ -73,7 +71,8 @@ class ProductSearchDialog(
         initConfig()
 
         val alertDialog = dialog.create()
-        alertDialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        alertDialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT)
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.window?.attributes!!.windowAnimations = R.style.BottomDialogAnimation
         alertDialog.window?.setGravity(Gravity.BOTTOM)
@@ -85,9 +84,93 @@ class ProductSearchDialog(
         mFragment = fragment
     }
 
+    private fun initConfig() {
+        initEventListener()
+        initAdapter()
+        initRequest()
+        initLiveData()
+
+    }
+
+    private fun initEventListener() {
+        binding.apply {
+            textInputEditText.requestFocus()
+            textInputEditText.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {}
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(query: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    mNewText = query.toString()
+                }
+            })
+
+            btnSearch.setOnClickListener {
+                if (mNewText.isEmpty()) {
+                    initRequest()
+                } else {
+                    searchRequest(mNewText)
+                }
+            }
+
+            recyclerViewProducts.apply {
+                this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        if (!recyclerView.canScrollVertically(1)) {
+                            initSearchRequestOffset(mNewText)
+                        }
+                        super.onScrolled(recyclerView, dx, dy)
+                    }
+                })
+            }
+        }
+    }
+
+    private fun initAdapter() {
+        mAdapter = ProductSearchAdapter(
+            context = mActivity,
+            onClickCallBack = RecyclerClick(
+                click = {
+                    // TODO - Pending api for adding product and at the same time quantity
+                    DialogInventoryQuantity(
+                        userId = userId,
+                        model = it as ProductInventoryDomain,     // TODO - This model is for testing purposes
+                        listener = object : DialogInventoryQuantity.Listener {
+                            override fun onAddInventoryQuantityListener(
+                                quantity: String,
+                                productId: Long,
+                            ) {
+                                inventoryViewModel.inventoryAndQuantity(productId, quantity)
+                            }
+                        }
+                    ).show(mFragment.supportFragmentManager, DialogTag.DIALOG_FORM_EDIT_PRODUCT)
+                }
+            ))
+
+        binding.recyclerViewProducts.apply {
+            adapter = mAdapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    R.drawable.list_divider_decoration
+                )
+            )
+        }
+    }
+
+    private fun initRequest() {
+        mAdapter.clearAdapter()
+        mCurrentPage = 1L
+        mLength = 10L
+        mStart = 0L
+
+        inventoryViewModel.getAllProductInventory(
+            length = mLength,
+            start = mStart,
+            search = mSearch)
+    }
+
     private fun initLiveData() {
         inventoryViewModel.apply {
-            productInventoryList.observe(binding.lifecycleOwner!!) {
+            productInventoryList.observe(this@ProductSearchDialog) {
                 mLength += it.data.size
                 mStart += it.data.size
                 mCurrentPage = it.currentPage
@@ -108,65 +191,22 @@ class ProductSearchDialog(
         }
     }
 
-    private fun initConfig() {
-        initAdapter()
-        initEventListener()
-        initRequest()
-        initLiveData()
-    }
-
-    private fun initAdapter() {
-        mAdapter = ProductSearchAdapter(
-            context = mActivity,
-            onClickCallBack = RecyclerClick(
-                click = {
-                    // add to inventory and add quantity
-                    // TODO - create a separate dialog coz this returns ProductInventoryDomain
-                    DialogModifyQuantity(
-                        userId = userId,
-                        model = it as InventoryDomain,
-                        listener = object : DialogModifyQuantity.Listener {
-                            override fun onAddQuantityListener(quantity: String, productId: Long) {
-                                inventoryViewModel.inventoryAndQuantity(productId, quantity)
-                            }
-                        }
-                    ).show(mFragment.supportFragmentManager, DialogTag.DIALOG_FORM_EDIT_PRODUCT)
-                }
-            ))
-
-        binding.recyclerViewProducts.apply {
-            adapter = mAdapter
-            addItemDecoration(
-                DividerItemDecoration(
-                    context,
-                    R.drawable.list_divider_decoration
-                )
-            )
-        }
-    }
-
-    private fun initEventListener() {
-        binding.apply {
-            btnSearch.setOnClickListener {
-                val search = binding.svSearch.text.toString()
-                mAdapter.clearAdapter()
-                inventoryViewModel.getAllProductInventory(
-                    length = mLength,
-                    start = mStart,
-                    search = search)
-            }
-        }
-    }
-
-    private fun initRequest() {
+    private fun searchRequest(newSearch: String) {
         mAdapter.clearAdapter()
         mCurrentPage = 1L
-        mLength = 10L
-        mStart = 0L
-
         inventoryViewModel.getAllProductInventory(
-            length = mLength,
-            start = mStart,
-            search = mSearch)
+            length = 10L,
+            start = 0L,
+            search = newSearch)
+    }
+
+    private fun initSearchRequestOffset(newText: String) {
+        if (mCurrentPage < mLastPage) {
+            mCurrentPage++
+            inventoryViewModel.getAllProductInventory(
+                length = mLength,
+                start = mStart,
+                search = newText)
+        }
     }
 }

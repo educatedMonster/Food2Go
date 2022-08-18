@@ -16,23 +16,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KaFiesta">
         <activity
+            android:name=".screens.dashboard.DashboardActivity"
+            android:exported="false"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/Theme.KaFiesta.NoActionBar" />
+        <activity
             android:name=".screens.inventory_product.InventoryActivity"
             android:exported="false" />
         <activity
             android:name=".screens.add_product.ProductActivity"
-            android:exported="false" >
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".screens.profile.ProfileSettingActivity"
             android:exported="false" />
         <activity
             android:name=".screens.splash.SplashActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".screens.login.LoginActivity"
-            android:screenOrientation="portrait"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

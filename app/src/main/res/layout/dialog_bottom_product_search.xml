@@ -28,42 +28,6 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-
-                <LinearLayout
-                    android:id="@+id/layoutSearch"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/layer_button_dialog_stroke"
-                    android:focusableInTouchMode="true"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.appcompat.widget.SearchView
-                        android:id="@+id/svSearch"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/medium_icon_size"
-                        android:layout_weight="1"
-                        android:focusable="false"
-                        android:focusableInTouchMode="true"
-                        android:hint="Search"
-                        android:imeOptions="actionSearch"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:textColor="@color/gray"
-                        android:textColorHint="@color/gray"
-                        android:textSize="@dimen/text_size_normal" />
-
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,35 +55,62 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_big"
-                android:layout_marginTop="@dimen/margin_aver_plus"
-                android:layout_marginEnd="@dimen/margin_big"
-                app:layout_constraintTop_toBottomOf="@+id/text_layout_password">
+                android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/layer_button_login_fill"
-                    android:fontFamily="@font/aileron_bold"
-                    android:text="Search"
-                    android:textAllCaps="false"
-                    android:textColor="@color/color_white"
-                    android:textSize="@dimen/text_size_normal_plus" />
-
-                <ProgressBar
-                    android:id="@+id/progress_loading"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_layout_search"
+                    style="@style/TextInputLayoutStyle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:visibility="gone" />
+                    android:layout_margin="@dimen/margin_small"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="Search"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/frameLayout2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </FrameLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/text_input_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <FrameLayout
+                    android:id="@+id/frameLayout2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/btn_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/aileron_bold"
+                        android:padding="@dimen/margin_small"
+                        android:src="@drawable/ic_search_24"
+                        android:textAllCaps="false"
+                        android:textColor="@color/color_white" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_loading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                </FrameLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 

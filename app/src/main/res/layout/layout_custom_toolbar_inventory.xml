@@ -49,7 +49,7 @@
                 android:adjustViewBounds="true"
                 android:paddingStart="@dimen/padding_small"
                 android:paddingEnd="@dimen/padding_small"
-                android:src="@drawable/ic_more_vert_24"
+                android:src="@drawable/ic_search_24"
                 android:tint="@color/color_palette_black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

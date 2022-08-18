@@ -98,9 +98,9 @@ class ProfileSettingActivity : BaseActivity() {
         mActionBar = supportActionBar
         if (mActionBar != null) {
             mActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            mActionBar!!.setDisplayHomeAsUpEnabled(false)
+            mActionBar!!.setDisplayHomeAsUpEnabled(true)
+            mActionBar!!.setDisplayShowHomeEnabled(true)
             mActionBar!!.setDisplayUseLogoEnabled(true)
-            mActionBar!!.setDisplayShowHomeEnabled(false)
             toolbarShopBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(this),
                 R.layout.layout_custom_toolbar_shop,

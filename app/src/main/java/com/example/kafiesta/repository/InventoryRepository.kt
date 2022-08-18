@@ -131,5 +131,4 @@ class InventoryRepository(private val sharedPrefs: SharedPrefs) {
             }
         }
     }
-
 }

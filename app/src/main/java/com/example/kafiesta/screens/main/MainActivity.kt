@@ -19,6 +19,7 @@ import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityMainBinding
 import com.example.kafiesta.databinding.LayoutCustomNavHeaderBinding
 import com.example.kafiesta.databinding.LayoutCustomToolbarDashboardBinding
+import com.example.kafiesta.screens.dashboard.DashboardActivity
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.add_product.ProductActivity
 import com.example.kafiesta.screens.inventory_product.InventoryActivity
@@ -28,7 +29,6 @@ import com.example.kafiesta.screens.main.fragment.order.OrderFragment
 import com.example.kafiesta.screens.profile.ProfileSettingActivity
 import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
-import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
@@ -237,9 +237,8 @@ class MainActivity : BaseActivity(),
              * Drawer Navigation View
              */
             R.id.nav_dashboard -> {
-                showToast(getString(R.string.title_nav_drawer_dashboard))
-//                proceedToActivity(SettingActivity::class.java)
-//                setFocus(false)
+                proceedToActivity(DashboardActivity::class.java)
+                setFocus(false)
             }
             R.id.nav_my_shop -> {
                 proceedToActivity(ProfileSettingActivity::class.java)

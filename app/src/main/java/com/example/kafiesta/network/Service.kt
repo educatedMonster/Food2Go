@@ -139,6 +139,8 @@ interface AppService {
         @PartMap params: HashMap<String, RequestBody>
     ): Deferred<InventoryBaseNetwork>
 
+
+    // TODO - Pending api for adding product and at the same time quantity
     // https://kafiesta-api.osc-fr1.scalingo.io/v1/product
     @Multipart
     @POST("inventory/modifyQuantity")

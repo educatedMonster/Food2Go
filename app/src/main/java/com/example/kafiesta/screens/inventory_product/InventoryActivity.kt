@@ -3,8 +3,6 @@ package com.example.kafiesta.screens.inventory_product
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.animation.AnimationUtils
-import android.widget.PopupMenu
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +18,6 @@ import com.example.kafiesta.screens.add_product.bottom_dialog.DialogModifyQuanti
 import com.example.kafiesta.screens.inventory_product.adapter.InventoryAdapter
 import com.example.kafiesta.screens.inventory_product.bottom_dialog_add_inventory.ProductSearchDialog
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
-import com.example.kafiesta.utilities.dialog.ProductEditDialog
 import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.getDialog
 import com.example.kafiesta.utilities.helpers.RecyclerClick
@@ -113,9 +110,9 @@ class InventoryActivity : BaseActivity() {
         mActionBar = supportActionBar
         if (mActionBar != null) {
             mActionBar!!.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            mActionBar!!.setDisplayHomeAsUpEnabled(false)
+            mActionBar!!.setDisplayHomeAsUpEnabled(true)
+            mActionBar!!.setDisplayShowHomeEnabled(true)
             mActionBar!!.setDisplayUseLogoEnabled(true)
-            mActionBar!!.setDisplayShowHomeEnabled(false)
             toolbarAddBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(this),
                 R.layout.layout_custom_toolbar_inventory,
@@ -134,39 +131,12 @@ class InventoryActivity : BaseActivity() {
     private fun initEventListener() {
         binding.apply {
             toolbarAddBinding.imgMore.setOnClickListener {
-                val btnScale =
-                    AnimationUtils.loadAnimation(this@InventoryActivity, R.anim.btn_scale)
-                val popupMenu = PopupMenu(this@InventoryActivity, it)
-                it.startAnimation(btnScale)
-                popupMenu.menuInflater.inflate(R.menu.menu_inventory_nav, popupMenu.menu)
-                popupMenu.setOnMenuItemClickListener { item: MenuItem ->
-                    val itemId = item.itemId
-                    if (itemId == R.id.action_nav_inventory_insert) {
-                        val dialog = ProductSearchDialog(
-                            userId = userId,
-                            listener = object : ProductSearchDialog.Listener {
-                                override fun onAddInventoryWithQuantityListener() {
-//                        productInventoryViewModel.addInventoryWithQuantity()
-                                }
-                            },
-                            application = application)
-                        dialog.setParentActivity(this@InventoryActivity, this@InventoryActivity)
-                    } else if (itemId == R.id.action_nav_inventory_search) {
-                        val dialog = ProductSearchDialog(
-                            userId = userId,
-                            listener = object : ProductSearchDialog.Listener {
-                                override fun onAddInventoryWithQuantityListener() {
-//                        productInventoryViewModel.addInventoryWithQuantity()
-                                }
-                            },
-                            application = application)
-                        dialog.setParentActivity(this@InventoryActivity, this@InventoryActivity)
-                        dialog.show(supportFragmentManager,
-                            DialogTag.DIALOG_BOTTOM_SEARCH_INVENTORY)
-                    }
-                    false
-                }
-                popupMenu.show()
+                val dialog = ProductSearchDialog(
+                    userId = userId,
+                    application = application)
+                dialog.setParentActivity(this@InventoryActivity, this@InventoryActivity)
+                dialog.show(supportFragmentManager,
+                    DialogTag.DIALOG_BOTTOM_SEARCH_INVENTORY)
             }
 
             swipeRefreshLayout.setOnRefreshListener {
