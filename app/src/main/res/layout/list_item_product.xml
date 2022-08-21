@@ -21,9 +21,8 @@
         android:layout_height="wrap_content"
         android:onClick="@{() -> onClickCallBack.onClick(model)}"
         android:paddingStart="@dimen/padding_semi_avg"
-        android:paddingTop="@dimen/padding_semi_avg"
-        android:paddingEnd="@dimen/padding_semi_avg"
-        android:paddingBottom="@dimen/padding_semi_avg">
+        android:paddingTop="@dimen/padding_avg"
+        android:paddingEnd="@dimen/padding_semi_avg">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_img_profile"

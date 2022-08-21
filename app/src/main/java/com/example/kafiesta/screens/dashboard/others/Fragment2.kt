@@ -7,18 +7,23 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.FragmentDashboard2Binding
+import com.example.kafiesta.databinding.FragmentDashboardBinding
+import com.example.kafiesta.screens.main.fragment.order.OrderFragment
+import com.example.kafiesta.utilities.decorator.DividerItemDecoration
 
 /**
  * A placeholder fragment containing a simple view.
  */
-class Placeholder2Fragment : Fragment() {
+class Fragment2 : Fragment() {
 
     private lateinit var binding: FragmentDashboard2Binding
-    private val pageViewModel: PageViewModel by lazy {
+    private val dashboardViewModel: DashboardViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-            .create(PageViewModel::class.java)
+            .create(DashboardViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -41,7 +46,7 @@ class Placeholder2Fragment : Fragment() {
             false
         )
         binding.lifecycleOwner = this
-        binding.pageViewModel = pageViewModel
+        binding.pageViewModel = dashboardViewModel
         return binding.root
     }
 
@@ -56,12 +61,33 @@ class Placeholder2Fragment : Fragment() {
     }
 
     private fun initViews() {
-        binding.sectionLabel.text = "Placeholder2Fragment"
+        binding.root.findViewById<RecyclerView>(R.id.recycler_view).apply {
+            layoutManager = LinearLayoutManager(context)
+//            adapter = mAdapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    R.drawable.list_divider_decoration
+                )
+            )
+        }.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1)) {
+//                    initRequestOffset()
+                }
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+//            initRequest()
+        }
     }
 
     private fun initLiveData() {
 //        TODO("Not yet implemented")
-//        pageViewModel.sampleHere.observe(viewLifecycleOwner, Observer {
+//        dashboardViewModel.sampleHere.observe(viewLifecycleOwner, Observer {
 //
 //        })
     }
@@ -71,5 +97,7 @@ class Placeholder2Fragment : Fragment() {
         binding
     }
 
-
+    companion object {
+        fun newInstance() = OrderFragment()
+    }
 }

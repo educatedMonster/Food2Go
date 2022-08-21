@@ -22,6 +22,7 @@ interface AppService {
         @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<LoginBaseNetwork>
 
+
     @GET("auth/logout")
     fun onLogoutAsync(
         @Header("Authorization") bearer: String,
@@ -41,12 +42,14 @@ interface AppService {
         @Path("id") userId: Long,
     ): Deferred<UserBaseNetwork>
 
+
     //    https://kafiesta-api.osc-fr1.scalingo.io/v1/user
     // This APi is use to get Profile of the current user. For security purposes.
     @GET("user")
     fun onGetMedAsync(
         @Header("Authorization") bearer: String,
     ): Deferred<UserBaseNetwork>
+
 
     //    https://kafiesta-api.osc-fr1.scalingo.io/v1/user/update
     @Multipart
@@ -56,10 +59,12 @@ interface AppService {
         @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<UserBaseNetwork>
 
+
     @POST("user/list")
     fun getAllUsersAsync(
         @Header("Authorization") bearer: String,
     ): Deferred<List<Any>>
+
 
     // https://kafiesta-api.osc-fr1.scalingo.io/v1/product
     @Multipart
@@ -76,6 +81,7 @@ interface AppService {
         @Header("Authorization") bearer: String,
         @Path("id") productId: Long,
     ): Deferred<ProductBaseNetwork>
+
 
     // https://kafiesta-api.osc-fr1.scalingo.io/v1/product
     @Multipart
@@ -103,7 +109,7 @@ interface AppService {
         @Path("id") productId: Long,
         @Part params: MultipartBody.Part
     ): Deferred<Any>
-//    ): Deferred<ProductBaseNetwork>
+
 
     //https://kafiesta-api.osc-fr1.scalingo.io/v1/product/getProductsForInventory
     @Multipart
@@ -122,6 +128,7 @@ interface AppService {
         @PartMap params: HashMap<String, RequestBody>
     ): Deferred<InventoryBaseNetwork>
 
+
     // https://kafiesta-api.osc-fr1.scalingo.io/v1/inventory/add/10
 //    @Multipart
     @POST("inventory/add/{product_id}")
@@ -130,6 +137,7 @@ interface AppService {
 //        @PartMap params: HashMap<String, RequestBody>
         @Path("product_id") productId: Long,
     ): Deferred<InventoryBaseNetwork>
+
 
     // https://kafiesta-api.osc-fr1.scalingo.io/v1/product
     @Multipart
@@ -140,15 +148,23 @@ interface AppService {
     ): Deferred<InventoryBaseNetwork>
 
 
-    // TODO - Pending api for adding product and at the same time quantity
     // https://kafiesta-api.osc-fr1.scalingo.io/v1/product
     @Multipart
-    @POST("inventory/modifyQuantity")
+    @POST("inventory/add")
     fun onInventoryAndQuantityAsync(
         @Header("Authorization") bearer: String,
-        @Path("product_id") productId: Long,
-        @Path("quantity") quantity: String,
+        @PartMap params: HashMap<String, RequestBody>
     ): Deferred<InventoryBaseNetwork>
+
+
+    // list all orders
+    // https://kafiesta-api.osc-fr1.scalingo.io/v1/orders
+    @Multipart
+    @POST("orders")
+    fun onGetAllOrdersAsync(
+        @Header("Authorization") bearer: String,
+        @PartMap params: HashMap<String, RequestBody>
+    ): Deferred<Any>
 
 }
 

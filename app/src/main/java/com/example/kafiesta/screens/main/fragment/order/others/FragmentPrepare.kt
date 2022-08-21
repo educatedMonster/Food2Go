@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.dashboard.others
+package com.example.kafiesta.screens.main.fragment.order.others
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,18 +8,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
-import com.example.kafiesta.databinding.FragmentDashboardBinding
-import com.example.kafiesta.screens.main.fragment.order.OrderFragment
+import com.example.kafiesta.databinding.FragmentDashboard2Binding
+import com.example.kafiesta.databinding.FragmentPrepareBinding
 
 /**
  * A placeholder fragment containing a simple view.
  */
-class PlaceholderFragment : Fragment() {
+class FragmentPrepare : Fragment() {
 
-    private lateinit var binding: FragmentDashboardBinding
-    private val pageViewModel: PageViewModel by lazy {
+    private lateinit var binding: FragmentPrepareBinding
+    private val orderViewModel: OrderViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-            .create(PageViewModel::class.java)
+            .create(OrderViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -37,12 +37,12 @@ class PlaceholderFragment : Fragment() {
     private fun initBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_dashboard,
+            R.layout.fragment_prepare,
             container,
             false
         )
         binding.lifecycleOwner = this
-        binding.pageViewModel = pageViewModel
+        binding.orderViewModel = orderViewModel
         return binding.root
     }
 
@@ -57,12 +57,12 @@ class PlaceholderFragment : Fragment() {
     }
 
     private fun initViews() {
-        binding.sectionLabel.text = "PlaceholderFragment"
+        binding.sectionLabel.text = "Fragment Prepare"
     }
 
     private fun initLiveData() {
 //        TODO("Not yet implemented")
-//        pageViewModel.sampleHere.observe(viewLifecycleOwner, Observer {
+//        dashboardViewModel.sampleHere.observe(viewLifecycleOwner, Observer {
 //
 //        })
     }
@@ -72,7 +72,5 @@ class PlaceholderFragment : Fragment() {
         binding
     }
 
-    companion object {
-        fun newInstance() = OrderFragment()
-    }
+
 }

@@ -1,19 +1,17 @@
 package com.example.kafiesta.domain
 
-import com.example.kafiesta.network.InventoryLinkResponse
 
-
-data class InventoryBaseNetworkDomain (
+data class InventoryBaseNetworkDomain(
     val status: String,
     val message: String,
-    val result: InventoryBaseDomain
+    val result: InventoryBaseDomain,
 )
 
-data class InventoryBaseDomain (
+data class InventoryBaseDomain(
     val currentPage: Long,
     val data: List<InventoryDomain>, // no model yet
     val firstPageURL: String,
-    val from: String? = null,
+    val from: Long? = null,
     val lastPage: Long,
     val lastPageURL: String,
     val links: List<InventoryLinkDomain>,
@@ -22,24 +20,26 @@ data class InventoryBaseDomain (
     val perPage: String,
     val prevPageURL: String? = null,
     val to: String? = null,
-    val total: Long
+    val total: Long,
 )
 
 data class InventoryDomain(
     val id: Long,
+    val productID: Long,
     val userID: Long,
+    val quantity: Long,
     val name: String,
     val description: String,
-    val imageURL: String?,
+    val imageURL: String,
     val price: String,
     val tags: String,
     val status: String,
-    val quantity: String,
-
-)
+) {
+    val quantityString = quantity.toString()
+}
 
 data class InventoryLinkDomain(
     val url: String? = null,
     val label: String,
-    val active: Boolean
+    val active: Boolean,
 )

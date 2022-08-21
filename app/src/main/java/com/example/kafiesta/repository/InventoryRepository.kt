@@ -115,10 +115,14 @@ class InventoryRepository(private val sharedPrefs: SharedPrefs) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
+                val params = HashMap<String, Any>()
+                params["product_id"] = productId
+                params["quantity"] = quantity
+
                 val network = AppNetwork.service.onInventoryAndQuantityAsync(
                     bearer = setBearer(token),
-                    productId,
-                    quantity).await()
+                    params = paramsToRequestBody(params)
+                ).await()
 
                 // notify add inventory
                 _isAddedInventory.postValue(true)

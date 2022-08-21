@@ -21,9 +21,8 @@
         android:layout_height="wrap_content"
         android:onClick="@{() -> onClickCallBack.onClick(model)}"
         android:paddingStart="@dimen/padding_semi_avg"
-        android:paddingTop="@dimen/padding_semi_avg"
-        android:paddingEnd="@dimen/padding_semi_avg"
-        android:paddingBottom="@dimen/padding_semi_avg">
+        android:paddingTop="@dimen/padding_avg"
+        android:paddingEnd="@dimen/padding_semi_avg">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_img_profile"
@@ -76,7 +75,7 @@
             android:gravity="start"
             android:lines="1"
             android:padding="@dimen/padding_min"
-            android:text="@{model.quantity}"
+            android:text="@{model.quantityString}"
             android:textColor="@color/color_palette_black"
             android:textSize="@dimen/text_size_normal_small"
             app:layout_constraintStart_toStartOf="@+id/text_view_name"

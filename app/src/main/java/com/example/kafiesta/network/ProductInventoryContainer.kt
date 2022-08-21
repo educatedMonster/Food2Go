@@ -52,7 +52,6 @@ data class ProductInventoryBaseResponse(
 
 
 data class ProductInventoryResponse(
-    @SerializedName("product_id")
     val id: Long,
 
     @SerializedName("user_id")

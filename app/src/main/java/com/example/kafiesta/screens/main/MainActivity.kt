@@ -227,7 +227,7 @@ class MainActivity : BaseActivity(),
                     .commit()
 
                 if (mCurrentInView != mFragmentList[2]) {
-                    (mFragmentList[2] as OrderFragment).initRequest()
+                    (mFragmentList[2] as OrderFragment)
                 }
                 setFragmentView(mFragmentList[2])
             }

@@ -6,24 +6,22 @@ import com.example.kafiesta.domain.InventoryDomain
 import com.example.kafiesta.domain.InventoryLinkDomain
 import com.google.gson.annotations.SerializedName
 
-
 data class InventoryBaseNetwork(
     val status: String,
     val message: String,
     val result: InventoryBaseResponse,
 )
 
-
 data class InventoryBaseResponse(
     @SerializedName("current_page")
     val currentPage: Long,
 
-    val data: List<InventorResponse>, // no model yet
+    val data: List<InventoryResponse>,
 
     @SerializedName("first_page_url")
     val firstPageURL: String,
 
-    val from: String? = null,
+    val from: Long,
 
     @SerializedName("last_page")
     val lastPage: Long,
@@ -44,20 +42,30 @@ data class InventoryBaseResponse(
     @SerializedName("prev_page_url")
     val prevPageURL: String? = null,
 
-    val to: String? = null,
+    val to: String,
     val total: Long,
 )
 
-data class InventorResponse(
+
+data class InventoryResponse(
     val id: Long,
+
+    @SerializedName("product_id")
+    val productID: Long,
+
+    @SerializedName("user_id")
     val userID: Long,
+
+    val quantity: Long,
     val name: String,
     val description: String,
-    val imageURL: String? = null,
+
+    @SerializedName("image_url")
+    val imageURL: String,
+
     val price: String,
     val tags: String,
     val status: String,
-    val quantity: String,
 )
 
 data class InventoryLinkResponse(
@@ -93,9 +101,10 @@ fun InventoryBaseResponse.asDomainModel(): InventoryBaseDomain {
 }
 
 
-fun InventorResponse.asDomainModel(): InventoryDomain {
+fun InventoryResponse.asDomainModel(): InventoryDomain {
     return InventoryDomain(
         id = id,
+        productID = productID,
         userID = userID,
         name = name,
         description = description,

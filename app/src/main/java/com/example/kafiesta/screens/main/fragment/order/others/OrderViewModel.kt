@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.main.fragment.order
+package com.example.kafiesta.screens.main.fragment.order.others
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
