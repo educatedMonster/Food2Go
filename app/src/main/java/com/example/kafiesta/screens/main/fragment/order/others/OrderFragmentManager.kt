@@ -11,7 +11,7 @@ import com.example.kafiesta.R
  * A [FragmentStateAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class OrderPagerAdapter(
+class OrderFragmentManager(
     private val mFragmentList: ArrayList<Fragment>,
     someContext: Context,
     activity: FragmentActivity

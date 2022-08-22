@@ -17,3 +17,11 @@ class AddInventoryRecyclerClick(
     fun onClick(model: Any) = click(model)
     fun onClickAdd(productId: Long) = clickAdd(productId)
 }
+
+class OrderRecyclerClick(
+    val accept: (Any) -> Unit,
+    val reject: (Any) -> Unit
+) {
+    fun onAcceptClick(model: Any) = accept(model)
+    fun onRejectClick(model: Any) = reject(model)
+}

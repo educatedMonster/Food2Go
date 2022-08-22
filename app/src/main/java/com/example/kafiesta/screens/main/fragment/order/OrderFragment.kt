@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +17,7 @@ import com.example.kafiesta.screens.main.fragment.order.others.*
 import com.example.kafiesta.utilities.extensions.showToast
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import timber.log.Timber
 
 class OrderFragment : Fragment() {
 
@@ -37,7 +36,7 @@ class OrderFragment : Fragment() {
             FragmentDelivery(),
             FragmentCompleted()
         )
-    private lateinit var mOrderPagerAdapter: OrderPagerAdapter
+    private lateinit var mOrderFragmentManager: OrderFragmentManager
     private lateinit var mViewPager2: ViewPager2
 
     override fun onCreateView(
@@ -50,11 +49,6 @@ class OrderFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initConfig()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        initRequest()
     }
 
     private fun initDataBinding(inflater: LayoutInflater, container: ViewGroup?): View {
@@ -77,19 +71,15 @@ class OrderFragment : Fragment() {
     private fun initConfig() {
         initViewPager()
         initTabLayout()
-        initLiveData()
-    }
-
-    private fun initRequest() {
-
     }
 
     private fun initViewPager() {
         //Initialized viewpager adapter
-        mOrderPagerAdapter = OrderPagerAdapter(mFragmentList, requireContext(), requireActivity())
+        mOrderFragmentManager =
+            OrderFragmentManager(mFragmentList, requireContext(), requireActivity())
         //Add adapter to view pager
         mViewPager2 = binding.viewPager
-        mViewPager2.adapter = mOrderPagerAdapter
+        mViewPager2.adapter = mOrderFragmentManager
     }
 
     private fun initTabLayout() {
@@ -100,40 +90,40 @@ class OrderFragment : Fragment() {
         lateinit var tabLinearLayout: ConstraintLayout
 
         TabLayoutMediator(tabLayout, mViewPager2) { tab, position ->
-            tab.text = mOrderPagerAdapter.pageTitle(position)
+            tab.text = mOrderFragmentManager.pageTitle(position)
         }.attach()
 
         for (i in 0 until mFragmentList.count()) {
-            tabLinearLayout = LayoutInflater.from(requireContext()).inflate(R.layout.layout_tab_item, null) as ConstraintLayout
-            tabContent = tabLinearLayout.findViewById<View>(R.id.text_view_tab_item_name) as TextView
+            tabLinearLayout = LayoutInflater.from(requireContext())
+                .inflate(R.layout.layout_tab_item, null) as ConstraintLayout
+            tabContent =
+                tabLinearLayout.findViewById<View>(R.id.text_view_tab_item_name) as TextView
             tabImage = tabLinearLayout.findViewById<View>(R.id.text_view_tab_item_img) as ImageView
 
-//            tabContent.text = mOrderPagerAdapter.pageTitle(i)
-            tabImage.setImageResource(mOrderPagerAdapter.pageImage(i))
+//            tabContent.text = mOrderFragmentManager.pageTitle(i)
+            tabImage.setImageResource(mOrderFragmentManager.pageImage(i))
             tabLayout.getTabAt(i)?.customView = tabLinearLayout
         }
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                requireContext().showToast("onTabSelected ${tab?.text}")
+                Timber.d("onTabSelected ${tab?.text}")
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                requireContext().showToast("onTabUnselected ${tab?.text}")
+                Timber.d("onTabUnselected ${tab?.text}")
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                requireContext().showToast("onTabReselected ${tab?.text}")
+                Timber.d("onTabReselected ${tab?.text}")
             }
         })
     }
+}
 
-    private fun initLiveData() {
-        //
-    }
-
-    companion object {
-        fun newInstance() = OrderFragment()
-    }
-
+enum class OrderStatusEnum {
+    PENDING,
+    PREPARING,
+    DELIVERY,
+    COMPLETED
 }

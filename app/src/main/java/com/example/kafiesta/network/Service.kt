@@ -16,6 +16,7 @@ import retrofit2.http.*
 
 interface AppService {
 
+    // region profile
     @Multipart
     @POST("login")
     fun loginAsync(
@@ -51,6 +52,16 @@ interface AppService {
     ): Deferred<UserBaseNetwork>
 
 
+    //https://kafiesta-api.osc-fr1.scalingo.io/v1/product/upload/{id}
+    @Multipart
+    @POST("user/upload/{user_shop_id}")
+    fun onUploadImageAsync(
+        @Header("Authorization") bearer: String,
+        @Path("user_shop_id") userShopId: Long,
+        @Part params: MultipartBody.Part
+    ): Deferred<Any>
+
+
     //    https://kafiesta-api.osc-fr1.scalingo.io/v1/user/update
     @Multipart
     @POST("user/update")
@@ -64,8 +75,9 @@ interface AppService {
     fun getAllUsersAsync(
         @Header("Authorization") bearer: String,
     ): Deferred<List<Any>>
+    //endregion
 
-
+    // region product and inventory
     // https://kafiesta-api.osc-fr1.scalingo.io/v1/product
     @Multipart
     @POST("product")
@@ -155,8 +167,9 @@ interface AppService {
         @Header("Authorization") bearer: String,
         @PartMap params: HashMap<String, RequestBody>
     ): Deferred<InventoryBaseNetwork>
+    //endregion
 
-
+    // region order
     // list all orders
     // https://kafiesta-api.osc-fr1.scalingo.io/v1/orders
     @Multipart
@@ -164,7 +177,8 @@ interface AppService {
     fun onGetAllOrdersAsync(
         @Header("Authorization") bearer: String,
         @PartMap params: HashMap<String, RequestBody>
-    ): Deferred<Any>
+    ): Deferred<OrderBaseNetwork>
+    //endregion
 
 }
 
