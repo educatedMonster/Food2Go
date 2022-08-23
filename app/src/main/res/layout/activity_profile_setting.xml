@@ -51,7 +51,7 @@
                     android:id="@+id/layout_user_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_avg"
+                    android:paddingBottom="@dimen/padding_avg"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -64,26 +64,18 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/circle_add_product"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:adjustViewBounds="true"
+                            android:fitsSystemWindows="true"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/ic_profile_24"
+                            app:layout_constraintDimensionRatio="16:9"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <Button
-                            android:id="@+id/button_upload_profile"
-                            style="@style/UploadImageButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/activity_profile_settings_upload"
-                            android:textSize="@dimen/text_size_small"
-                            android:visibility="gone"
-                            app:layout_constraintEnd_toEndOf="@id/circle_add_product"
-                            app:layout_constraintStart_toStartOf="@id/circle_add_product"
-                            app:layout_constraintTop_toBottomOf="@+id/circle_add_product" />
 
                         <TextView
                             android:id="@+id/text_view_full_name"
@@ -484,7 +476,7 @@
 
                                     <View
                                         android:id="@+id/divider"
-                                        android:layout_width="0.1dp"
+                                        android:layout_width="0.001dp"
                                         android:layout_height="0dp"
                                         android:background="@color/transparent_white_percent_0"
                                         app:layout_constraintBottom_toBottomOf="parent"
@@ -496,20 +488,17 @@
                                         android:id="@+id/label_time"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Opening hours"
+                                        android:text="Business hours"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent" />
 
-                                    <com.google.android.material.button.MaterialButton
+                                    <androidx.appcompat.widget.AppCompatButton
                                         android:id="@+id/text_input_time_open"
                                         style="@style/ButtonEditShopHoursSection"
                                         android:hint="@string/activity_shop_time_open"
                                         android:onClick="popupOpeningTimePicker"
                                         android:text="@{mainViewModel.profile.user_shop.open_hour}"
-                                        app:icon="@drawable/ic_open_time_24"
-                                        app:iconGravity="textEnd"
-                                        app:iconTint="@color/color_white"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toStartOf="@+id/divider"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -517,15 +506,12 @@
                                         tools:ignore="OnClick" />
 
 
-                                    <com.google.android.material.button.MaterialButton
+                                    <androidx.appcompat.widget.AppCompatButton
                                         android:id="@+id/text_input_time_close"
                                         style="@style/ButtonEditShopHoursSection"
                                         android:hint="@string/activity_shop_time_close"
                                         android:onClick="popupClosingTimePicker"
                                         android:text="@{mainViewModel.profile.user_shop.close_hour}"
-                                        app:icon="@drawable/ic_close_24"
-                                        app:iconGravity="textEnd"
-                                        app:iconTint="@color/color_white"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/divider"
@@ -563,7 +549,7 @@
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:padding="@dimen/padding_min"
+                                        android:padding="@dimen/padding_small"
                                         app:layout_constraintEnd_toStartOf="@+id/divider2"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/label_time2">
@@ -581,7 +567,7 @@
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:padding="@dimen/padding_min"
+                                        android:padding="@dimen/padding_small"
                                         app:layout_constraintEnd_toStartOf="@+id/divider2"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_open2">
@@ -599,7 +585,7 @@
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:padding="@dimen/padding_min"
+                                        android:padding="@dimen/padding_small"
                                         app:layout_constraintEnd_toEndOf="@+id/layout_shop_time_open2"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_close2">
@@ -617,7 +603,7 @@
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:padding="@dimen/padding_min"
+                                        android:padding="@dimen/padding_small"
                                         app:layout_constraintEnd_toEndOf="@+id/layout_shop_time_open2"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_close3">
@@ -635,7 +621,7 @@
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:padding="@dimen/padding_min"
+                                        android:padding="@dimen/padding_small"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/layout_shop_time_open2"
                                         app:layout_constraintTop_toBottomOf="@+id/label_time2">
@@ -653,7 +639,7 @@
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:padding="@dimen/padding_min"
+                                        android:padding="@dimen/padding_small"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/layout_shop_time_open2"
                                         app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_close5">
@@ -671,7 +657,7 @@
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:padding="@dimen/padding_min"
+                                        android:padding="@dimen/padding_small"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/layout_shop_time_open2"
                                         app:layout_constraintTop_toBottomOf="@+id/layout_shop_time_close6">
@@ -715,7 +701,7 @@
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:padding="@dimen/padding_min"
+                                        android:padding="@dimen/padding_small"
                                         app:layout_constraintEnd_toStartOf="@+id/divider3"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/label_payment_method">
@@ -733,7 +719,7 @@
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:padding="@dimen/padding_min"
+                                        android:padding="@dimen/padding_small"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/layout_shop_gcash"
                                         app:layout_constraintTop_toBottomOf="@+id/label_payment_method">
@@ -743,6 +729,23 @@
                                             style="@style/CheckBoxShopDaysSection"
                                             android:checked="@{mainViewModel.profile.user_shop.is_pm_cod}"
                                             android:text="Cash on Delivery" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:padding="@dimen/padding_small"
+                                        app:layout_constraintTop_toBottomOf="@+id/layout_shop_gcash">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/text_input_delivery_charge"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="Delivery Fee"
+                                            android:inputType="text"
+                                            android:text="@{mainViewModel.profile.user_shop.delivery_charge}" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -769,7 +772,6 @@
                 android:padding="@dimen/padding_avg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-
                 app:layout_constraintStart_toStartOf="parent">
 
                 <FrameLayout
@@ -785,12 +787,12 @@
                         android:id="@+id/button_update"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/layer_button_login_stroke"
-                        android:fontFamily="@font/aileron_regular"
+                        android:layout_marginStart="@dimen/padding_big"
+                        android:layout_marginEnd="@dimen/padding_big"
+                        android:background="@drawable/layer_button_global_fill"
                         android:text="@string/activity_user_info_update"
                         android:textAllCaps="false"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/text_size_normal_plus"
+                        android:textColor="@color/color_palette_black"
                         android:visibility="@{mainViewModel.isLoading ? View.GONE : View.VISIBLE}" />
 
                     <ProgressBar

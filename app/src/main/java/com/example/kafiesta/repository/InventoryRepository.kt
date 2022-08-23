@@ -32,6 +32,9 @@ class InventoryRepository(private val sharedPrefs: SharedPrefs) {
     private val _isModifyQuantity = MutableLiveData<Boolean>()
     val isModifyQuantity: LiveData<Boolean> get() = _isModifyQuantity
 
+    private val _isRemoved = MutableLiveData<Boolean>()
+    val isRemoved: LiveData<Boolean> get() = _isRemoved
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
@@ -127,6 +130,26 @@ class InventoryRepository(private val sharedPrefs: SharedPrefs) {
                 // notify add inventory
                 _isAddedInventory.postValue(true)
                 _isLoading.postValue(false)
+            } catch (e: HttpException) {
+                Timber.e(e.message())
+                _isLoading.postValue(false)
+            } finally {
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
+    suspend fun onRemoveInventory(productId: Long) {
+        withContext(Dispatchers.IO) {
+            try {
+                _isLoading.postValue(true)
+                val network = AppNetwork.service.onRemoveInventoryAsync(
+                    bearer = setBearer(token),
+                    productId = productId).await()
+                if (network.status.matches(ServerConst.IS_SUCCESS.toRegex())) {
+                    _isLoading.postValue(false)
+                    _isRemoved.postValue(true)
+                }
             } catch (e: HttpException) {
                 Timber.e(e.message())
                 _isLoading.postValue(false)

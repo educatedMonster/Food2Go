@@ -2,6 +2,7 @@ package com.example.kafiesta.screens.inventory_product.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -9,16 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.ListItemInventoryBinding
 import com.example.kafiesta.domain.InventoryDomain
-import com.example.kafiesta.domain.ProductInventoryDomain
-import com.example.kafiesta.utilities.helpers.RecyclerClick
+import com.example.kafiesta.utilities.helpers.RecyclerClick2View
 
 class InventoryAdapter(
     private val context: Context,
-    private val onClickCallBack: RecyclerClick,
+    private val onClickCallBack: Any
 ) :
     RecyclerView.Adapter<ProductViewHolder>() {
     private var list: ArrayList<InventoryDomain> = arrayListOf()
     private lateinit var model: InventoryDomain
+
 
     fun addData(model: InventoryDomain) {
         //to avoid duplication
@@ -31,6 +32,17 @@ class InventoryAdapter(
     fun clearAdapter() {
         list = arrayListOf()
         notifyDataSetChanged()
+    }
+
+    fun add(model: InventoryDomain) {
+        if (model !in list) {
+            list.add(model)
+        }
+        notifyDataSetChanged()
+    }
+
+    fun remove(model: InventoryDomain) {
+        list.remove(model)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -47,7 +59,8 @@ class InventoryAdapter(
         holder.viewDataBinding.also {
             model = list[position]
             it.model = model
-            it.onClickCallBack = onClickCallBack
+            it.onClickCallBack = onClickCallBack as RecyclerClick2View
+            it.view = it.imageViewButtonMore
 
             holder.viewDataBinding.rcTag.apply {
 //                val rand: Int

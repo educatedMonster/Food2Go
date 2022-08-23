@@ -129,10 +129,9 @@ class ProductSearchDialog(
             context = mActivity,
             onClickCallBack = RecyclerClick(
                 click = {
-                    // TODO - Pending api for adding product and at the same time quantity
                     DialogInventoryQuantity(
                         userId = userId,
-                        model = it as ProductInventoryDomain,     // TODO - This model is for testing purposes
+                        model = it as ProductInventoryDomain,
                         listener = object : DialogInventoryQuantity.Listener {
                             override fun onAddInventoryQuantityListener(
                                 quantity: String,

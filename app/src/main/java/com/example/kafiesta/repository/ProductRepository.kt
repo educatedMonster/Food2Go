@@ -141,12 +141,12 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
                     bearer = setBearer(token),
                     params = paramsToRequestBody(params)
                 ).await()
-                _isLoading.postValue(false)
-                _isUpdated.postValue(true)
                 if (selectedFile != null) {
                     // when the Product Form successfully created , get the id and pass to the file image
                     onUploadProductImage(prod.id, selectedFile)
                 }
+                _isLoading.postValue(false)
+                _isUpdated.postValue(true)
             } catch (e: HttpException) {
                 Timber.e(e.message())
                 _isLoading.postValue(false)

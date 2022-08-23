@@ -1,9 +1,12 @@
 package com.example.kafiesta.screens.inventory_product
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +23,7 @@ import com.example.kafiesta.screens.inventory_product.bottom_dialog_add_inventor
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
 import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.getDialog
-import com.example.kafiesta.utilities.helpers.RecyclerClick
+import com.example.kafiesta.utilities.helpers.RecyclerClick2View
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.example.kafiesta.utilities.hideKeyboard
@@ -80,19 +83,25 @@ class InventoryActivity : BaseActivity() {
 
     private fun initAdapter() {
         mAdapter = InventoryAdapter(
-            context = this, RecyclerClick(
-                click = {
-                    DialogModifyQuantity(
-                        userId = userId,
-                        model = it as InventoryDomain,
-                        listener = object : DialogModifyQuantity.Listener {
-                            override fun onAddQuantityListener(quantity: String, productId: Long) {
-                                inventoryViewModel.modifyQuantity(quantity, productId)
-                            }
-                        }
-                    ).show(supportFragmentManager, DialogTag.DIALOG_BOTTOM_QUANTITY)
+            context = this,
+            RecyclerClick2View(
+                click1 = {
+//                    DialogModifyQuantity(
+//                        userId = userId,
+//                        model = it as InventoryDomain,
+//                        listener = object : DialogModifyQuantity.Listener {
+//                            override fun onAddQuantityListener(quantity: String, productId: Long) {
+//                                inventoryViewModel.modifyQuantity(quantity, productId)
+//                            }
+//                        }
+//                    ).show(supportFragmentManager, DialogTag.DIALOG_BOTTOM_QUANTITY)
+                },
+                click2 = { it, view ->
+                    val model = it as InventoryDomain
+                    showInventoryMenu(model, view)
                 }
-            ))
+            )
+        )
 
         binding.recyclerViewProducts.apply {
             adapter = mAdapter
@@ -236,6 +245,49 @@ class InventoryActivity : BaseActivity() {
         } catch (e: Exception) {
             Timber.e(e)
         }
+    }
+
+    private fun showInventoryMenu(model: InventoryDomain, view: View) {
+        val popup = PopupMenu(this, view)
+        val inflater = popup.menuInflater
+        inflater.inflate(R.menu.menu_inventory_nav, popup.menu)
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_nav_inventory_edit -> {
+                    DialogModifyQuantity(
+                        userId = userId,
+                        model = model,
+                        listener = object : DialogModifyQuantity.Listener {
+                            override fun onAddQuantityListener(quantity: String, productId: Long) {
+                                inventoryViewModel.modifyQuantity(quantity, productId)
+                            }
+                        }
+                    ).show(supportFragmentManager, DialogTag.DIALOG_BOTTOM_QUANTITY)
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.action_nav_inventory_remove -> {
+                    val alertDeleteDialog = AlertDialog.Builder(this)
+                    alertDeleteDialog.apply {
+                        setTitle("Delete")
+                        setMessage("Are you sure you want to remove this product in your inventory?")
+                        setPositiveButton("Remove") { dialogInterface, _ ->
+                            inventoryViewModel.removeInventory(productId = model.productID)
+                            mAdapter.remove(model)
+                            dialogInterface.dismiss()
+                        }
+                        setNegativeButton(getString(R.string.dialog_cancel_button)) { dialogInterface, _ ->
+                            dialogInterface.dismiss()
+                        }
+                        alertDeleteDialog.show()
+                    }
+                    return@setOnMenuItemClickListener true
+                }
+                else -> {
+                    return@setOnMenuItemClickListener false
+                }
+            }
+        }
+        popup.show()
     }
 
 }

@@ -99,7 +99,12 @@ data class UserShopResponse(
     val isActive: Long,
 
     @SerializedName("delivery_charge")
-    val deliveryCharge: String? = null
+    val deliveryCharge: String? = null,
+
+    @SerializedName("image_url")
+    val imageURL: String? = null,
+
+    val description: String? = null
 )
 
 
@@ -155,6 +160,8 @@ fun UserShopResponse.asDomainModel(): UserShopDomain {
         pm_gcash = pmGcash,
         pm_cod = pmCod,
         is_active = isActive,
-        delivery_charge = deliveryCharge
+        delivery_charge = deliveryCharge,
+        imageURL = imageURL,
+        description = description
     )
 }

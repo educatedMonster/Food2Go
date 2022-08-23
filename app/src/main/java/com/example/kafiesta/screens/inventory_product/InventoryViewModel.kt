@@ -62,4 +62,14 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
+
+    fun removeInventory(productId: Long) {
+        viewModelScope.launch {
+            try {
+                repository.onRemoveInventory(productId)
+            } catch (e: IOException) {
+                Timber.d(e)
+            }
+        }
+    }
 }

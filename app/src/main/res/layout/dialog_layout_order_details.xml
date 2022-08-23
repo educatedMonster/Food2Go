@@ -5,9 +5,15 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="model"
             type="com.example.kafiesta.domain.OrderBaseDomain" />
+
+        <variable
+            name="orderViewModel"
+            type="com.example.kafiesta.screens.main.fragment.order.others.OrderViewModel" />
 
         <variable
             name="onClickCallBack"
@@ -22,7 +28,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_white" >
+            android:background="@color/color_white">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_order"
@@ -105,8 +111,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/aileron_bold"
-                                android:text="Price"
                                 android:gravity="end"
+                                android:text="Price"
                                 android:textSize="@dimen/text_size_normal" />
 
                         </LinearLayout>
@@ -124,8 +130,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/aileron_bold"
-                                android:text="Qty"
                                 android:gravity="end"
+                                android:text="Qty"
                                 android:textSize="@dimen/text_size_normal" />
 
                         </LinearLayout>
@@ -143,8 +149,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/aileron_bold"
-                                android:text="Total"
                                 android:gravity="end"
+                                android:text="Total"
                                 android:textSize="@dimen/text_size_normal" />
 
                         </LinearLayout>
@@ -224,6 +230,7 @@
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
                     android:gravity="center_vertical"
+                    android:paddingTop="@dimen/padding_avg"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -274,6 +281,7 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:baselineAligned="false"
                     android:gravity="center_vertical"
+                    android:paddingTop="@dimen/padding_avg"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line_2">
@@ -324,6 +332,7 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:baselineAligned="false"
                     android:gravity="center_vertical"
+                    android:paddingTop="@dimen/padding_avg"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line_3">
@@ -371,7 +380,7 @@
                     android:id="@+id/const_note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/margin_avg"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line_4">
@@ -413,6 +422,7 @@
                 android:id="@+id/layout_button_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/padding_avg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
@@ -421,8 +431,6 @@
                     android:id="@+id/frame_button_update"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/padding_avg"
-                    android:layout_marginEnd="@dimen/padding_avg"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -434,7 +442,6 @@
                         android:layout_height="wrap_content"
                         android:baselineAligned="false"
                         android:gravity="center_vertical"
-                        android:padding="@dimen/padding_avg"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -445,35 +452,38 @@
                             android:id="@+id/btn_reject"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/padding_big"
+                            android:layout_marginEnd="@dimen/padding_big"
+                            android:layout_weight="1"
                             android:background="@drawable/layer_button_global_stroke"
                             android:text="Reject"
-                            android:layout_weight="1"
                             android:textAllCaps="false"
-                            android:layout_marginStart="@dimen/padding_avg"
-                            android:layout_marginEnd="@dimen/padding_avg"
-                            android:textColor="@color/color_palette_black" />
+                            android:textColor="@color/color_palette_black"
+                            android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btn_accept"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/padding_big"
+                            android:layout_marginEnd="@dimen/padding_big"
+                            android:layout_weight="1"
                             android:background="@drawable/layer_button_global_fill"
                             android:text="Accept"
-                            android:layout_marginStart="@dimen/padding_avg"
-                            android:layout_marginEnd="@dimen/padding_avg"
-                            android:layout_weight="1"
                             android:textAllCaps="false"
-                            android:textColor="@color/color_palette_black" />
+                            android:textColor="@color/color_palette_black"
+                            android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
 
 
                     </LinearLayout>
 
-<!--                    <ProgressBar-->
-<!--                        android:id="@+id/progress_loading"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:layout_gravity="center_horizontal"-->
-<!--                        android:backgroundTint="@color/transparent_white_percent_25" />-->
+                    <ProgressBar
+                        android:id="@+id/progress_loading"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:backgroundTint="@color/transparent_white_percent_25"
+                        android:visibility="@{orderViewModel.isLoading ? View.VISIBLE : View.GONE}" />
 
                 </FrameLayout>
 

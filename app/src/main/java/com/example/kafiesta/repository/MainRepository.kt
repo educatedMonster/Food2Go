@@ -12,10 +12,16 @@ import com.example.kafiesta.utilities.setBearer
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.HttpException
 import timber.log.Timber
+import java.io.File
 
 
 class MainRepository(private val sharedPrefs: SharedPrefs) {
+    val token = sharedPrefs.getString(UserConst.TOKEN)!!
 
     private val _mainFormState = MutableLiveData<NetworkFormStateMain>()
     val mainFormState: LiveData<NetworkFormStateMain> get() = _mainFormState
@@ -23,11 +29,11 @@ class MainRepository(private val sharedPrefs: SharedPrefs) {
     private val _updateFormState = MutableLiveData<UpdateFormState>()
     val updateFormState: LiveData<UpdateFormState> get() = _updateFormState
 
-    private val _data = MutableLiveData<UserBaseDomain>()
-    val data: LiveData<UserBaseDomain> get() = _data
-
     private val _profile = MutableLiveData<ProfileDomain>()
     val profile: LiveData<ProfileDomain> get() = _profile
+
+    private val _isUploaded = MutableLiveData<Boolean>()
+    val isUploaded: LiveData<Boolean> get() = _isUploaded
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -36,7 +42,6 @@ class MainRepository(private val sharedPrefs: SharedPrefs) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
-                val token = sharedPrefs.getString(UserConst.TOKEN)!!
                 val network = AppNetwork.service.onGetMedAsync(
                     bearer = setBearer(token)
                 ).await()
@@ -56,11 +61,10 @@ class MainRepository(private val sharedPrefs: SharedPrefs) {
         }
     }
 
-    suspend fun onUpdateUserInfo(profileDomain: ProfileDomain) {
+    suspend fun onUpdateUserInfo(profileDomain: ProfileDomain, selectedFile: File?) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
-                val token = sharedPrefs.getString(UserConst.TOKEN)!!
                 val params = HashMap<String, Any>()
                 params["id"] = sharedPrefs.getString(UserConst.USER_ID)!!.toLong()
                 params["status"] = profileDomain.status
@@ -93,7 +97,7 @@ class MainRepository(private val sharedPrefs: SharedPrefs) {
                 params["user_shop[pm_cod]"] = profileDomain.user_shop.pm_cod
                 params["user_shop[pm_gcash]"] = profileDomain.user_shop.pm_gcash
                 params["user_shop[is_active]"] = profileDomain.user_shop.is_active
-//                params["user_shop[delivery_charge]"] = profileDomain.user_shop.delivery_charge
+                params["user_shop[delivery_charge]"] = profileDomain.user_shop.delivery_charge!!
 
 
                 val network = AppNetwork.service.onUpdateUserInfoAsync(
@@ -101,12 +105,40 @@ class MainRepository(private val sharedPrefs: SharedPrefs) {
                     params = paramsToRequestBody(params)
                 ).await()
 
-                val a = Timber.d(Gson().toJson(network))
-                _data.postValue(network.asDomainModel())
+                if (selectedFile != null) {
+                    // when the Profile Form successfully created , get the user_shop_id and pass to the file image
+                    onUploadImage(profileDomain.user_shop.id, selectedFile)
+                }
+//                val a = Timber.d(Gson().toJson(network))
                 _updateFormState.postValue(UpdateFormState(network.status, network.message))
                 _isLoading.postValue(false)
             } catch (e: Exception) {
                 Timber.d(e)
+                _isLoading.postValue(false)
+            } finally {
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
+    suspend fun onUploadImage(userShopId: Long, file: File) {
+        withContext(Dispatchers.IO) {
+            try {
+                _isLoading.postValue(true)
+                val params = HashMap<String, Any>()
+                params["file"] = file
+
+                val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
+                val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+                val network = AppNetwork.service.onUploadImageAsync(
+                    bearer = setBearer(token),
+                    userShopId = userShopId,
+                    params = body
+                ).await()
+                _isUploaded.postValue(true)
+                _isLoading.postValue(false)
+            } catch (e: HttpException) {
+                Timber.e(e.message())
                 _isLoading.postValue(false)
             } finally {
                 _isLoading.postValue(false)
@@ -122,7 +154,6 @@ class MainRepository(private val sharedPrefs: SharedPrefs) {
                     isLoggingOut = true
                 )
             )
-            val token = sharedPrefs.getString(UserConst.TOKEN)!!
             val network = AppNetwork.service.onLogoutAsync(setBearer(token)).await()
             Timber.d(Gson().toJson(network))
             clearSecurePreference()

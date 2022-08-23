@@ -60,6 +60,9 @@ data class OrderResponse (
     @SerializedName("changed_at_completed")
     val changedAtCompleted: String? = null,
 
+    @SerializedName("collected_at")
+    val collectedAt: String? = null,
+
     @SerializedName("deleted_at")
     val deletedAt: String? = null,
 
@@ -183,6 +186,7 @@ fun OrderResponse.asDomainModel(): OrderDomain {
         changedAtPreparing = changedAtPreparing,
         changedAtDelivered = changedAtDelivered,
         changedAtCompleted = changedAtCompleted,
+        collectedAt = collectedAt,
         deletedAt = deletedAt,
         createdAt = createdAt,
         updatedAt = updatedAt,

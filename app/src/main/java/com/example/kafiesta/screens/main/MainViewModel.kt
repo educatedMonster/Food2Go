@@ -2,6 +2,7 @@ package com.example.kafiesta.screens.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.example.kafiesta.domain.ProductDomaintest
 import com.example.kafiesta.domain.ProfileDomain
 import com.example.kafiesta.repository.MainRepository
 import com.example.kafiesta.utilities.helpers.SharedPrefs
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.File
 import java.io.IOException
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -21,7 +23,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val mainFormState = mainRepository.mainFormState
     val updateFormState = mainRepository.updateFormState
-    val data = mainRepository.data
     val profile = mainRepository.profile
     val isLoading = mainRepository.isLoading
 
@@ -46,12 +47,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun updateUserInfo(profileDomain: ProfileDomain) {
+    fun updateUserInfo(profileDomain: ProfileDomain, file: File?) {
         viewModelScope.launch {
             try {
-                mainRepository.onUpdateUserInfo(profileDomain)
+                mainRepository.onUpdateUserInfo(profileDomain, file)
             } catch (e: Exception) {
                 e.message.toString()
+            }
+        }
+    }
+
+    fun uploadImage(userShopId: Long, file: File) {
+        viewModelScope.launch {
+            try {
+                mainRepository.onUploadImage(userShopId, file)
+            } catch (e: IOException) {
+                Timber.d(e)
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.example.kafiesta.domain
 
+import com.google.gson.annotations.SerializedName
+
 data class UserBaseDomain(
     val status: String,
     val message: String,
@@ -45,7 +47,9 @@ data class UserShopDomain(
     val pm_gcash: Long,
     val pm_cod: Long,
     val is_active: Long,
-    val delivery_charge: String? = null
+    val delivery_charge: String? = null,
+    val imageURL: String? = null,
+    val description: String? = null
 ) {
     val is_monday: Boolean = monday == 1L
     val is_Status: Boolean = status == "open"

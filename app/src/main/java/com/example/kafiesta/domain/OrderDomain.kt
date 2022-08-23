@@ -33,6 +33,7 @@ data class OrderDomain (
     val changedAtPreparing: String? = null,
     val changedAtDelivered: String? = null,
     val changedAtCompleted: String? = null,
+    val collectedAt: String? = null,
     val deletedAt: String? = null,
     val createdAt: String,
     val updatedAt: String? = null,

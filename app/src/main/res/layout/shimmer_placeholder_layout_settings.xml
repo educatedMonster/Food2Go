@@ -5,11 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/circle_add_product"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:fitsSystemWindows="true"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_profile_24"
+        app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
