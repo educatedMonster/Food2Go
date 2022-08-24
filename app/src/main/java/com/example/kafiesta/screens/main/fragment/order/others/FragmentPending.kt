@@ -1,5 +1,6 @@
 package com.example.kafiesta.screens.main.fragment.order.others
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,8 @@ import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.trackerteer.taskmanagement.utilities.extensions.showToast
 import kotlinx.android.synthetic.main.fragment_pending.view.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * A placeholder fragment containing a simple view.
@@ -139,14 +142,34 @@ class FragmentPending : Fragment() {
 //            start = 0,
             search = "",
             merchant_user_id = 5,
+//            date_from = getDateNow(),
+//            date_to = getDateNow())
             date_from = "2022-08-22",
-            date_to = "2022-08-22")
+            date_to = "2022-08-22") // TODO - for testing
     }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
         binding
+    }
+
+    private fun getDateNow() :  String{
+        val current = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now()
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+
+        val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+
+        val formatted = current.format(formatter)
+        println("Current Date and Time is: $formatted")
+        return formatted
     }
 
 

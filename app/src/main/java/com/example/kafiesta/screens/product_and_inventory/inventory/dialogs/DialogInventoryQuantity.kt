@@ -1,8 +1,7 @@
-package com.example.kafiesta.screens.inventory_product.bottom_dialog_add_inventory
+package com.example.kafiesta.screens.product_and_inventory.inventory.dialogs
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Application
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,13 +10,9 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.DialogBottomInventoryQuantityBinding
-import com.example.kafiesta.databinding.DialogBottomModifyQuantityBinding
-import com.example.kafiesta.domain.InventoryDomain
 import com.example.kafiesta.domain.ProductInventoryDomain
-import com.example.kafiesta.screens.inventory_product.InventoryViewModel
 import com.example.kafiesta.utilities.extensions.isNotEmpty
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText

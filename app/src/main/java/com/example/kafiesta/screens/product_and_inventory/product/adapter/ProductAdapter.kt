@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.add_product.adapter
+package com.example.kafiesta.screens.product_and_inventory.product.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.ListItemProductBinding
 import com.example.kafiesta.domain.ProductDomaintest
-import com.example.kafiesta.domain.ProductInventoryDomain
-import com.example.kafiesta.screens.inventory_product.adapter.TagAdapter
-import com.example.kafiesta.utilities.helpers.AddInventoryRecyclerClick
+import com.example.kafiesta.screens.product_and_inventory.inventory.adapter.TagAdapter
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 
 class ProductAdapter(

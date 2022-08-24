@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.FragmentCompletedBinding
-import com.example.kafiesta.databinding.FragmentDashboard2Binding
 
 /**
  * A placeholder fragment containing a simple view.

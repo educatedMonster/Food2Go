@@ -3,9 +3,13 @@ package com.example.kafiesta.screens.splash
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.example.kafiesta.R
+import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivitySplashBinding
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.login.LoginActivity
+import com.example.kafiesta.screens.main.MainActivity
+import com.example.kafiesta.utilities.helpers.SharedPrefs
+import com.example.kafiesta.utilities.helpers.getSecurePrefs
 
 class SplashActivity : BaseActivity() {
 
@@ -64,7 +68,7 @@ class SplashActivity : BaseActivity() {
              */
             while (progressStatus < 95) {
                 try {
-                    progressStatus += 7
+                    progressStatus += 16
                     Thread.sleep(200)
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
@@ -72,8 +76,24 @@ class SplashActivity : BaseActivity() {
                 binding.progressLoading.progress = progressStatus
             }
             if (binding.progressLoading.max >= 90) {
-                proceedToActivity(LoginActivity::class.java, true)
+                val isRemembered =
+                    SharedPrefs(getSecurePrefs(this)).getBoolean(UserConst.SP_USER_REMEMBER_ME)
+                if (isRemembered == true) {
+                    initExtras()
+                } else {
+                    proceedToActivity(LoginActivity::class.java, true)
+                }
             }
         }.start()
+    }
+
+    private fun initExtras() {
+        val data = intent.extras
+
+        if (data == null) {
+            proceedToActivity(LoginActivity::class.java, true)
+        } else {
+            proceedToActivity(MainActivity::class.java, true)
+        }
     }
 }

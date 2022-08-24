@@ -1,11 +1,13 @@
 package com.example.kafiesta.domain
 
-import com.google.gson.annotations.SerializedName
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 data class UserBaseDomain(
     val status: String,
     val message: String,
-    val result: ProfileDomain
+    val result: ProfileDomain,
 )
 
 data class ProfileDomain(
@@ -49,7 +51,7 @@ data class UserShopDomain(
     val is_active: Long,
     val delivery_charge: String? = null,
     val imageURL: String? = null,
-    val description: String? = null
+    val description: String? = null,
 ) {
     val is_monday: Boolean = monday == 1L
     val is_Status: Boolean = status == "open"
@@ -75,4 +77,20 @@ data class UserShopDomain(
     } else {
         "Inactive"
     }
+
+    val timeOpenString = timeAMPM(open_hour!!)
+    val timeCloseString = timeAMPM(close_hour!!)
+}
+
+// displaying "0:00 PM"
+fun timeAMPM(time: String): String{
+    var displayTime = ""
+    try {
+        val sdf = SimpleDateFormat("H:mm")
+        val dateObj: Date = sdf.parse(time)
+        displayTime = SimpleDateFormat("K:mm a").format(dateObj)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return displayTime
 }

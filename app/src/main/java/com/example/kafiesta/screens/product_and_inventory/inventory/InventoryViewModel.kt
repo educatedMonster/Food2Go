@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.inventory_product
+package com.example.kafiesta.screens.product_and_inventory.inventory
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

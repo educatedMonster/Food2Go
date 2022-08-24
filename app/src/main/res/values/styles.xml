@@ -115,4 +115,9 @@
         <item name="boxStrokeWidth">1dp</item>
     </style>
 
+    <style name="NoMarginsDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
 </resources>

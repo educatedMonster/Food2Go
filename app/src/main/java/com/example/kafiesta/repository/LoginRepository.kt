@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.kafiesta.constants.ServerConst.IS_SUCCESS
 import com.example.kafiesta.constants.UserConst
+import com.example.kafiesta.domain.LoginBaseDomain
 import com.example.kafiesta.domain.LoginDataDomain
 import com.example.kafiesta.domain.LoginInformationsDomain
 import com.example.kafiesta.domain.LoginProfileDomain
-import com.example.kafiesta.domain.LoginBaseDomain
 import com.example.kafiesta.network.AppNetwork
 import com.example.kafiesta.network.asDomainModel
 import com.example.kafiesta.network.paramsToRequestBody
@@ -29,7 +29,7 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    suspend fun onLogin(email: String, password: String) {
+    suspend fun onLogin(email: String, password: String, isRemember: Boolean) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
@@ -47,7 +47,8 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
                     saveToSecurePreference(
                         network.data.asDomainModel(),
                         network.data.profile.asDomainModel(),
-                        network.data.profile.userInformations?.asDomainModel()
+                        network.data.profile.userInformations?.asDomainModel(),
+                        isRemember
                     )
                 }
             } catch (e: HttpException) {
@@ -67,7 +68,9 @@ class LoginRepository(private val sharedPrefs: SharedPrefs) {
         dataDomain: LoginDataDomain,
         profileDomain: LoginProfileDomain,
         loginInformationsDomain: LoginInformationsDomain?,
+        isRemember: Boolean,
     ) {
+        sharedPrefs.save(UserConst.SP_USER_REMEMBER_ME, isRemember)
         sharedPrefs.save(UserConst.TOKEN, dataDomain.token)
         sharedPrefs.save(UserConst.TOKEN_TYPE, dataDomain.tokenType)
         sharedPrefs.save(UserConst.EXPIRES_IN, dataDomain.expiresIn)

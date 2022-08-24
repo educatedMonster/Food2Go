@@ -32,7 +32,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * This function will validate the credentials of the user if that inputted characters meet the required structure
      */
-    fun validateLoginCredentials(context: Context, email: String, password: String) {
+    fun validateLoginCredentials(context: Context, email: String, password: String, isRemember: Boolean) {
         if (email.isEmpty() && password.isEmpty()) {
             _loginFormState.value = LoginFormState(
                 isInvalidEmail = true,
@@ -51,15 +51,15 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 invalidPasswordMessage = context.getString(R.string.login_empty_password)
             )
         } else {
-            login(email, password)
+            login(email, password, isRemember)
         }
     }
 
-    private fun login(email: String, password: String) {
+    private fun login(email: String, password: String, isRemember: Boolean) {
         viewModelScope.launch {
             try {
                 setLoading(true)
-                loginRepository.onLogin(email, password)
+                loginRepository.onLogin(email, password, isRemember)
             } catch (networkError: IOException) {
                 Timber.d(networkError)
                 setNetworkError(networkError.message.toString())

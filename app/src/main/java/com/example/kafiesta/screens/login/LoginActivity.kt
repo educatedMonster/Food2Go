@@ -103,17 +103,6 @@ class LoginActivity : BaseActivity() {
     private fun initLiveData() {
         //Observe `userDomain` live dataResult from our LoginViewModel
         viewModel.userDomain.observe(this) { userDomain ->
-
-            //testing purpose
-            //if the user.status == "success" we can now proceed to the MainActivity activity
-//            if (userDomain.status.matches(IS_SUCCESS.toRegex())){
-//                //proceedToActivity function can be found at BaseActivity.kt
-//                proceedToActivity(MainActivity::class.java, true)
-//            } else {
-//                viewModel.setLoading(false)
-//                showToast(getString(R.string.login_something_went_wrong))
-//            }
-
             //if the user.status == "success" and role == "client" we can now proceed to the MainActivity activity
             if (userDomain.status.matches(IS_SUCCESS.toRegex()) && userDomain.data.profile.role.matches(
                     IS_CLIENT.toRegex())
@@ -216,7 +205,7 @@ class LoginActivity : BaseActivity() {
         val username = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
 //        viewModel.validateLoginCredentials(this, "jadalmario.freelancer@gmail.com", "@Unknown0322") // Admin Account
-        viewModel.validateLoginCredentials(this, "client@email.com", "@Unknown0322") // Client Account
-//        viewModel.validateLoginCredentials(this, username, password)
+//        viewModel.validateLoginCredentials(this, "client@email.com", "@Unknown0322") // Client Account
+        viewModel.validateLoginCredentials(this, username, password, true)
     }
 }

@@ -1,22 +1,20 @@
-package com.example.kafiesta.screens.add_product.bottom_dialog
+package com.example.kafiesta.screens.product_and_inventory.product.dialogs
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
-import android.app.Application
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.FragmentActivity
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.DialogBottomModifyQuantityBinding
 import com.example.kafiesta.domain.InventoryDomain
-import com.example.kafiesta.domain.ProductInventoryDomain
-import com.example.kafiesta.screens.inventory_product.InventoryViewModel
 import com.example.kafiesta.utilities.extensions.isNotEmpty
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
@@ -24,14 +22,26 @@ import com.google.android.material.textfield.TextInputEditText
 class DialogModifyQuantity(
     private val userId: Long,
     private val model: InventoryDomain,
-    private val listener: Listener
+    private val listener: Listener,
 ) : BottomSheetDialogFragment() {
+
+    private lateinit var binding: DialogBottomModifyQuantityBinding
+    private lateinit var mActivity: Activity
+    private lateinit var mFragment: FragmentActivity
 
     interface Listener {
         fun onAddQuantityListener(quantity: String, productId: Long)
     }
 
-    private lateinit var binding: DialogBottomModifyQuantityBinding
+    override fun getTheme(): Int = R.style.NoMarginsDialog
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
+    }
 
     @SuppressLint("DefaultLocale")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -60,8 +70,6 @@ class DialogModifyQuantity(
         }
 
         val alertDialog = dialog.create()
-        alertDialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.window?.attributes!!.windowAnimations = R.style.BottomDialogAnimation
         alertDialog.window?.setGravity(Gravity.BOTTOM)
@@ -73,5 +81,10 @@ class DialogModifyQuantity(
             return false
         }
         return true
+    }
+
+    fun setParentActivity(activity: Activity, fragment: FragmentActivity) {
+        mActivity = activity
+        mFragment = fragment
     }
 }

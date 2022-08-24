@@ -5,7 +5,9 @@ import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.ComponentName
 import android.content.Intent
+import android.net.ParseException
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Parcelable
@@ -42,6 +44,9 @@ import com.trackerteer.taskmanagement.utilities.extensions.setSafeOnClickListene
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import timber.log.Timber
 import java.io.File
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class ProfileSettingActivity : BaseActivity() {
     override val hideStatusBar: Boolean get() = false
@@ -242,8 +247,8 @@ class ProfileSettingActivity : BaseActivity() {
                     name = shopName,
                     address = shopAddress,
                     contact = shopContact,
-                    open_hour = shopOpen,
-                    close_hour = shopClose,
+                    open_hour = set24Hours(shopOpen),
+                    close_hour = set24Hours(shopClose),
                     status = onValidateStatus(shopStatus),
                     monday = onValidateCb(cbDay1),
                     tuesday = onValidateCb(cbDay2),
@@ -408,23 +413,23 @@ class ProfileSettingActivity : BaseActivity() {
         timePiker.show()
     }
 
-    private fun setBusinessHours(hour: Int, minute: Int): String {
-        var myHour: Int = 0
-        val timeSet: String
-        when {
-            hour > 12 -> {
-                myHour -= 12
-                timeSet = "PM"
+    private fun set24Hours(timeComeFromServer: String): String {
+        var time: LocalTime? = null
+        var formatter: DateTimeFormatter? = null
+        try {
+//        val timeComeFromServer = "0:00 PM" // testing
+            val parser: DateTimeFormatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
+            } else {
+                TODO("VERSION.SDK_INT < O")
             }
-            hour == 0 -> {
-                myHour += 12
-                timeSet = "AM"
+
+            formatter = DateTimeFormatter.ofPattern("HH:mm")
+            time = LocalTime.parse(timeComeFromServer, parser)
+        } catch (e: ParseException) {
+                e.printStackTrace()
             }
-            hour == 12 -> timeSet = "PM"
-            else -> timeSet = "AM"
-        }
-        val minuteString = if (minute < 10) "0$minute" else "$minute"
-        return "$myHour:$minuteString $timeSet"
+        return time!!.format(formatter)
     }
 
     private fun startGettingImage() {

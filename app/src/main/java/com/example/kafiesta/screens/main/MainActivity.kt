@@ -19,16 +19,15 @@ import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityMainBinding
 import com.example.kafiesta.databinding.LayoutCustomNavHeaderBinding
 import com.example.kafiesta.databinding.LayoutCustomToolbarDashboardBinding
-import com.example.kafiesta.screens.dashboard.DashboardActivity
+import com.example.kafiesta.screens.product_and_inventory.ProductAndInventoryActivity
 import com.example.kafiesta.screens.BaseActivity
-import com.example.kafiesta.screens.add_product.ProductActivity
-import com.example.kafiesta.screens.inventory_product.InventoryActivity
 import com.example.kafiesta.screens.main.fragment.home.HomeFragment
 import com.example.kafiesta.screens.main.fragment.myshop.MyShopFragment
 import com.example.kafiesta.screens.main.fragment.order.OrderFragment
 import com.example.kafiesta.screens.profile.ProfileSettingActivity
 import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
+import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
@@ -52,8 +51,8 @@ class MainActivity : BaseActivity(),
 
     private val mFragmentList: ArrayList<Fragment> = arrayListOf(
         MyShopFragment(),
-        HomeFragment(),
         OrderFragment(),
+        HomeFragment()
     )
     private val mFragmentManager: FragmentManager = this.supportFragmentManager
     private val mainContainer = R.id.nav_host_fragment
@@ -138,7 +137,7 @@ class MainActivity : BaseActivity(),
 
         mFragmentManager.beginTransaction().show(mFragmentList[1]).commit()
         setFragmentView(mFragmentList[1])
-        binding.bottomNavigationView.selectedItemId = R.id.nav_home
+        binding.bottomNavigationView.selectedItemId = R.id.nav_order
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
     }
 
@@ -207,28 +206,28 @@ class MainActivity : BaseActivity(),
 
                 setFragmentView(mFragmentList[0])
             }
-            R.id.nav_home -> {
+            R.id.nav_order -> {
                 mFragmentManager.beginTransaction()
                     .hide(mCurrentInView)
                     .show(mFragmentList[1])
                     .commit()
 
                 if (mCurrentInView != mFragmentList[1]) {
-//                    (mFragmentList[1] as HomeFragment).initRequest()
-                    refreshHomeFragment()
+                    refreshOrderFragment()
                 }
 
                 setFragmentView(mFragmentList[1])
             }
-            R.id.nav_order -> {
+            R.id.nav_home -> {
                 mFragmentManager.beginTransaction()
                     .hide(mCurrentInView)
                     .show(mFragmentList[2])
                     .commit()
 
                 if (mCurrentInView != mFragmentList[2]) {
-                    (mFragmentList[2] as OrderFragment)
+                    (mFragmentList[2] as HomeFragment)
                 }
+
                 setFragmentView(mFragmentList[2])
             }
 
@@ -237,19 +236,15 @@ class MainActivity : BaseActivity(),
              * Drawer Navigation View
              */
             R.id.nav_dashboard -> {
-                proceedToActivity(DashboardActivity::class.java)
+                showToast("Dashboard is under development")
                 setFocus(false)
             }
             R.id.nav_my_shop -> {
                 proceedToActivity(ProfileSettingActivity::class.java)
                 setFocus(false)
             }
-            R.id.nav_product -> {
-                proceedToActivity(ProductActivity::class.java)
-                setFocus(false)
-            }
             R.id.nav_inventory -> {
-                proceedToActivity(InventoryActivity::class.java)
+                proceedToActivity(ProductAndInventoryActivity::class.java)
                 setFocus(false)
             }
             R.id.nav_logout -> {
@@ -282,11 +277,11 @@ class MainActivity : BaseActivity(),
             is MyShopFragment -> {
                 getString(R.string.navigation_title_my_shop)
             }
-            is HomeFragment -> {
-                getString(R.string.navigation_title_home)
-            }
             is OrderFragment -> {
                 getString(R.string.navigation_title_order)
+            }
+            is HomeFragment -> {
+                getString(R.string.navigation_title_home)
             }
             else -> {
                 getString(R.string.navigation_title_error)
@@ -313,8 +308,8 @@ class MainActivity : BaseActivity(),
         KaFiestaApplication.taskActivityIsOpen = set
     }
 
-    private fun refreshHomeFragment() {
-        (mFragmentList[1] as HomeFragment).initRequest()
+    private fun refreshOrderFragment() {
+        (mFragmentList[1] as OrderFragment)
     }
 
     override fun onBackPressed() {

@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.inventory_product.bottom_dialog_add_inventory
+package com.example.kafiesta.screens.product_and_inventory.inventory.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -12,7 +12,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -21,15 +21,17 @@ import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
 import com.example.kafiesta.databinding.DialogBottomProductSearchBinding
 import com.example.kafiesta.domain.ProductInventoryDomain
-import com.example.kafiesta.screens.inventory_product.InventoryViewModel
-import com.example.kafiesta.screens.inventory_product.adapter.ProductSearchAdapter
+import com.example.kafiesta.screens.product_and_inventory.inventory.InventoryViewModel
+import com.example.kafiesta.screens.product_and_inventory.inventory.adapter.ProductSearchAdapter
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
 import com.example.kafiesta.utilities.helpers.RecyclerClick
+import com.example.kafiesta.utilities.hideKeyboard
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.trackerteer.taskmanagement.utilities.extensions.showToast
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 
 
-class ProductSearchDialog(
+class DialogProductSearch(
     private val userId: Long,
     private val application: Application,
 ) : BottomSheetDialogFragment() {
@@ -49,6 +51,16 @@ class ProductSearchDialog(
     private val inventoryViewModel: InventoryViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(application)
             .create(InventoryViewModel::class.java)
+    }
+
+    override fun getTheme(): Int = R.style.NoMarginsDialog
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
     }
 
     @SuppressLint("DefaultLocale")
@@ -71,8 +83,6 @@ class ProductSearchDialog(
         initConfig()
 
         val alertDialog = dialog.create()
-        alertDialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.window?.attributes!!.windowAnimations = R.style.BottomDialogAnimation
         alertDialog.window?.setGravity(Gravity.BOTTOM)
@@ -140,7 +150,7 @@ class ProductSearchDialog(
                                 inventoryViewModel.inventoryAndQuantity(productId, quantity)
                             }
                         }
-                    ).show(mFragment.supportFragmentManager, DialogTag.DIALOG_FORM_EDIT_PRODUCT)
+                    ).show(mFragment.supportFragmentManager, DialogTag.DIALOG_BOTTOM_ADD_INVENTORY_PRODUCT)
                 }
             ))
 
@@ -169,7 +179,7 @@ class ProductSearchDialog(
 
     private fun initLiveData() {
         inventoryViewModel.apply {
-            productInventoryList.observe(this@ProductSearchDialog) {
+            productInventoryList.observe(binding.lifecycleOwner!!) {
                 mLength += it.data.size
                 mStart += it.data.size
                 mCurrentPage = it.currentPage
@@ -182,6 +192,14 @@ class ProductSearchDialog(
                 } else {
                     binding.layoutEmptyTask.root.visible()
                 }
+            }
+
+            isAddedInventory.observe(binding.lifecycleOwner!!) {
+                showToast("Added to Inventory list and Quantity modified")
+                hideKeyboard(requireActivity())
+                (com.example.kafiesta.utilities.getDialog(requireActivity(),
+                    DialogTag.DIALOG_BOTTOM_ADD_INVENTORY_PRODUCT) as DialogInventoryQuantity?)?.dismiss()
+                initRequest()
             }
 
             isLoading.observe(binding.lifecycleOwner!!) {

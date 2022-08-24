@@ -26,6 +26,7 @@ object AppConst {
 }
 
 object UserConst {
+    const val SP_USER_REMEMBER_ME = "key_user_remember_me"
     const val TOKEN = "key_auth_token"
     const val TOKEN_TYPE = "key_token_type"
     const val EXPIRES_IN = "key_expires_in"

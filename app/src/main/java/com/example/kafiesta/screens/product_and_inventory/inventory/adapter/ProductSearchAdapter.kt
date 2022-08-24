@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.inventory_product.adapter
+package com.example.kafiesta.screens.product_and_inventory.inventory.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

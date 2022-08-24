@@ -8,8 +8,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="dashboardViewModel"
-            type="com.example.kafiesta.screens.dashboard.others.DashboardViewModel" />
+            name="model"
+            type="com.example.kafiesta.screens.product_and_inventory.inventory.InventoryViewModel" />
 
     </data>
 
@@ -19,6 +19,7 @@
         tools:context=".screens.main.fragment.order.OrderFragment">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/Theme.KaFiesta.AppBarOverlay"
@@ -47,8 +48,12 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
-import com.example.kafiesta.databinding.FragmentDashboard2Binding
 import com.example.kafiesta.databinding.FragmentPrepareBinding
 
 /**

@@ -1,15 +1,17 @@
-package com.example.kafiesta.screens.dashboard.others
+package com.example.kafiesta.screens.product_and_inventory
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.kafiesta.screens.product_and_inventory.inventory.FragmentInventory
+import com.example.kafiesta.screens.product_and_inventory.product.FragmentProduct
 
 /**
  * A [FragmentStateAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class DashboardPagerAdapter(
+class ProductInventoryManager(
     private val mFragmentList: ArrayList<Fragment>,
     someContext: Context,
     activity: FragmentActivity
@@ -26,11 +28,11 @@ class DashboardPagerAdapter(
 
     fun pageTitle(position: Int): String {
         return when (mFragmentList[position]) {
-            is Fragment2 -> {
-                "Fragment2"
+            is FragmentProduct -> {
+                "Product"
             }
-            is Fragment1 -> {
-                "Fragment1"
+            is FragmentInventory -> {
+                "Inventory"
             }
             else -> {
                 "Unknown"

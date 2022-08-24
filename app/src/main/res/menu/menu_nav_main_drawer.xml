@@ -12,11 +12,6 @@
         android:title="@string/title_nav_drawer_my_shop" />
 
     <item
-        android:id="@+id/nav_product"
-        android:icon="@drawable/ic_product_24"
-        android:title="@string/title_nav_drawer_products" />
-
-    <item
         android:id="@+id/nav_inventory"
         android:icon="@drawable/ic_inventory_24"
         android:title="@string/title_nav_drawer_inventory" />
