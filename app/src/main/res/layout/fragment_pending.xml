@@ -9,7 +9,7 @@
 
         <variable
             name="orderViewModel"
-            type="com.example.kafiesta.screens.main.fragment.order.others.OrderViewModel" />
+            type="com.example.kafiesta.screens.main.fragment.order.OrderViewModel" />
 
     </data>
 
@@ -45,6 +45,12 @@
                 tools:listitem="@layout/list_item_order" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+        <include
+            android:id="@+id/layout_empty_task"
+            layout="@layout/layout_empty_archive"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

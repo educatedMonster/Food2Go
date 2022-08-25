@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class OrderBaseNetworkDomain (
     val status: String,
     val message: String,
-    val result: List<OrderBaseDomain>
+    val result: List<OrderBaseDomain>? = null
 )
 
 
@@ -27,21 +27,22 @@ data class OrderDomain (
     val deliveryCharge: String,
     val convenienceFee: String,
     val proofURL: String? = null,
-    val note: String,
-    val total: String,
+    val note: String? = null,
+    val total: Long? = 0,
     val status: String,
     val changedAtPreparing: String? = null,
     val changedAtDelivered: String? = null,
     val changedAtCompleted: String? = null,
     val collectedAt: String? = null,
     val deletedAt: String? = null,
-    val createdAt: String,
+    val createdAt: String? = null,
     val updatedAt: String? = null,
-    val users: OrderUsersDomain
+    val users: OrderUsersDomain? = null,
 ) {
     val orderId = id.toString()
-    private val netTotal = total.toDouble() + deliveryCharge.toDouble() + convenienceFee.toDouble()
-    val netTotalString = netTotal.toString()
+    private val netTotal = (total?.toDouble() ?: 0.0)
+    private val netTotal2 = netTotal + deliveryCharge.toDouble() + convenienceFee.toDouble()
+    val netTotalString = netTotal2.toString()
 }
 
 
@@ -55,9 +56,9 @@ data class OrderUsersDomain (
     val status: String,
     val role: String,
     val deletedAt: String? = null,
-    val createdAt: String,
-    val updatedAt: String,
-    val userInformations: OrderUserInformationsDomain
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val userInformations: OrderUserInformationsDomain? = null,
 )
 
 

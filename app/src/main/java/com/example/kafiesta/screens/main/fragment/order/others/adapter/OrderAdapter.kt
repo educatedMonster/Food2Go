@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.main.fragment.order.others
+package com.example.kafiesta.screens.main.fragment.order.others.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.ListItemOrderBinding
 import com.example.kafiesta.domain.OrderBaseDomain
-import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
+import com.example.kafiesta.domain.OrderDomain
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 
 class OrderAdapter(

@@ -3,12 +3,10 @@ package com.example.kafiesta.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.kafiesta.constants.UserConst
-import com.example.kafiesta.domain.OrderBaseNetworkDomain
+import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.network.AppNetwork
-import com.example.kafiesta.network.OrderBaseNetwork
 import com.example.kafiesta.network.asDomainModel
 import com.example.kafiesta.network.paramsToRequestBody
-import com.example.kafiesta.screens.main.fragment.order.OrderFragment
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.setBearer
@@ -23,17 +21,17 @@ class OrderRepository(
     private val token = sharedPrefs.getString(UserConst.TOKEN)!!
     private val userid = sharedPrefs.getString(UserConst.USER_ID)!!
 
-    private val _orderPendingList = MutableLiveData<OrderBaseNetworkDomain>()
-    val orderPendingList: LiveData<OrderBaseNetworkDomain> get() = _orderPendingList
+    private val _orderPendingList = MutableLiveData<List<OrderBaseDomain>>()
+    val orderPendingList: LiveData<List<OrderBaseDomain>> get() = _orderPendingList
 
-    private val _orderPreparingList = MutableLiveData<Any>()
-    val orderPreparingList: LiveData<Any> get() = _orderPreparingList
+    private val _orderPreparingList = MutableLiveData<List<OrderBaseDomain>>()
+    val orderPreparingList: LiveData<List<OrderBaseDomain>> get() = _orderPreparingList
 
-    private val _orderDeliveryList = MutableLiveData<Any>()
-    val orderDeliveryList: LiveData<Any> get() = _orderDeliveryList
+    private val _orderDeliveryList = MutableLiveData<List<OrderBaseDomain>>()
+    val orderDeliveryList: LiveData<List<OrderBaseDomain>> get() = _orderDeliveryList
 
-    private val _orderCompletedList = MutableLiveData<Any>()
-    val orderCompletedList: LiveData<Any> get() = _orderCompletedList
+    private val _orderCompletedList = MutableLiveData<List<OrderBaseDomain>>()
+    val orderCompletedList: LiveData<List<OrderBaseDomain>> get() = _orderCompletedList
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -73,10 +71,14 @@ class OrderRepository(
                     .await()
 
                 when (orderStatusEnum) {
-                    OrderStatusEnum.PENDING -> _orderPendingList.postValue(network.asDomainModel())
-                    OrderStatusEnum.PREPARING -> _orderPreparingList.postValue(network.asDomainModel())
-                    OrderStatusEnum.DELIVERY -> _orderDeliveryList.postValue(network.asDomainModel())
-                    OrderStatusEnum.COMPLETED -> _orderCompletedList.postValue(network.asDomainModel())
+                    OrderStatusEnum.PENDING -> _orderPendingList.postValue(network.result?.map { it.asDomainModel() }
+                        ?: emptyList())
+                    OrderStatusEnum.PREPARING -> _orderPreparingList.postValue(network.result?.map { it.asDomainModel() }
+                        ?: emptyList())
+                    OrderStatusEnum.DELIVERY -> _orderDeliveryList.postValue(network.result?.map { it.asDomainModel() }
+                        ?: emptyList())
+                    OrderStatusEnum.COMPLETED -> _orderCompletedList.postValue(network.result?.map { it.asDomainModel() }
+                        ?: emptyList())
                 }
                 _isLoading.postValue(false)
 

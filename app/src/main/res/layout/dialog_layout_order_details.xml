@@ -13,7 +13,7 @@
 
         <variable
             name="orderViewModel"
-            type="com.example.kafiesta.screens.main.fragment.order.others.OrderViewModel" />
+            type="com.example.kafiesta.screens.main.fragment.order.OrderViewModel" />
 
         <variable
             name="onClickCallBack"

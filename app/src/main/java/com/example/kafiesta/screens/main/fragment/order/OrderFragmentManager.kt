@@ -1,11 +1,14 @@
-package com.example.kafiesta.screens.main.fragment.order.others
+package com.example.kafiesta.screens.main.fragment.order
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.kafiesta.R
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentCompleted
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentDelivery
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentPending
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentPrepare
 
 /**
  * A [FragmentStateAdapter] that returns a fragment corresponding to

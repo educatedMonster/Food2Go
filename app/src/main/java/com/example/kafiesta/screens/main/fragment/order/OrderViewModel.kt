@@ -1,9 +1,8 @@
-package com.example.kafiesta.screens.main.fragment.order.others
+package com.example.kafiesta.screens.main.fragment.order
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.example.kafiesta.repository.OrderRepository
-import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import kotlinx.coroutines.CoroutineScope

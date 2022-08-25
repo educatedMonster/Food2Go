@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.main.fragment.order.others
+package com.example.kafiesta.screens.main.fragment.order.others.fragments
 
 import android.os.Build
 import android.os.Bundle
@@ -13,15 +13,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
 import com.example.kafiesta.constants.UserConst
-import com.example.kafiesta.databinding.FragmentPendingBinding
+import com.example.kafiesta.databinding.FragmentDeliveryBinding
 import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
+import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderAdapter
+import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
+import com.example.kafiesta.screens.main.fragment.order.others.dialogs.DialogOrderDetails
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
-import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.trackerteer.taskmanagement.utilities.extensions.showToast
+import com.trackerteer.taskmanagement.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_pending.view.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -29,9 +32,9 @@ import java.time.format.DateTimeFormatter
 /**
  * A placeholder fragment containing a simple view.
  */
-class FragmentPending : Fragment() {
+class FragmentDelivery : Fragment() {
 
-    private lateinit var binding: FragmentPendingBinding
+    private lateinit var binding: FragmentDeliveryBinding
     private val orderViewModel: OrderViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
             .create(OrderViewModel::class.java)
@@ -61,7 +64,7 @@ class FragmentPending : Fragment() {
     private fun initBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_pending,
+            R.layout.fragment_delivery,
             container,
             false
         )
@@ -120,32 +123,38 @@ class FragmentPending : Fragment() {
     }
 
     private fun initLiveData() {
-        orderViewModel.orderPendingList.observe(viewLifecycleOwner) { it ->
+        orderViewModel.apply {
+            orderDeliveryList.observe(viewLifecycleOwner) { model ->
 //            mCurrentPage = it.currentPage
 //            mLastPage = it.lastPage
-            for (data in it.result) {
-                mAdapter.addData(data)
+                if (model.isNotEmpty()) {
+                    for (data in model) {
+                        mAdapter.addData(data)
+                    }
+                } else {
+                    binding.layoutEmptyTask.root.visible()
+                }
             }
-        }
 
-        orderViewModel.isLoading.observe(viewLifecycleOwner) {
-            binding.swipeRefreshLayout.isRefreshing = it
+            isLoading.observe(viewLifecycleOwner) {
+                binding.swipeRefreshLayout.isRefreshing = it
 
+            }
         }
     }
 
     fun initRequest() {
         mAdapter.clearAdapter()
         orderViewModel.getAllOrderList(
-            orderStatusEnum = OrderStatusEnum.PENDING,
+            orderStatusEnum = OrderStatusEnum.DELIVERY,
 //            length = 10,
 //            start = 0,
             search = "",
             merchant_user_id = 5,
-//            date_from = getDateNow(),
-//            date_to = getDateNow())
-            date_from = "2022-08-22",
-            date_to = "2022-08-22") // TODO - for testing
+            date_from = getDateNow(),
+            date_to = getDateNow())
+//            date_from = "2022-08-24",
+//            date_to = "2022-08-24") // TODO - for testing
     }
 
 

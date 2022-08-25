@@ -14,7 +14,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.OrderFragmentBinding
 import com.example.kafiesta.screens.main.fragment.order.others.*
-import com.example.kafiesta.utilities.extensions.showToast
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentCompleted
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentDelivery
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentPending
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentPrepare
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import timber.log.Timber

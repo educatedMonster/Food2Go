@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 data class OrderBaseNetwork (
     val status: String,
     val message: String,
-    val result: List<OrderBaseResponse>
+    val result: List<OrderBaseResponse>? = null
 )
 
 
@@ -47,8 +47,8 @@ data class OrderResponse (
     @SerializedName("proof_url")
     val proofURL: String? = null,
 
-    val note: String,
-    val total: String,
+    val note: String? = null,
+    val total: Long? = null,
     val status: String,
 
     @SerializedName("changed_at_preparing")
@@ -67,12 +67,12 @@ data class OrderResponse (
     val deletedAt: String? = null,
 
     @SerializedName("created_at")
-    val createdAt: String,
+    val createdAt: String? = null,
 
     @SerializedName("updated_at")
     val updatedAt: String? = null,
 
-    val users: OrderUsersResponse
+    val users: OrderUsersResponse? = null,
 )
 
 
@@ -100,13 +100,13 @@ data class OrderUsersResponse (
     val deletedAt: String? = null,
 
     @SerializedName("created_at")
-    val createdAt: String,
+    val createdAt: String? = null,
 
     @SerializedName("updated_at")
-    val updatedAt: String,
+    val updatedAt: String? = null,
 
     @SerializedName("user_informations")
-    val userInformations: OrderUserInformationsResponse
+    val userInformations: OrderUserInformationsResponse? = null,
 )
 
 
@@ -156,7 +156,7 @@ fun OrderBaseNetwork.asDomainModel(): OrderBaseNetworkDomain {
     return OrderBaseNetworkDomain (
         status = status,
         message = message,
-        result = result.map { it.asDomainModel() }
+        result = result?.map { it.asDomainModel() }
     )
 }
 
@@ -190,7 +190,7 @@ fun OrderResponse.asDomainModel(): OrderDomain {
         deletedAt = deletedAt,
         createdAt = createdAt,
         updatedAt = updatedAt,
-        users = users.asDomainModel(),
+        users = users?.asDomainModel(),
     )
 }
 
@@ -207,7 +207,7 @@ fun OrderUsersResponse.asDomainModel(): OrderUsersDomain {
         deletedAt = deletedAt,
         createdAt = createdAt,
         updatedAt = updatedAt,
-        userInformations = userInformations.asDomainModel(),
+        userInformations = userInformations?.asDomainModel(),
     )
 }
 

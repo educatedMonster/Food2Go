@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.main.fragment.order.others
+package com.example.kafiesta.screens.main.fragment.order.others.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -10,17 +10,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.DialogLayoutOrderDetailsBinding
 import com.example.kafiesta.domain.OrderBaseDomain
+import com.example.kafiesta.domain.OrderDomain
+import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
+import com.example.kafiesta.screens.main.fragment.order.others.OrderDetailsAdapter
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
 import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 
 class DialogOrderDetails(
     private val userId: Long,
-    private val model: OrderBaseDomain,
+    private val model: OrderBaseDomain?,
     private val listener: Listener,
     private val activity: Activity
 ) : DialogFragment() {
@@ -31,6 +34,11 @@ class DialogOrderDetails(
     }
 
     private lateinit var binding: DialogLayoutOrderDetailsBinding
+    private val orderViewModel: OrderViewModel by lazy {
+        ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+            .create(OrderViewModel::class.java)
+    }
+
     private lateinit var mAdapter: OrderDetailsAdapter
 
     @SuppressLint("DefaultLocale")
@@ -44,7 +52,9 @@ class DialogOrderDetails(
             null,
             false
         ) as DialogLayoutOrderDetailsBinding
+        binding.lifecycleOwner = this
         binding.model = model
+        binding.orderViewModel = orderViewModel
         val view = binding.root
         dialog.setView(view)
 
@@ -113,7 +123,7 @@ class DialogOrderDetails(
     }
 
     private fun initData() {
-        for (data in model.orderList) {
+        for (data in model!!.orderList) {
             mAdapter.addData(data)
         }
     }
