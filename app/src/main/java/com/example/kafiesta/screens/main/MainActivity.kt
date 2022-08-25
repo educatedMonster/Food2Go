@@ -3,6 +3,7 @@ package com.example.kafiesta.screens.main
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.KaFiestaApplication
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
+import com.example.kafiesta.constants.PusherConst
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityMainBinding
 import com.example.kafiesta.databinding.LayoutCustomNavHeaderBinding
@@ -27,14 +29,24 @@ import com.example.kafiesta.screens.main.fragment.order.OrderFragment
 import com.example.kafiesta.screens.profile.ProfileSettingActivity
 import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
+import com.example.kafiesta.utilities.extensions.isEmailValid
 import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
+import com.example.kafiesta.utilities.helpers.NotificationHelper
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.pusher.client.Pusher
+import com.pusher.client.PusherOptions
+import com.pusher.client.connection.ConnectionEventListener
+import com.pusher.client.connection.ConnectionState
+import com.pusher.client.connection.ConnectionStateChange
 import com.trackerteer.taskmanagement.utilities.extensions.gone
 import com.trackerteer.taskmanagement.utilities.extensions.visible
+import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : BaseActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener,
@@ -68,12 +80,43 @@ class MainActivity : BaseActivity(),
         userId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.USER_ID)?.toLong() ?: 0L
         infoId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.INFO_ID)?.toLong() ?: 0L
         shopId = SharedPrefs(getSecurePrefs(this)).getString(UserConst.SHOP_ID)?.toLong() ?: 0L
+        initPusher()
         initConfig()
     }
 
     override fun onResume() {
         super.onResume()
         initRequest()
+    }
+
+    private fun initPusher() {
+        val options = PusherOptions()
+        options.setCluster(PusherConst.PUSHER_CLUSTER)
+
+        val pusher = Pusher(PusherConst.PUSHER_API_KEY, options)
+
+        pusher.connect(object : ConnectionEventListener {
+            override fun onConnectionStateChange(change: ConnectionStateChange?) {
+                Timber.d("State changed from ${change!!.previousState} to ${change.currentState}")
+            }
+
+            override fun onError(message: String?, code: String?, e: Exception?) {
+                Timber.d("There was a problem connecting! code ($code), message ($message), exception($e)")
+            }
+        }, ConnectionState.ALL)
+
+        val channel = pusher.subscribe(PusherConst.PUSHER_MY_CHANNEL)
+        channel.bind(PusherConst.PUSHER_MY_EVENT) { event ->
+            Timber.d( "Received event with data: $event")
+
+            // If order view is not open/focus show notification
+            if (!KaFiestaApplication.taskActivityIsOpen) {
+                NotificationHelper(this).displayNotification(
+                    event.data,
+                    Random().nextInt()
+                )
+            }
+        }
     }
 
     /**
@@ -290,7 +333,8 @@ class MainActivity : BaseActivity(),
 
         setActionBarTitle(title)
 //        requestMainViewModel()
-        setFocus(mCurrentInView == mFragmentList[1])
+//        setFocus(mCurrentInView == mFragmentList[1])
+        setFocus(false) // Notification triggers too even in OrderFragment
     }
 
     private fun setActionBarTitle(title: String) {

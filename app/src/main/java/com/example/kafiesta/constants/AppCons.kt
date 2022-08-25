@@ -18,7 +18,18 @@ object ServerConst {
     const val IS_SUCCESS = "success"
 }
 
+object PusherConst {
+    const val PUSHER_MY_CHANNEL = "my-channel"
+    const val PUSHER_MY_EVENT = "my-event"
+    const val PUSHER_API_KEY = "5916385ce66c483b7a01"
+    const val PUSHER_CLUSTER = "ap1"
+
+    const val NOTIFICATION_ID = "INTENT_KEY_NOTIFICATION_ID"
+    const val ORDER_DATA = "ORDER_DATA"
+}
+
 object AppConst {
+    const val app_name_channel= "Food2Go Channel"
     const val XML_SECURE_SHARED_PREFS_NAME = "secure_preference"
     const val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
     const val EMAIL_REGEX_2 =

@@ -1,6 +1,7 @@
 package com.example.kafiesta.screens.main.fragment.order
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.OrderFragmentBinding
-import com.example.kafiesta.screens.main.fragment.order.others.*
 import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentCompleted
 import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentDelivery
 import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentPending

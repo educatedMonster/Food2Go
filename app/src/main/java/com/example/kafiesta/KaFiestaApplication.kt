@@ -32,9 +32,6 @@ class KaFiestaApplication : Application() {
          */
         Stetho.initializeWithDefaults(this)
 
-//        FirebaseApp.initializeApp(applicationContext)
-//        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-
         val config = BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
     }
