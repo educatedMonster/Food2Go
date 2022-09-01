@@ -4,14 +4,14 @@ import com.example.kafiesta.domain.*
 import com.google.gson.annotations.SerializedName
 
 
-data class OrderBaseNetwork (
+data class OrderListBaseNetwork (
     val status: String,
     val message: String,
-    val result: List<OrderBaseResponse>? = null
+    val result: List<OrderListBaseResponse>? = null
 )
 
 
-data class OrderBaseResponse (
+data class OrderListBaseResponse (
     val order: OrderResponse,
 
     @SerializedName("order_list")
@@ -152,16 +152,16 @@ data class OrderListResponse (
     val updatedAt: String? = null
 )
 
-fun OrderBaseNetwork.asDomainModel(): OrderBaseNetworkDomain {
-    return OrderBaseNetworkDomain (
+fun OrderListBaseNetwork.asDomainModel(): OrderListNetworkDomain {
+    return OrderListNetworkDomain (
         status = status,
         message = message,
         result = result?.map { it.asDomainModel() }
     )
 }
 
-fun OrderBaseResponse.asDomainModel(): OrderBaseDomain {
-    return OrderBaseDomain (
+fun OrderListBaseResponse.asDomainModel(): OrderListBaseDomain {
+    return OrderListBaseDomain (
         order = order.asDomainModel(),
         orderList = orderList.map { it.asDomainModel() }
     )

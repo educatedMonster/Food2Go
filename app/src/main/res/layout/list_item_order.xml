@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.OrderBaseDomain" />
+            type="com.example.kafiesta.domain.OrderListBaseDomain" />
 
         <variable
             name="onClickCallBack"
@@ -63,7 +64,10 @@
             android:id="@+id/layout_order_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_avg"
+            android:paddingStart="@dimen/padding_avg"
+            android:paddingEnd="@dimen/padding_avg"
+            android:paddingTop="@dimen/padding_avg"
+            android:paddingBottom="@dimen/padding_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_order">
@@ -76,10 +80,23 @@
                 android:singleLine="true"
                 android:text="@{model.order.users.userInformations.primaryContact}"
                 android:textSize="@dimen/text_size_semi_normal"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_timestamp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@tools:sample/us_zipcodes" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/aileron_regular"
+                android:gravity="end"
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_customer_number"
+                tools:text="@tools:sample/date/hhmm" />
+
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_customer_name"
@@ -96,7 +113,7 @@
                 tools:text="@tools:sample/lorem/random" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_note"
+                android:id="@+id/tv_address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -107,6 +124,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_customer_name"
                 tools:text="@tools:sample/lorem/random" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/mode_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_size_normal"
+                android:ellipsize="end"
+                android:fontFamily="@font/aileron_bold"
+                android:maxLines="1"
+                android:text="@{model.order.modeOfPayment}"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_address"
+                tools:text="@tools:sample/lorem" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

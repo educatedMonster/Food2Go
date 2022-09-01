@@ -1,7 +1,6 @@
 package com.example.kafiesta.screens.main.fragment.order
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,7 @@ import com.example.kafiesta.screens.main.fragment.order.others.fragments.Fragmen
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import timber.log.Timber
+
 
 class OrderFragment : Fragment() {
 
@@ -121,6 +121,10 @@ class OrderFragment : Fragment() {
                 Timber.d("onTabReselected ${tab?.text}")
             }
         })
+    }
+
+    fun initRequest() {
+        (mFragmentList[0] as FragmentPending).initRequest()
     }
 }
 

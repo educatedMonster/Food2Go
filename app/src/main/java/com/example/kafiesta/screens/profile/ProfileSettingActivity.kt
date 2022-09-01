@@ -15,11 +15,17 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
+import androidx.annotation.ArrayRes
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.kafiesta.R
+import com.example.kafiesta.autocomplete.ArrayAdapterInstantAuto
+import com.example.kafiesta.autocomplete.InstantAutoComplete
+import com.example.kafiesta.autocomplete.InstantAutoItem
+import com.example.kafiesta.autocomplete.InstantAutoTextWatcher
 import com.example.kafiesta.constants.RequestCodeTag
 import com.example.kafiesta.constants.ServerConst.IS_SUCCESS
 import com.example.kafiesta.constants.UserConst
@@ -32,6 +38,7 @@ import com.example.kafiesta.domain.UserInformationDomain
 import com.example.kafiesta.domain.UserShopDomain
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.main.MainViewModel
+import com.example.kafiesta.utilities.extensions.hasSelected
 import com.example.kafiesta.utilities.extensions.isEmailValid
 import com.example.kafiesta.utilities.extensions.isNotEmpty
 import com.example.kafiesta.utilities.extensions.showToast
@@ -71,6 +78,10 @@ class ProfileSettingActivity : BaseActivity() {
         ViewModelProvider.AndroidViewModelFactory.getInstance(application)
             .create(MainViewModel::class.java)
     }
+
+    // Todo - Test dropdown
+    private lateinit var mIAutoCompleteAdapter: ArrayAdapterInstantAuto
+    private var mAutoItems = ArrayList<InstantAutoItem>()
 
     // Todo - Get the selected image path here
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -134,6 +145,7 @@ class ProfileSettingActivity : BaseActivity() {
         initActionBar()
         initLiveData()
         initEventListener()
+        initAutoCompleteAdapter()
     }
 
     private fun initRequest() {
@@ -196,9 +208,9 @@ class ProfileSettingActivity : BaseActivity() {
     }
 
     private fun initEventListener() {
-        toolbarShopBinding.activeInactiveToggleStore.setOnClickListener{
+        toolbarShopBinding.activeInactiveToggleStore.setOnClickListener {
             if (toolbarShopBinding.activeInactiveToggleStore.isChecked) toolbarShopBinding.activeInactiveText.text =
-                "Open" else toolbarShopBinding.activeInactiveText.text ="Closed"
+                "Open" else toolbarShopBinding.activeInactiveText.text = "Closed"
         }
 
         binding.apply {
@@ -232,6 +244,19 @@ class ProfileSettingActivity : BaseActivity() {
                 val cbGcash = binding.cbGcash.isChecked
                 val cbCod = binding.cbCod.isChecked
                 val deliveryCharge = binding.textInputDeliveryCharge.text.toString()
+
+                //Todo - Test dropdown
+                if (hasSelected(
+//                        autoCompleteSample,
+                        binding.autoCompleteSample,
+                        mIAutoCompleteAdapter,
+                        true,
+                        R.string.invalid_auto_complete)
+                ) {
+                    return@setSafeOnClickListener
+                }
+
+                val selected: String = mIAutoCompleteAdapter.getSelected()!!.id
 
                 val userInfo = UserInformationDomain(
                     id = infoId,
@@ -427,8 +452,8 @@ class ProfileSettingActivity : BaseActivity() {
             formatter = DateTimeFormatter.ofPattern("HH:mm")
             time = LocalTime.parse(timeComeFromServer, parser)
         } catch (e: ParseException) {
-                e.printStackTrace()
-            }
+            e.printStackTrace()
+        }
         return time!!.format(formatter)
     }
 
@@ -458,11 +483,56 @@ class ProfileSettingActivity : BaseActivity() {
         intentGallery.type = "image/*"
         intentGallery.action = Intent.ACTION_PICK
 
-        val intentChooser = Intent.createChooser(intentGallery, getString(R.string.title_select_image))
+        val intentChooser =
+            Intent.createChooser(intentGallery, getString(R.string.title_select_image))
         intentChooser.putExtra(
             Intent.EXTRA_INITIAL_INTENTS,
             intentCameraArray.toTypedArray<Parcelable>()
         )
         startActivityForResult(intentChooser, RequestCodeTag.REQUEST_CODE_CAMERA)
+    }
+
+    private fun initAutoCompleteAdapter() {
+        getListFromArrayResource(mAutoItems,
+            R.array.status_values,
+            R.array.status_texts)
+        mIAutoCompleteAdapter = ArrayAdapterInstantAuto(this,
+            R.layout.instant_auto_complete_item_simple_text,
+            mAutoItems)
+        initializeAutoComplete(
+            binding.autoCompleteSample,
+            mIAutoCompleteAdapter)
+    }
+
+    private fun getListFromArrayResource(
+        list: ArrayList<InstantAutoItem>,
+        @ArrayRes valueRes: Int,
+        @ArrayRes textRes: Int,
+    ) {
+        val ids = this.resources.getStringArray(valueRes)
+        val texts = this.resources.getStringArray(textRes)
+        for (i in ids.indices) {
+            list.add(InstantAutoItem(ids[i], texts[i]))
+        }
+    }
+
+    private fun initializeAutoComplete(
+        autoComplete: InstantAutoComplete,
+        adapter: ArrayAdapterInstantAuto,
+    ) {
+        autoComplete.threshold = 0 //will start working from first character
+        autoComplete.setShowUnfilteredListWhenClicked(true)
+        autoComplete.setAdapter(adapter)
+        autoComplete.onItemClickListener =
+            AdapterView.OnItemClickListener { parent1: AdapterView<*>, view: View?, position: Int, id: Long ->
+                autoComplete.error = null
+                val item = parent1.getItemAtPosition(position) as InstantAutoItem
+                adapter.setSelected(item)
+
+                Timber.d("ITEM $item.id : $item.text")
+                Timber.d("ADAPTER ITEM ${adapter.getSelected()!!.text}" )
+
+            }
+        autoComplete.addTextChangedListener(InstantAutoTextWatcher(adapter))
     }
 }

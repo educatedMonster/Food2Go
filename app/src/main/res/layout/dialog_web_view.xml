@@ -2,54 +2,149 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
 
-    <LinearLayout
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.example.kafiesta.domain.OrderListBaseDomain" />
+
+        <variable
+            name="orderViewModel"
+            type="com.example.kafiesta.screens.main.fragment.order.OrderViewModel" />
+
+        <variable
+            name="onClickCallBack"
+            type="com.example.kafiesta.utilities.helpers.OrderRecyclerClick" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent_white_percent_0"
-        android:orientation="vertical">
+        android:background="@color/transparent_white_percent_90">
+
+        <ProgressBar
+            android:id="@+id/activeProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="0"
+            android:progressDrawable="@drawable/custom_background_progress_bar_rounded_top_left_right"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_min"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_close"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/padding_semi_avg"
+                android:src="@drawable/left_arrow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/light_gray" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_white_rounded_top_left_right">
-
-            <ProgressBar
-                android:id="@+id/activeProgress"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:progress="0"
-                android:progressDrawable="@drawable/custom_background_progress_bar_rounded_top_left_right"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintBottom_toTopOf="@+id/layout_button_update"
+            app:layout_constraintTop_toBottomOf="@+id/top">
 
             <WebView
                 android:id="@+id/webview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_close"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activeProgress" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_close"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:text="Close"
-                android:textSize="@dimen/text_size_semi_normal"
-                android:fontFamily="@font/aileron_semibold"
-                android:background="@color/color_white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_button_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <FrameLayout
+                android:id="@+id/frame_button_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/line_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_reject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/padding_big"
+                        android:layout_marginEnd="@dimen/padding_big"
+                        android:layout_weight="1"
+                        android:background="@drawable/layer_button_global_stroke"
+                        android:onClick="@{() -> onClickCallBack.onRejectClick(model)}"
+                        android:text="Reject"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorBlack"
+                        android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_accept"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/padding_big"
+                        android:layout_marginEnd="@dimen/padding_big"
+                        android:layout_weight="1"
+                        android:background="@drawable/layer_button_global_fill"
+                        android:onClick="@{() -> onClickCallBack.onProceedClick(model)}"
+                        android:text="Accept"
+                        android:textAllCaps="false"
+                        android:textColor="@color/color_palette_black"
+                        android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progress_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="@color/transparent_white_percent_25"
+                    android:visibility="@{orderViewModel.isLoading ? View.VISIBLE : View.GONE}" />
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

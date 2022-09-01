@@ -1,5 +1,7 @@
 package com.trackerteer.taskmanagement.utilities.extensions
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.view.View
 import com.example.kafiesta.utilities.`interface`.SafeClickListener
 
@@ -45,6 +47,38 @@ fun View.visible(){
 
 fun View.invisible(){
     visibility = View.INVISIBLE
+}
+
+fun focusView(view: View) {
+    view.isFocusableInTouchMode = true
+    view.requestFocus()
+    view.isFocusableInTouchMode = false
+}
+
+fun fadeIn(view: View) {
+    view.alpha = 0.0f
+    view.visibility = View.VISIBLE
+    view.animate()
+        .alpha(1f)
+        .setDuration(300)
+        .setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                view.visibility = View.VISIBLE
+            }
+        })
+}
+
+fun fadeOut(view: View) {
+    view.animate()
+        .alpha(0.0f)
+        .setDuration(300)
+        .setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                view.visibility = View.GONE
+            }
+        })
 }
 
 fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit){

@@ -13,25 +13,20 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
+import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.databinding.DialogLayoutOrderDetailsBinding
-import com.example.kafiesta.domain.OrderBaseDomain
-import com.example.kafiesta.domain.OrderDomain
+import com.example.kafiesta.domain.OrderListBaseDomain
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
-import com.example.kafiesta.screens.main.fragment.order.others.OrderDetailsAdapter
+import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderDetailsAdapter
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
 import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 
 class DialogOrderDetails(
-    private val userId: Long,
-    private val model: OrderBaseDomain?,
-    private val listener: Listener,
+    private val status: String,
+    private val model: OrderListBaseDomain?,
+    private val onClickCallBack: OrderRecyclerClick,
     private val activity: Activity
 ) : DialogFragment() {
-
-    interface Listener {
-        fun onAcceptOrder(model: OrderBaseDomain)
-        fun onRejectOrder(model: OrderBaseDomain)
-    }
 
     private lateinit var binding: DialogLayoutOrderDetailsBinding
     private val orderViewModel: OrderViewModel by lazy {
@@ -55,8 +50,21 @@ class DialogOrderDetails(
         binding.lifecycleOwner = this
         binding.model = model
         binding.orderViewModel = orderViewModel
+        binding.onClickCallBack = onClickCallBack
         val view = binding.root
         dialog.setView(view)
+
+
+        val color: Int = when (status) {
+            OrderConst.ORDER_COMPLETED -> {
+                R.color.colorSecondary
+            }
+            else -> {
+                R.color.light_gray2
+            }
+        }
+
+        binding.layoutOrder.setBackgroundResource(color)
 
         initConfig()
 
@@ -76,15 +84,6 @@ class DialogOrderDetails(
 
     private fun initEventListener() {
         binding.apply {
-            btnAccept.setOnClickListener {
-                listener.onAcceptOrder(model!!)
-
-            }
-
-            btnReject.setOnClickListener {
-                listener.onRejectOrder(model!!)
-            }
-
             rcOrders.apply {
                 this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -99,17 +98,7 @@ class DialogOrderDetails(
     }
 
     private fun initAdapter() {
-        mAdapter = OrderDetailsAdapter(
-            context = activity,
-            onClickCallBack = OrderRecyclerClick(
-                accept = {
-
-                },
-                reject = {
-
-                }
-            )
-        )
+        mAdapter = OrderDetailsAdapter(context = activity)
 
         binding.rcOrders.apply {
             adapter = mAdapter

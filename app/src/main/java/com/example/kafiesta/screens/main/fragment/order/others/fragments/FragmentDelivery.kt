@@ -12,14 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
+import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.FragmentDeliveryBinding
-import com.example.kafiesta.domain.OrderBaseDomain
+import com.example.kafiesta.domain.OrderListBaseDomain
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
 import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderAdapter
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
 import com.example.kafiesta.screens.main.fragment.order.others.dialogs.DialogOrderDetails
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
+import com.example.kafiesta.utilities.getDialog
+import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
@@ -80,23 +83,31 @@ class FragmentDelivery : Fragment() {
     }
 
     private fun initAdapter() {
-        mAdapter = OrderAdapter(RecyclerClick(
+        mAdapter = OrderAdapter(
+            context = requireContext(),
+            onClickCallBack = RecyclerClick(
             click = {
+                val a = it as OrderListBaseDomain
                 val dialog = DialogOrderDetails(
-                    userId = userId,
-                    model = it as OrderBaseDomain,
-                    listener = object : DialogOrderDetails.Listener {
-                        override fun onAcceptOrder(model: OrderBaseDomain) {
-                            showToast("Not yet implemented")
-                        }
-
-                        override fun onRejectOrder(model: OrderBaseDomain) {
-                            showToast("Not yet implemented")
-                        }
-                    },
+                    status = a.order.status,
+                    model = a,
+                    onClickCallBack = OrderRecyclerClick(
+                        proceed = { model ->
+                            val order = model as OrderListBaseDomain
+                            orderViewModel.orderMoveStatus(
+                                order.order.id,
+                                OrderConst.ORDER_COMPLETED,
+                                ""
+                            )
+                            showToast(getString(R.string.dialog_message_order_completed, order.order.orderId))
+                        },
+                        reject = {},
+                        proofURL = {}
+                    ),
                     activity = requireActivity()
                 )
-                dialog.show(requireActivity().supportFragmentManager, DialogTag.DIALOG_ORDER_DETAILS)
+                dialog.show(requireActivity().supportFragmentManager,
+                    DialogTag.DIALOG_ORDER_DETAILS)
             }
         ))
     }
@@ -140,6 +151,12 @@ class FragmentDelivery : Fragment() {
                 binding.swipeRefreshLayout.isRefreshing = it
 
             }
+
+            orderStatus.observe(viewLifecycleOwner) {
+                (getDialog(requireActivity(), DialogTag.DIALOG_ORDER_DETAILS) as DialogOrderDetails?)?.dismiss()
+                showToast(it)
+                initRequest()
+            }
         }
     }
 
@@ -153,8 +170,6 @@ class FragmentDelivery : Fragment() {
             merchant_user_id = 5,
             date_from = getDateNow(),
             date_to = getDateNow())
-//            date_from = "2022-08-24",
-//            date_to = "2022-08-24") // TODO - for testing
     }
 
 

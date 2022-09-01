@@ -29,9 +29,11 @@ class AddInventoryRecyclerClick(
 }
 
 class OrderRecyclerClick(
-    val accept: (Any) -> Unit,
-    val reject: (Any) -> Unit
+    val proceed: (Any) -> Unit,
+    val reject: (Any) -> Unit,
+    val proofURL: (Any) -> Unit
 ) {
-    fun onAcceptClick(model: Any) = accept(model)
+    fun onProceedClick(model: Any) = proceed(model)
     fun onRejectClick(model: Any) = reject(model)
+    fun onProofURLClick(model: Any) = proofURL(model)
 }

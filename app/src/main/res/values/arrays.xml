@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="status_values">
+        <item>W</item>
+        <item>P</item>
+        <item>D</item>
+        <item>C</item>
+    </string-array>
+
+
+    <string-array name="status_texts">
+        <item>Pending</item>
+        <item>Preparing</item>
+        <item>Delivery</item>
+        <item>Completed</item>
+    </string-array>
+
+
+</resources>

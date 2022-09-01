@@ -9,7 +9,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.OrderBaseDomain" />
+            type="com.example.kafiesta.domain.OrderListBaseDomain" />
 
         <variable
             name="orderViewModel"
@@ -157,7 +157,6 @@
 
                     </LinearLayout>
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -219,7 +218,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_avg"
-                app:layout_constraintBottom_toTopOf="@+id/layout_button_update"
+                app:layout_constraintBottom_toTopOf="@+id/layout_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_product_details">
@@ -268,7 +267,8 @@
                             android:fontFamily="@font/aileron_regular"
                             android:gravity="end"
                             android:text="@{model.order.deliveryCharge}"
-                            android:textSize="@dimen/text_size_normal" />
+                            android:textSize="@dimen/text_size_normal"
+                            tools:text="@tools:sample/us_zipcodes" />
 
                     </LinearLayout>
 
@@ -319,7 +319,8 @@
                             android:fontFamily="@font/aileron_regular"
                             android:gravity="end"
                             android:text="@{model.order.convenienceFee}"
-                            android:textSize="@dimen/text_size_normal" />
+                            android:textSize="@dimen/text_size_normal"
+                            tools:text="@tools:sample/us_zipcodes" />
 
                     </LinearLayout>
 
@@ -367,10 +368,11 @@
                             android:id="@+id/textView_price4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/aileron_regular"
+                            android:fontFamily="@font/aileron_bold"
                             android:gravity="end"
                             android:text="@{model.order.netTotalString}"
-                            android:textSize="@dimen/text_size_normal" />
+                            android:textSize="@dimen/text_size_normal"
+                            tools:text="@tools:sample/us_zipcodes" />
 
                     </LinearLayout>
 
@@ -384,7 +386,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line_4">
-
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_view_note"
@@ -415,77 +416,209 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/proof_url"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/aileron_light"
+                    android:maxLines="1"
+                    android:layout_marginTop="@dimen/text_size_normal"
+                    android:text="@{model.order.proofURL}"
+                    android:textSize="@dimen/text_size_normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/const_note"
+                    tools:text="@tools:sample/lorem/random"
+                    android:textColor="@color/colorSecondaryVariant"
+                    android:onClick="@{() -> onClickCallBack.onProofURLClick(model)}"
+                    android:visibility="@{model.order.showButton ? View.VISIBLE : View.GONE}" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_button_update"
+                android:id="@+id/layout_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_avg"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="@{model.order.isCompleted ? View.GONE: View.VISIBLE}"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/container">
 
-                <FrameLayout
-                    android:id="@+id/frame_button_update"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_is_pending"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_avg"
+                    android:visibility="@{model.order.isPending ?  View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintStart_toStartOf="parent">
 
-                    <LinearLayout
-                        android:id="@+id/line_button"
+                    <FrameLayout
+                        android:id="@+id/frame_button_is_pending"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:baselineAligned="false"
-                        android:gravity="center_vertical"
+                        android:visibility="@{model.order.showButton ? View.GONE : View.VISIBLE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btn_reject"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:id="@+id/line_button"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/padding_big"
-                            android:layout_marginEnd="@dimen/padding_big"
-                            android:layout_weight="1"
-                            android:background="@drawable/layer_button_global_stroke"
-                            android:text="Reject"
-                            android:textAllCaps="false"
-                            android:textColor="@color/color_palette_black"
-                            android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btn_accept"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/padding_big"
-                            android:layout_marginEnd="@dimen/padding_big"
-                            android:layout_weight="1"
-                            android:background="@drawable/layer_button_global_fill"
-                            android:text="Accept"
-                            android:textAllCaps="false"
-                            android:textColor="@color/color_palette_black"
-                            android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btn_reject"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/padding_big"
+                                android:layout_marginEnd="@dimen/padding_big"
+                                android:layout_weight="1"
+                                android:background="@drawable/layer_button_global_stroke"
+                                android:onClick="@{() -> onClickCallBack.onRejectClick(model)}"
+                                android:text="Reject"
+                                android:textAllCaps="false"
+                                android:textColor="@color/color_palette_black"
+                                android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
 
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btn_accept"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/padding_big"
+                                android:layout_marginEnd="@dimen/padding_big"
+                                android:layout_weight="1"
+                                android:background="@drawable/layer_button_global_fill"
+                                android:onClick="@{() -> onClickCallBack.onProceedClick(model)}"
+                                android:text="Accept"
+                                android:textAllCaps="false"
+                                android:textColor="@color/color_palette_black"
+                                android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
 
-                    </LinearLayout>
+                        </LinearLayout>
 
-                    <ProgressBar
-                        android:id="@+id/progress_loading"
+                    </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_is_preparing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_avg"
+                    android:visibility="@{model.order.isPrepareToDelivery ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <FrameLayout
+                        android:id="@+id/frame_button_prepare"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:backgroundTint="@color/transparent_white_percent_25"
-                        android:visibility="@{orderViewModel.isLoading ? View.VISIBLE : View.GONE}" />
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                </FrameLayout>
+                        <LinearLayout
+                            android:id="@+id/line_button1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btn_move_to_delivery"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/padding_big"
+                                android:layout_marginEnd="@dimen/padding_big"
+                                android:layout_weight="1"
+                                android:background="@drawable/layer_button_global_fill"
+                                android:onClick="@{() -> onClickCallBack.onProceedClick(model)}"
+                                android:text="Move to Delivery"
+                                android:textAllCaps="false"
+                                android:textColor="@color/color_palette_black"
+                                android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_is_delivery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_avg"
+                    android:visibility="@{model.order.isPrepareToDeliveryToCompleted ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <FrameLayout
+                        android:id="@+id/frame_button_delivery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <LinearLayout
+                            android:id="@+id/line_button2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btn_move_to_completed"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/padding_big"
+                                android:layout_marginEnd="@dimen/padding_big"
+                                android:layout_weight="1"
+                                android:background="@drawable/layer_button_global_fill"
+                                android:onClick="@{() -> onClickCallBack.onProceedClick(model)}"
+                                android:text="Move to Completed"
+                                android:textAllCaps="false"
+                                android:textColor="@color/color_palette_black"
+                                android:visibility="@{orderViewModel.isLoading ? View.GONE : View.VISIBLE}" />
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ProgressBar
+                    android:id="@+id/progress_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="@color/transparent_white_percent_25"
+                    android:visibility="@{orderViewModel.isLoading ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="16dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

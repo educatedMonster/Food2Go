@@ -26,10 +26,10 @@ import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.main.fragment.home.HomeFragment
 import com.example.kafiesta.screens.main.fragment.myshop.MyShopFragment
 import com.example.kafiesta.screens.main.fragment.order.OrderFragment
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentPending
 import com.example.kafiesta.screens.profile.ProfileSettingActivity
 import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
-import com.example.kafiesta.utilities.extensions.isEmailValid
 import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
 import com.example.kafiesta.utilities.helpers.NotificationHelper
@@ -44,6 +44,7 @@ import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
 import com.trackerteer.taskmanagement.utilities.extensions.gone
 import com.trackerteer.taskmanagement.utilities.extensions.visible
+import org.json.JSONObject
 import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
@@ -107,12 +108,18 @@ class MainActivity : BaseActivity(),
 
         val channel = pusher.subscribe(PusherConst.PUSHER_MY_CHANNEL)
         channel.bind(PusherConst.PUSHER_MY_EVENT) { event ->
-            Timber.d( "Received event with data: $event")
+            Timber.d( "Received event with data: ${event.data}")
+            val message = JSONObject(event.data).getString("message")
+            Timber.d(message)
+
+           runOnUiThread {
+               (mFragmentList[1] as OrderFragment).initRequest() // pass the new received order here from pusher
+           }
 
             // If order view is not open/focus show notification
             if (!KaFiestaApplication.taskActivityIsOpen) {
                 NotificationHelper(this).displayNotification(
-                    event.data,
+                    message,
                     Random().nextInt()
                 )
             }
@@ -123,6 +130,7 @@ class MainActivity : BaseActivity(),
      * Call all the functions here that needed to be initialized first
      */
     private fun initConfig() {
+        initExtras()
         initBinding()
         initActionBar()
         initBottomNavigationView()
@@ -137,6 +145,14 @@ class MainActivity : BaseActivity(),
     private fun requestMainViewModel() {
         if (this::mainViewModel.isInitialized) {
             mainViewModel.getMe()
+        }
+    }
+
+    private fun initExtras() {
+        val orderData = intent.getStringExtra(PusherConst.ORDER_DATA)
+        if (orderData != null) {
+            showToast(orderData)
+            refreshOrderFragment()
         }
     }
 

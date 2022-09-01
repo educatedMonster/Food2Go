@@ -67,6 +67,9 @@
     <string name="error_message_illegal_argument_exception">Unable to construct action bar</string>
     <string name="required">Required</string>
     <string name="invalid_email">Invalid Email</string>
+    <string name="invalid_auto_complete">Invalid auto complete</string>
+    <string name="invalid_file">Error file</string>
+    <string name="error_install_web_browser">Please install a web browser</string>
 
     <!--    Actions -->
     <string name="action_label_login">login</string>
@@ -110,5 +113,21 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
 
+
+    <!--    Order Details -->
+    <string name="dialog_message_order_rejected">Order #%1$s has been rejected.</string>
+    <string name="dialog_message_order_preparing">Order #%1$s is added on preparing queue.</string>
+    <string name="dialog_message_order_delivery">You move Order #%1$s to Out For Delivery.</string>
+    <string name="dialog_message_order_completed">Order #%1$s is now successfully completed.</string>
+
+
+    <!--    Timestamp -->
+    <string name="days_ago">days ago</string>
+    <string name="day_ago">day ago</string>
+    <string name="hours_ago">hours ago</string>
+    <string name="hour_ago">hour ago</string>
+    <string name="minutes_ago">minutes ago</string>
+    <string name="minute_ago">minute ago</string>
+    <string name="few_seconds_ago">few seconds ago</string>
 
 </resources>

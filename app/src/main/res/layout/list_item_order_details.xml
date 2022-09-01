@@ -9,9 +9,6 @@
             name="model"
             type="com.example.kafiesta.domain.OrderListDomain" />
 
-        <variable
-            name="onClickCallBack"
-            type="com.example.kafiesta.utilities.helpers.OrderRecyclerClick" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

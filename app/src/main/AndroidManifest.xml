@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KaFiesta">
         <activity
+            android:name=".screens.image_viewer.ImageViewerActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.product_and_inventory.ProductAndInventoryActivity"
             android:exported="false"
             android:label="@string/title_activity_dashboard"
@@ -23,8 +26,8 @@
         <activity
             android:name=".screens.profile.ProfileSettingActivity"
             android:exported="false" />
-
-        <activity android:name=".screens.splash.SplashActivity"
+        <activity
+            android:name=".screens.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +36,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".screens.login.LoginActivity" />
-
         <activity
             android:name=".screens.main.MainActivity"
             android:screenOrientation="portrait" />

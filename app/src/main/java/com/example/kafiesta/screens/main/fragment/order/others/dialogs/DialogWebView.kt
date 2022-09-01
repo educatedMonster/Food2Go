@@ -16,22 +16,26 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.DialogWebViewBinding
+import com.example.kafiesta.domain.OrderListBaseDomain
+import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
+import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 import com.trackerteer.taskmanagement.utilities.extensions.gone
 
-class WebViewDialog(
-    webUrl: String,
+class DialogWebView(
+    private val model: OrderListBaseDomain,
+    private val onClickCallBack: OrderRecyclerClick,
     private val listener: Listener
 ) : DialogFragment() {
 
     private lateinit var binding: DialogWebViewBinding
     private lateinit var mWebSettings: WebSettings
-    private var mWebUrl = webUrl
+    private var mWebUrl = model.order.proofURL!!
 
     interface Listener {
         fun onCloseClicked()
-        fun onOpenActivityUrl(url: String)
     }
 
     override fun getTheme(): Int = R.style.NoMarginsDialog
@@ -42,6 +46,11 @@ class WebViewDialog(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
+    }
+
+    private val orderViewModel: OrderViewModel by lazy {
+        ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+            .create(OrderViewModel::class.java)
     }
 
     @SuppressLint("DefaultLocale")
@@ -59,7 +68,10 @@ class WebViewDialog(
             null,
             false
         ) as DialogWebViewBinding
-
+        binding.lifecycleOwner = this
+        binding.model = model
+        binding.orderViewModel = orderViewModel
+        binding.onClickCallBack = onClickCallBack
         //Use the binding.root to get the view on our binding
         val view = binding.root
 
@@ -82,7 +94,7 @@ class WebViewDialog(
             }
 
             mWebSettings = webview.settings
-            webview.webChromeClient = MyWebChromeClient(binding.activeProgress, mWebUrl, listener)
+            webview.webChromeClient = MyWebChromeClient(binding.activeProgress)
             webview.webViewClient = WebViewClient()
             webview.loadUrl(mWebUrl)
         }
@@ -96,20 +108,10 @@ class WebViewDialog(
     }
 
     private class MyWebChromeClient(
-        private val progressBar: ProgressBar,
-        webUrl: String,
-        listener: Listener
+        private val progressBar: ProgressBar
     ) : WebChromeClient() {
-        private val mWebHost: String? = Uri.parse(webUrl).host
-        private val mListener: Listener = listener
-
         override fun onProgressChanged(view: WebView, newProgress: Int) {
-            val pageHostName = Uri.parse(view.url).host
-            if (!pageHostName!!.matches(mWebHost!!.toRegex())) {
-                // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
-                mListener.onOpenActivityUrl(view.url!!)
-                return
-            }
+            Uri.parse(view.url).host
             progressBar.progress = newProgress
             if (newProgress == 100) {
                 progressBar.gone()

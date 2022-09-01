@@ -1,15 +1,15 @@
 package com.example.kafiesta.domain
 
-import com.google.gson.annotations.SerializedName
+import com.example.kafiesta.constants.OrderConst
 
-data class OrderBaseNetworkDomain (
+data class OrderListNetworkDomain (
     val status: String,
     val message: String,
-    val result: List<OrderBaseDomain>? = null
+    val result: List<OrderListBaseDomain>? = null
 )
 
 
-data class OrderBaseDomain (
+data class OrderListBaseDomain (
     val order: OrderDomain,
     val orderList: List<OrderListDomain>
 )
@@ -30,12 +30,12 @@ data class OrderDomain (
     val note: String? = null,
     val total: Long? = 0,
     val status: String,
-    val changedAtPreparing: String? = null,
-    val changedAtDelivered: String? = null,
-    val changedAtCompleted: String? = null,
+    val changedAtPreparing: String? = null, // preparing time - timelapse
+    val changedAtDelivered: String? = null, // preparing time - timelapse
+    val changedAtCompleted: String? = null, // preparing datetime 12:00 AM/PM
     val collectedAt: String? = null,
     val deletedAt: String? = null,
-    val createdAt: String? = null,
+    val createdAt: String? = null, //time - timelapse
     val updatedAt: String? = null,
     val users: OrderUsersDomain? = null,
 ) {
@@ -43,6 +43,12 @@ data class OrderDomain (
     private val netTotal = (total?.toDouble() ?: 0.0)
     private val netTotal2 = netTotal + deliveryCharge.toDouble() + convenienceFee.toDouble()
     val netTotalString = netTotal2.toString()
+    val showButton = !proofURL.isNullOrEmpty()
+
+    val isPending = status.matches(OrderConst.ORDER_PENDING.toRegex())
+    val isPrepareToDelivery = status.matches(OrderConst.ORDER_PREPARING.toRegex())
+    val isPrepareToDeliveryToCompleted = status.matches(OrderConst.ORDER_DELIVERY.toRegex())
+    val isCompleted = status.matches(OrderConst.ORDER_COMPLETED.toRegex())
 }
 
 

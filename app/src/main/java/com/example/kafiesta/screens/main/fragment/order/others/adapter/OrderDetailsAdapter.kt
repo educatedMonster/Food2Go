@@ -1,4 +1,4 @@
-package com.example.kafiesta.screens.main.fragment.order.others
+package com.example.kafiesta.screens.main.fragment.order.others.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,15 +7,12 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
-import com.example.kafiesta.databinding.ListItemOrderBinding
+import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.databinding.ListItemOrderDetailsBinding
-import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.domain.OrderListDomain
-import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 
 class OrderDetailsAdapter(
-    private val context: Context,
-    private val onClickCallBack: OrderRecyclerClick
+    private val context: Context
 ) :
     RecyclerView.Adapter<OrderDetailsViewHolder>() {
 
@@ -48,7 +45,6 @@ class OrderDetailsAdapter(
         holder.viewDataBinding.also {
             val model = list[position]
             it.model = model
-            it.onClickCallBack = onClickCallBack
         }
     }
 

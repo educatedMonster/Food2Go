@@ -12,21 +12,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
+import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.FragmentPendingBinding
-import com.example.kafiesta.domain.OrderBaseDomain
-import com.example.kafiesta.domain.OrderDomain
+import com.example.kafiesta.domain.OrderListBaseDomain
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
 import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderAdapter
 import com.example.kafiesta.screens.main.fragment.order.others.dialogs.DialogOrderDetails
+import com.example.kafiesta.screens.main.fragment.order.others.dialogs.DialogWebView
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
+import com.example.kafiesta.utilities.getDialog
+import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.trackerteer.taskmanagement.utilities.extensions.showToast
 import com.trackerteer.taskmanagement.utilities.extensions.visible
-import kotlinx.android.synthetic.main.fragment_pending.view.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -82,20 +84,71 @@ class FragmentPending : Fragment() {
     }
 
     private fun initAdapter() {
-        mAdapter = OrderAdapter(RecyclerClick(
+        mAdapter = OrderAdapter(
+            context = requireContext(),
+            onClickCallBack = RecyclerClick(
             click = {
+                val a = it as OrderListBaseDomain
                 val dialog = DialogOrderDetails(
-                    userId = userId,
-                    model = it as OrderBaseDomain,
-                    listener = object : DialogOrderDetails.Listener {
-                        override fun onAcceptOrder(model: OrderBaseDomain) {
-                            showToast("Not yet implemented")
+                    status = a.order.status,
+                    model = a,
+                    onClickCallBack = OrderRecyclerClick(
+                        proceed = { model ->
+                            val order = model as OrderListBaseDomain
+                            orderViewModel.orderMoveStatus(
+                                order.order.id,
+                                OrderConst.ORDER_PREPARING,
+                                ""
+                            )
+                            showToast(getString(R.string.dialog_message_order_preparing, order.order.orderId))
+                        },
+                        reject = { model ->
+                            val order = model as OrderListBaseDomain
+                            orderViewModel.orderMoveStatus(
+                                order.order.id,
+                                OrderConst.ORDER_REJECTED,
+                                "Static Test Rejected"
+                            )
+                            showToast(getString(R.string.dialog_message_order_rejected, order.order.orderId))
+                        },
+                        proofURL = { model ->
+                            val order = model as OrderListBaseDomain
+                            val webDialog = DialogWebView(
+                                model = order,
+                                onClickCallBack = OrderRecyclerClick(
+                                    proceed = { model2 ->
+                                        val order2 = model2 as OrderListBaseDomain
+                                        orderViewModel.orderMoveStatus(
+                                            order2.order.id,
+                                            OrderConst.ORDER_PREPARING,
+                                            ""
+                                        )
+                                        showToast(getString(R.string.dialog_message_order_preparing, order.order.orderId))
+                                    },
+                                    reject = { model2 ->
+                                        val order2 = model2 as OrderListBaseDomain
+                                        orderViewModel.orderMoveStatus(
+                                            order2.order.id,
+                                            OrderConst.ORDER_REJECTED,
+                                            "Static Test Rejected"
+                                        )
+                                        showToast(getString(R.string.dialog_message_order_rejected, order.order.orderId))
+                                    },
+                                    proofURL = {}
+                                ),
+                                listener = object : DialogWebView.Listener {
+                                    override fun onCloseClicked() {
+                                        (getDialog(
+                                            requireActivity(),
+                                            DialogTag.DIALOG_WEB_VIEW_TAG
+                                        ) as DialogWebView?)?.dismiss()
+                                    }
+                                }
+                            )
+                            webDialog.show(requireActivity().supportFragmentManager,
+                                DialogTag.DIALOG_WEB_VIEW_TAG)
                         }
-
-                        override fun onRejectOrder(model: OrderBaseDomain) {
-                            showToast("Not yet implemented")
-                        }
-                    },
+                    ),
                     activity = requireActivity()
                 )
                 dialog.show(requireActivity().supportFragmentManager,
@@ -144,6 +197,13 @@ class FragmentPending : Fragment() {
                 binding.swipeRefreshLayout.isRefreshing = it
 
             }
+
+            orderStatus.observe(viewLifecycleOwner) {
+                (getDialog(requireActivity(), DialogTag.DIALOG_ORDER_DETAILS) as DialogOrderDetails?)?.dismiss()
+                (getDialog(requireActivity(), DialogTag.DIALOG_WEB_VIEW_TAG) as DialogWebView?)?.dismiss()
+                showToast(it)
+                initRequest()
+            }
         }
     }
 
@@ -157,8 +217,6 @@ class FragmentPending : Fragment() {
             merchant_user_id = 5,
             date_from = getDateNow(),
             date_to = getDateNow())
-//            date_from = "2022-08-24",
-//            date_to = "2022-08-24") // TODO - for testing
     }
 
 

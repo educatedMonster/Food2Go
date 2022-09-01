@@ -182,7 +182,7 @@ interface AppService {
     fun onGetAllOrdersAsync(
         @Header("Authorization") bearer: String,
         @PartMap params: HashMap<String, RequestBody>
-    ): Deferred<OrderBaseNetwork>
+    ): Deferred<OrderListBaseNetwork>
 
 
     //https://kafiesta-api.osc-fr1.scalingo.io/v1/orders/move
@@ -191,7 +191,15 @@ interface AppService {
     fun onOrderMoveStatusAsync(
         @Header("Authorization") bearer: String,
         @PartMap params: HashMap<String, RequestBody>
-    ): Deferred<OrderBaseNetwork>
+    ): Deferred<SpecificOrderBaseNetwork>
+
+
+    //  https://kafiesta-api.osc-fr1.scalingo.io/v1/orders/getOrder/{order_id}
+    @GET("orders/getOrder/{order_id}")
+    fun onGetOrderIdAsync(
+        @Header("Authorization") bearer: String,
+        @Path("order_id") orderId: Long,
+    ): Deferred<UserBaseNetwork>
     //endregion
 
 }

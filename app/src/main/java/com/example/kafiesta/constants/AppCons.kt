@@ -8,7 +8,8 @@ object ServerConst {
 
     private const val SERVER_URL = "https://kafiesta-api.osc-fr1.scalingo.io/"
     const val API_SERVER_URL = "${SERVER_URL}v1/"
-    const val IMAGE_PLACE_HOLDER = "https://pbs.twimg.com/profile_images/1048086829143011329/W8R1grIh_400x400.jpg"
+    const val IMAGE_PLACE_HOLDER =
+        "https://pbs.twimg.com/profile_images/1048086829143011329/W8R1grIh_400x400.jpg"
 
     //Test Account
     const val TEST_EMAIL = "jadalmario.freelancer@gmail.com"
@@ -29,7 +30,7 @@ object PusherConst {
 }
 
 object AppConst {
-    const val app_name_channel= "Food2Go Channel"
+    const val app_name_channel = "Food2Go Channel"
     const val XML_SECURE_SHARED_PREFS_NAME = "secure_preference"
     const val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
     const val EMAIL_REGEX_2 =
@@ -74,6 +75,7 @@ object DialogTag {
     const val DIALOG_BOTTOM_SEARCH_INVENTORY = "DIALOG_BOTTOM_SEARCH_INVENTORY"
     const val DIALOG_ORDER_DETAILS = "DIALOG_ORDER_DETAILS"
     const val DIALOG_WEB_VIEW_TAG = "DIALOG_WEB_VIEW_TAG"
+    const val DIALOG_IMAGE_SLIDER = "DIALOG_IMAGE_SLIDER"
 }
 
 object RequestCodeTag {
@@ -85,4 +87,12 @@ object RequestCodeTag {
 object ProductConst {
     const val PRODUCT_ACTIVE = "active"
     const val PRODUCT_IN_ACTIVE = "inactive"
+}
+
+object OrderConst {
+    const val ORDER_PENDING = "pending"
+    const val ORDER_PREPARING = "preparing"
+    const val ORDER_DELIVERY = "outfordelivery"
+    const val ORDER_COMPLETED = "completed"
+    const val ORDER_REJECTED = "rejected"
 }
