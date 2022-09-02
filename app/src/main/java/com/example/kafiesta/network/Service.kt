@@ -1,6 +1,6 @@
 package com.example.kafiesta.network
 
-import com.example.kafiesta.BuildConfig
+import androidx.databinding.library.BuildConfig
 import com.example.kafiesta.constants.ServerConst.API_SERVER_URL
 import com.example.kafiesta.domain.ListNetworktest
 import com.google.gson.GsonBuilder
@@ -58,7 +58,7 @@ interface AppService {
     fun onUploadImageAsync(
         @Header("Authorization") bearer: String,
         @Path("user_shop_id") userShopId: Long,
-        @Part params: MultipartBody.Part
+        @Part params: MultipartBody.Part,
     ): Deferred<Any>
 
 
@@ -83,7 +83,7 @@ interface AppService {
     @POST("product")
     fun onAddProductAsync(
         @Header("Authorization") bearer: String,
-        @PartMap params: HashMap<String, RequestBody>
+        @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<ProductBaseNetwork>
 
 
@@ -108,7 +108,7 @@ interface AppService {
     @POST("product/update")
     fun onEditProductAsync(
         @Header("Authorization") bearer: String,
-        @PartMap params: HashMap<String, RequestBody>
+        @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<Any>
 
 
@@ -127,7 +127,7 @@ interface AppService {
     fun onAddProductImageAsync(
         @Header("Authorization") bearer: String,
         @Path("id") productId: Long,
-        @Part params: MultipartBody.Part
+        @Part params: MultipartBody.Part,
     ): Deferred<Any>
 
 
@@ -145,7 +145,7 @@ interface AppService {
     @POST("inventory/list")
     fun onGetAllInventoryAsync(
         @Header("Authorization") bearer: String,
-        @PartMap params: HashMap<String, RequestBody>
+        @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<InventoryBaseNetwork>
 
 
@@ -162,7 +162,7 @@ interface AppService {
     @POST("inventory/modifyQuantity")
     fun onModifyQuantityAsync(
         @Header("Authorization") bearer: String,
-        @PartMap params: HashMap<String, RequestBody>
+        @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<InventoryBaseNetwork>
 
 
@@ -171,7 +171,7 @@ interface AppService {
     @POST("inventory/add")
     fun onInventoryAndQuantityAsync(
         @Header("Authorization") bearer: String,
-        @PartMap params: HashMap<String, RequestBody>
+        @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<InventoryBaseNetwork>
     //endregion
 
@@ -181,7 +181,7 @@ interface AppService {
     @POST("orders")
     fun onGetAllOrdersAsync(
         @Header("Authorization") bearer: String,
-        @PartMap params: HashMap<String, RequestBody>
+        @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<OrderListBaseNetwork>
 
 
@@ -190,7 +190,7 @@ interface AppService {
     @POST("orders/move")
     fun onOrderMoveStatusAsync(
         @Header("Authorization") bearer: String,
-        @PartMap params: HashMap<String, RequestBody>
+        @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<SpecificOrderBaseNetwork>
 
 
@@ -199,7 +199,7 @@ interface AppService {
     fun onGetOrderIdAsync(
         @Header("Authorization") bearer: String,
         @Path("order_id") orderId: Long,
-    ): Deferred<UserBaseNetwork>
+    ): Deferred<SpecificOrderBaseNetwork>
     //endregion
 
 }

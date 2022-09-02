@@ -22,6 +22,7 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
     val orderPreparingList = repository.orderListPreparingList
     val orderDeliveryList = repository.orderListDeliveryList
     val orderCompletedList = repository.orderListCompletedList
+    val specificOrder = repository.specificOrder
     val orderStatus = repository.orderStatus
     val isLoading = repository.isLoading
 
@@ -49,10 +50,11 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
     fun orderMoveStatus(
         order_id: Long,
         status: String,
-        remarks: String?
+        remarks: String?,
     ) {
         viewModelScope.launch {
             try {
@@ -60,6 +62,17 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
                     order_id,
                     status,
                     remarks)
+            } catch (network: IOException) {
+                Timber.d(network)
+            }
+        }
+    }
+
+    fun getSpecificOrderId(order_id: Long) {
+        viewModelScope.launch {
+            try {
+                repository.onGetSpecificOrderId(
+                    order_id)
             } catch (network: IOException) {
                 Timber.d(network)
             }

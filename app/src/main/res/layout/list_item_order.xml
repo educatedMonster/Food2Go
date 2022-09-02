@@ -92,7 +92,8 @@
                 android:fontFamily="@font/aileron_regular"
                 android:gravity="end"
                 android:singleLine="true"
-                android:textSize="@dimen/text_size_normal"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/text_size_small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_customer_number"
                 tools:text="@tools:sample/date/hhmm" />

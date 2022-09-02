@@ -29,6 +29,10 @@ object PusherConst {
     const val ORDER_DATA = "ORDER_DATA"
 }
 
+object IntentConst {
+    const val ORDER_ID = "ORDER_ID"
+}
+
 object AppConst {
     const val app_name_channel = "Food2Go Channel"
     const val XML_SECURE_SHARED_PREFS_NAME = "secure_preference"
@@ -76,6 +80,7 @@ object DialogTag {
     const val DIALOG_ORDER_DETAILS = "DIALOG_ORDER_DETAILS"
     const val DIALOG_WEB_VIEW_TAG = "DIALOG_WEB_VIEW_TAG"
     const val DIALOG_IMAGE_SLIDER = "DIALOG_IMAGE_SLIDER"
+    const val DIALOG_REMARK = "DIALOG_REMARK"
 }
 
 object RequestCodeTag {

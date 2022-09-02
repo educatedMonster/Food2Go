@@ -32,7 +32,33 @@ data class SpecificOrderDomain (
     val changedAtCompleted: String? = null,
     val deletedAt: String? = null,
     val createdAt: String,
-    val updatedAt: String
+    val updatedAt: String,
+    val users: SpecificOrderUsersDomain? = null,
+) {
+    val orderId = id.toString()
+}
+
+data class SpecificOrderUsersDomain (
+    val id: Long,
+    val firstName: String,
+    val lastName: String,
+    val fullName: String,
+    val email: String,
+    val rememberToken: String? = null,
+    val status: String,
+    val role: String,
+    val deletedAt: String? = null,
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val userInformations: SpecificOrderUserInformationsDomain? = null,
+)
+
+data class SpecificOrderUserInformationsDomain (
+    val id: Long,
+    val userID: Long,
+    val primaryContact: String,
+    val secondaryContact: String,
+    val completeAddress: String,
 )
 
 data class SpecificOrderListDomain (

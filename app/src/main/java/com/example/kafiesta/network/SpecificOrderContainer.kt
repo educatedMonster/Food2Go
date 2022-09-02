@@ -1,9 +1,6 @@
 package com.example.kafiesta.network
 
-import com.example.kafiesta.domain.SpecificBaseOrderDomain
-import com.example.kafiesta.domain.SpecificOrderDomain
-import com.example.kafiesta.domain.SpecificOrderListDomain
-import com.example.kafiesta.domain.SpecificOrderNetworkDomain
+import com.example.kafiesta.domain.*
 import com.google.gson.annotations.SerializedName
 
 data class SpecificOrderBaseNetwork (
@@ -62,6 +59,66 @@ data class SpecificOrderResponse (
 
     @SerializedName("changed_at_completed")
     val changedAtCompleted: String? = null,
+
+    @SerializedName("deleted_at")
+    val deletedAt: String? = null,
+
+    @SerializedName("created_at")
+    val createdAt: String,
+
+    @SerializedName("updated_at")
+    val updatedAt: String,
+
+    val users: SpecificOrderUsersResponse
+)
+
+data class SpecificOrderUsersResponse (
+    val id: Long,
+
+    @SerializedName("first_name")
+    val firstName: String,
+
+    @SerializedName("last_name")
+    val lastName: String,
+
+    @SerializedName("full_name")
+    val fullName: String,
+
+    val email: String,
+
+    @SerializedName("remember_token")
+    val rememberToken: String? = null,
+
+    val status: String,
+    val role: String,
+
+    @SerializedName("deleted_at")
+    val deletedAt: String? = null,
+
+    @SerializedName("created_at")
+    val createdAt: String,
+
+    @SerializedName("updated_at")
+    val updatedAt: String,
+
+    @SerializedName("user_informations")
+    val userInformations: SpecificOrderUserInformationsResponse
+)
+
+data class SpecificOrderUserInformationsResponse (
+    val id: Long,
+
+    @SerializedName("user_id")
+    val userID: Long,
+
+    @SerializedName("primary_contact")
+    val primaryContact: String,
+
+    @SerializedName("secondary_contact")
+    val secondaryContact: String,
+
+    @SerializedName("complete_address")
+    val completeAddress: String,
 
     @SerializedName("deleted_at")
     val deletedAt: String? = null,
@@ -135,7 +192,35 @@ fun SpecificOrderResponse.asDomainModel(): SpecificOrderDomain {
         changedAtCompleted = changedAtCompleted,
         deletedAt = deletedAt,
         createdAt = createdAt,
-        updatedAt = updatedAt
+        updatedAt = updatedAt,
+        users = users.asDomainModel()
+    )
+}
+
+fun SpecificOrderUsersResponse.asDomainModel(): SpecificOrderUsersDomain {
+    return  SpecificOrderUsersDomain(
+        id = id,
+        firstName = firstName,
+        lastName = lastName,
+        fullName = fullName,
+        email = email,
+        rememberToken = rememberToken,
+        status = status,
+        role = role,
+        deletedAt = deletedAt,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+        userInformations = userInformations.asDomainModel(),
+    )
+}
+
+fun SpecificOrderUserInformationsResponse.asDomainModel(): SpecificOrderUserInformationsDomain {
+    return  SpecificOrderUserInformationsDomain(
+        id = id,
+        userID = userID,
+        primaryContact = primaryContact,
+        secondaryContact = secondaryContact,
+        completeAddress = completeAddress,
     )
 }
 

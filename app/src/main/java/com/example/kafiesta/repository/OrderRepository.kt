@@ -8,6 +8,7 @@ import com.example.kafiesta.constants.OrderConst.ORDER_PENDING
 import com.example.kafiesta.constants.OrderConst.ORDER_PREPARING
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.domain.OrderListBaseDomain
+import com.example.kafiesta.domain.SpecificBaseOrderDomain
 import com.example.kafiesta.network.AppNetwork
 import com.example.kafiesta.network.asDomainModel
 import com.example.kafiesta.network.paramsToRequestBody
@@ -36,6 +37,9 @@ class OrderRepository(
 
     private val _orderCompletedList = MutableLiveData<List<OrderListBaseDomain>>()
     val orderListCompletedList: LiveData<List<OrderListBaseDomain>> get() = _orderCompletedList
+
+    private val _specificOrder = MutableLiveData<SpecificBaseOrderDomain>()
+    val specificOrder: LiveData<SpecificBaseOrderDomain> get() = _specificOrder
 
     private val _orderStatus = MutableLiveData<String>()
     val orderStatus: LiveData<String> get() = _orderStatus
@@ -101,7 +105,7 @@ class OrderRepository(
     suspend fun onOrderMoveStatus(
         order_id: Long,
         status: String,
-        remarks: String?
+        remarks: String?,
     ) {
         withContext(Dispatchers.IO) {
             try {
@@ -116,6 +120,26 @@ class OrderRepository(
                     params = paramsToRequestBody(params))
                     .await()
                 _orderStatus.postValue(network.message)
+                _isLoading.postValue(false)
+            } catch (e: HttpException) {
+                Timber.e(e.message())
+                _isLoading.postValue(false)
+            } finally {
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
+    suspend fun onGetSpecificOrderId(order_id: Long) {
+        withContext(Dispatchers.IO) {
+            try {
+                _isLoading.postValue(true)
+
+                val network = AppNetwork.service.onGetOrderIdAsync(
+                    bearer = setBearer(token),
+                    orderId = order_id)
+                    .await()
+                _specificOrder.postValue(network.result.asDomainModel())
                 _isLoading.postValue(false)
             } catch (e: HttpException) {
                 Timber.e(e.message())

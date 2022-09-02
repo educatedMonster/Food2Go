@@ -109,7 +109,9 @@ class MainActivity : BaseActivity(),
         val channel = pusher.subscribe(PusherConst.PUSHER_MY_CHANNEL)
         channel.bind(PusherConst.PUSHER_MY_EVENT) { event ->
             Timber.d( "Received event with data: ${event.data}")
-            val message = JSONObject(event.data).getString("message")
+            val message = JSONObject(event.data).getString("message") //New order with order number: #77
+            val splitMessage = message.split("#")
+            val orderId = splitMessage[1]
             Timber.d(message)
 
            runOnUiThread {
@@ -149,9 +151,9 @@ class MainActivity : BaseActivity(),
     }
 
     private fun initExtras() {
-        val orderData = intent.getStringExtra(PusherConst.ORDER_DATA)
+        val orderData = intent.getSerializableExtra(PusherConst.ORDER_DATA)
         if (orderData != null) {
-            showToast(orderData)
+            Timber.d(orderData.toString())
             refreshOrderFragment()
         }
     }
@@ -232,7 +234,7 @@ class MainActivity : BaseActivity(),
                     activity = this,
                     title = getString(R.string.main_activity_preparing_logout)
                 )
-                mGlobalDialog = GlobalDialog(configureDialog)
+                mGlobalDialog = GlobalDialog(configureDialog, null)
                 mGlobalDialog?.show(supportFragmentManager, tag)
             } else if ((it.onLogoutRequest) && (!it.isLoggingOut)) {
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -322,7 +324,7 @@ class MainActivity : BaseActivity(),
                         mGlobalDialog?.dismiss()
                     }
                 )
-                mGlobalDialog = GlobalDialog(configureDialog)
+                mGlobalDialog = GlobalDialog(configureDialog, null)
                 mGlobalDialog?.show(supportFragmentManager, tag)
             }
         }

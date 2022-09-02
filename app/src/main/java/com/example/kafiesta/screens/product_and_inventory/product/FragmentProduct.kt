@@ -27,7 +27,7 @@ import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.example.kafiesta.utilities.hideKeyboard
-import com.trackerteer.taskmanagement.utilities.extensions.showToast
+import com.example.kafiesta.utilities.extensions.showToast
 import timber.log.Timber
 import java.io.File
 
@@ -119,7 +119,7 @@ class FragmentProduct : Fragment() {
                                         getGlobalDialog(requireActivity(), tag)?.dismiss()
                                     },
                                 )
-                                GlobalDialog(configureDialog).show(requireActivity().supportFragmentManager,
+                                GlobalDialog(configureDialog, null).show(requireActivity().supportFragmentManager,
                                     tag)
                             }
                         }).show(requireActivity().supportFragmentManager,

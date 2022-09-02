@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.MyShopFragmentBinding
-import com.trackerteer.taskmanagement.utilities.extensions.showToast
 
 class MyShopFragment : Fragment() {
 

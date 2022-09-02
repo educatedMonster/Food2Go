@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".screens.profile.ProfileSettingActivity">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.example.kafiesta.domain.SpecificBaseOrderDomain" />
+
+        <variable
+            name="orderViewModel"
+            type="com.example.kafiesta.screens.main.fragment.order.OrderViewModel" />
+
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:elevation="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/color_white"
+        app:layout_constraintBottom_toTopOf="@+id/layout_button_update"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_button_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <FrameLayout
+            android:id="@+id/frame_button_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/line_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_reject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_big"
+                    android:layout_marginEnd="@dimen/padding_big"
+                    android:layout_weight="1"
+                    android:background="@drawable/layer_button_global_stroke"
+                    android:text="Reject"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorBlack" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_accept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_big"
+                    android:layout_marginEnd="@dimen/padding_big"
+                    android:layout_weight="1"
+                    android:background="@drawable/layer_button_global_fill"
+                    android:text="Accept"
+                    android:textAllCaps="false"
+                    android:textColor="@color/color_palette_black" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progress_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/transparent_white_percent_25"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

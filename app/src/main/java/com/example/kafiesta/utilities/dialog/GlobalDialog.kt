@@ -11,9 +11,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.DialogGlobalBinding
+import com.example.kafiesta.utilities.extensions.isNotEmpty
 import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
+import com.google.android.material.textfield.TextInputEditText
 
-class GlobalDialog(private val configureDialog: ConfigureDialog) : DialogFragment() {
+class GlobalDialog(
+    private val configureDialog: ConfigureDialog,
+    private val listener: Listener?,
+) : DialogFragment() {
+
+    interface Listener {
+        fun onRejectedListener(remark: String)
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = configureDialog.activity

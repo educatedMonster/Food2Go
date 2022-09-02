@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_rounded_box"
+        android:padding="@dimen/margin_aver_plus"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_avg"
+            android:layout_marginTop="@dimen/margin_avg"
+            android:layout_marginEnd="@dimen/margin_avg"
+            android:fontFamily="@font/aileron_bold"
+            android:text="Reject Order"
+            android:textSize="@dimen/text_size_normal_plus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_text_remarks"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_avg"
+            android:layout_marginTop="@dimen/margin_avg"
+            android:layout_marginEnd="@dimen/margin_avg"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_remarks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Provide a reason to reject this product."
+                android:inputType="textEmailAddress"
+                android:lines="1"
+                android:maxLines="1"
+                tools:text="Out of order" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/checkbox_verify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_avg"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_avg"
+            android:text="You must tick this box to verify this transaction"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_text_remarks" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_is_pending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_avg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkbox_verify">
+
+            <FrameLayout
+                android:id="@+id/frame_button_is_pending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/line_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_neutral"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/padding_big"
+                        android:layout_marginEnd="@dimen/padding_big"
+                        android:layout_weight="1"
+                        android:background="@drawable/layer_button_global_stroke"
+                        android:text="Cancel"
+                        android:textAllCaps="false"
+                        android:textColor="@color/color_palette_black" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_positive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/padding_big"
+                        android:layout_marginEnd="@dimen/padding_big"
+                        android:layout_weight="1"
+                        android:background="@drawable/layer_button_global_fill"
+                        android:backgroundTint="@color/red_icon"
+                        android:text="Reject"
+                        android:textAllCaps="false"
+                        android:textColor="@color/color_white" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

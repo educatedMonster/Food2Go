@@ -17,8 +17,6 @@ import android.view.LayoutInflater
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.RequestCodeTag
 import com.example.kafiesta.databinding.DialogLayoutAddProductBinding
@@ -27,7 +25,7 @@ import com.example.kafiesta.utilities.extensions.isNotEmpty
 import com.example.kafiesta.utilities.helpers.FileUtils
 import com.example.kafiesta.utilities.imageUrl
 import com.google.android.material.textfield.TextInputEditText
-import com.trackerteer.taskmanagement.utilities.extensions.showToast
+import com.example.kafiesta.utilities.extensions.showToast
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import java.io.File
 

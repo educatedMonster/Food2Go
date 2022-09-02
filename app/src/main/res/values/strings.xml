@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KaFiesta</string>
+    <string name="app_name">Food2Go</string>
     <string name="image_content_description">Image Content</string>
     <string name="check_internet_connection">Please check your internet connection</string>
 
