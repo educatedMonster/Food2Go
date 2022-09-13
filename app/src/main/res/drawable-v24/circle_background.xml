@@ -9,7 +9,7 @@
                 android:bottomRightRadius="50dp"
                 android:bottomLeftRadius="50dp"/>
 
-            <solid android:color="@color/color_white"/>
+            <solid android:color="@color/transparent_white_percent_0"/>
             <size
                 android:width="50dp"
                 android:height="50dp" />

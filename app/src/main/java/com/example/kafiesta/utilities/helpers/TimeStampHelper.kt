@@ -15,8 +15,6 @@ import java.util.concurrent.TimeUnit
 
 
 fun getTimeStampDifference(context: Context, doubleTimestamp: Long): String {
-//    val doubleTimestamp = formatDateString(createdAt)
-
     val cal = Calendar.getInstance()
     val currentTime = cal.time
     val timeBefore = getDateFromTimestamp(doubleTimestamp)
@@ -26,7 +24,7 @@ fun getTimeStampDifference(context: Context, doubleTimestamp: Long): String {
     val min =
         (difference - 1000 * 60 * 60 * 24 * days - 1000 * 60 * 60 * hours).toInt() / (1000 * 60)
     val sec = TimeUnit.MILLISECONDS.toSeconds(difference).toInt()
-    val df: DateFormat = SimpleDateFormat("MMM. dd, yyyy")
+    val df: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     val timeDisplay: String = when {
         days > 28 -> {
             Log.d("TIMESTAMP", timeBefore.toString())
@@ -67,13 +65,13 @@ fun getDateFromTimestamp(doubleTimestamp: Long): Date {
     return cal.time
 }
 
-fun formatDateString(createdAt: String) : String {
-    return createdAt.toDate().formatTo("EEE MMM dd HH:mm:ss z yyyy") //2022-09-01 11:09:26
+fun formatDateString(createdAt: String) : String { //2022-09-07T06:59:46.000000Z -> Thu Jan 1 1970 07:30:00 GMT+0730
+    return createdAt.toDate().formatTo("EEE MMM dd HH:mm:ss z yyyy")
 }
 
 fun String.toDate(
     dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
-    timeZone: TimeZone = TimeZone.getTimeZone("UTC"),
+    timeZone: TimeZone = TimeZone.getTimeZone("Asia/Manila"),
 ): Date {
     val parser = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         SimpleDateFormat(dateFormat, Locale.getDefault())
@@ -86,7 +84,7 @@ fun String.toDate(
 
 fun Date.formatTo(
     dateFormat: String,
-    timeZone: TimeZone = TimeZone.getDefault(),
+    timeZone: TimeZone = TimeZone.getTimeZone("Asia/Manila"),
 ): String {
     val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
     formatter.timeZone = timeZone

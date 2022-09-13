@@ -71,9 +71,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+<!--                        Testing Purpose-->
                         <com.example.kafiesta.autocomplete.InstantAutoComplete
                             android:id="@+id/auto_complete_sample"
                             style="@style/EditProfileSelectInput"
+                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/include" />

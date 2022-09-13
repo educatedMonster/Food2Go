@@ -107,6 +107,11 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    // Room for database
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt "androidx.room:room-compiler:$room_version"
+
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
 

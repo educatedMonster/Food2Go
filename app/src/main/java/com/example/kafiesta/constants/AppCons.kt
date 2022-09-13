@@ -3,10 +3,7 @@ package com.example.kafiesta.constants
 import com.example.kafiesta.R
 
 object ServerConst {
-
-    //https://kafiesta-api.osc-fr1.scalingo.io/v1/login
-
-    private const val SERVER_URL = "https://kafiesta-api.osc-fr1.scalingo.io/"
+    private const val SERVER_URL = "https://food2go.osc-fr1.scalingo.io/"
     const val API_SERVER_URL = "${SERVER_URL}v1/"
     const val IMAGE_PLACE_HOLDER =
         "https://pbs.twimg.com/profile_images/1048086829143011329/W8R1grIh_400x400.jpg"
@@ -80,7 +77,8 @@ object DialogTag {
     const val DIALOG_ORDER_DETAILS = "DIALOG_ORDER_DETAILS"
     const val DIALOG_WEB_VIEW_TAG = "DIALOG_WEB_VIEW_TAG"
     const val DIALOG_IMAGE_SLIDER = "DIALOG_IMAGE_SLIDER"
-    const val DIALOG_REMARK = "DIALOG_REMARK"
+    const val DIALOG_REJECT_REMARK = "DIALOG_REJECT_REMARK"
+    const val DIALOG_WEEKLY_PAYMENT = "DIALOG_WEEKLY_PAYMENT"
 }
 
 object RequestCodeTag {
@@ -95,6 +93,7 @@ object ProductConst {
 }
 
 object OrderConst {
+    const val ORDER_ALL = "all"
     const val ORDER_PENDING = "pending"
     const val ORDER_PREPARING = "preparing"
     const val ORDER_DELIVERY = "outfordelivery"

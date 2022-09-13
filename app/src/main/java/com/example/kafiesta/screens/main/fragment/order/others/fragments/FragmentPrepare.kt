@@ -14,7 +14,7 @@ import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
 import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.databinding.FragmentPrepareBinding
-import com.example.kafiesta.domain.OrderListBaseDomain
+import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
 import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderAdapter
@@ -24,6 +24,7 @@ import com.example.kafiesta.utilities.getDialog
 import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.extensions.showToast
+import com.trackerteer.taskmanagement.utilities.extensions.gone
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_pending.view.*
 import java.time.LocalDateTime
@@ -83,13 +84,14 @@ class FragmentPrepare : Fragment() {
             context = requireContext(),
             onClickCallBack = RecyclerClick(
                 click = {
-                    val a = it as OrderListBaseDomain
+                    val a = it as OrderBaseDomain
                     val dialog = DialogOrderDetails(
                         status = a.order.status,
                         model = a,
                         onClickCallBack = OrderRecyclerClick(
-                            proceed = { model ->
-                                val order = model as OrderListBaseDomain
+                            accept = {},
+                            move_delivery = { model ->
+                                val order = model as OrderBaseDomain
                                 orderViewModel.orderMoveStatus(
                                     order.order.id,
                                     OrderConst.ORDER_DELIVERY,
@@ -97,6 +99,7 @@ class FragmentPrepare : Fragment() {
                                 )
                                 showToast(getString(R.string.dialog_message_order_delivery, order.order.orderId))
                             },
+                            move_completed = {},
                             reject = {},
                             proofURL = {}
                         ),
@@ -127,19 +130,28 @@ class FragmentPrepare : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
             }
         })
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            initRequest()
+        }
     }
 
     private fun initLiveData() {
         orderViewModel.apply {
-            orderPreparingList.observe(viewLifecycleOwner) { model ->
-//            mCurrentPage = it.currentPage
-//            mLastPage = it.lastPage
-                if (model.isNotEmpty()) {
-                    for (data in model) {
-                        mAdapter.addData(data)
+            orderPreparingList.observe(viewLifecycleOwner) {
+                when {
+                    it.isNotEmpty() -> {
+                        binding.layoutEmptyTask.root.gone()
+                        it.forEach { model ->
+                            mAdapter.addData(model)
+                        }
                     }
-                } else {
-                    binding.layoutEmptyTask.root.visible()
+                    mAdapter.itemCount == 0 -> {
+                        binding.layoutEmptyTask.root.visible()
+                    }
+                    else -> {
+                        binding.layoutEmptyTask.root.gone()
+                    }
                 }
             }
 

@@ -12,18 +12,13 @@ import com.example.kafiesta.constants.IntentConst
 import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityImageViewerBinding
-import com.example.kafiesta.domain.SpecificBaseOrderDomain
+import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.image_viewer.adapter.Pager2RecyclerAdapter
 import com.example.kafiesta.screens.image_viewer.dialog.RejectOrderDialog
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
-import com.example.kafiesta.screens.main.fragment.order.others.dialogs.DialogWebView
-import com.example.kafiesta.utilities.dialog.ConfigureDialog
-import com.example.kafiesta.utilities.dialog.GlobalDialog
 import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.getDialog
-import com.example.kafiesta.utilities.getGlobalDialog
-import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import kotlin.math.abs
@@ -42,7 +37,7 @@ class ImageViewerActivity : BaseActivity() {
     }
 
     private lateinit var pagerAdapter: Pager2RecyclerAdapter
-    private var model: SpecificBaseOrderDomain? = null
+    private var model: OrderBaseDomain? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,14 +139,14 @@ class ImageViewerActivity : BaseActivity() {
     private fun initLiveData() {
         orderViewModel.apply {
             specificOrder.observe(this@ImageViewerActivity) {
-                model = it as SpecificBaseOrderDomain
+                model = it as OrderBaseDomain
                 if (model!!.order.proofURL != null) {
                     pagerAdapter.addData(model!!.order.proofURL!!)
                 }
             }
 
             orderStatus.observe(this@ImageViewerActivity) {
-                (getDialog(this@ImageViewerActivity, DialogTag.DIALOG_REMARK) as RejectOrderDialog?)?.dismiss()
+                (getDialog(this@ImageViewerActivity, DialogTag.DIALOG_REJECT_REMARK) as RejectOrderDialog?)?.dismiss()
                 onBackPressed()
                 showToast(it)
             }
@@ -171,11 +166,11 @@ class ImageViewerActivity : BaseActivity() {
                 override fun onRejectOrder(remark: String) {
                     orderViewModel.orderMoveStatus(
                         orderId,
-                        OrderConst.ORDER_PREPARING,
+                        OrderConst.ORDER_REJECTED,
                         remark
                     )
                 }
             }
-        ).show(supportFragmentManager, DialogTag.DIALOG_REMARK)
+        ).show(supportFragmentManager, DialogTag.DIALOG_REJECT_REMARK)
     }
 }

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.databinding.DialogLayoutOrderDetailsBinding
-import com.example.kafiesta.domain.OrderListBaseDomain
+import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
 import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderDetailsAdapter
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
@@ -23,7 +23,7 @@ import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 
 class DialogOrderDetails(
     private val status: String,
-    private val model: OrderListBaseDomain?,
+    private val model: OrderBaseDomain?,
     private val onClickCallBack: OrderRecyclerClick,
     private val activity: Activity
 ) : DialogFragment() {

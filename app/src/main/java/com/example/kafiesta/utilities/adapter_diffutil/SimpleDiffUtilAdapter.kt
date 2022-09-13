@@ -15,7 +15,7 @@ import com.example.kafiesta.domain.ProductInventoryDomain
 import com.example.kafiesta.utilities.helpers.AddInventoryRecyclerClick
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 
-class SimpleDiffUtilAdapter(
+open class SimpleDiffUtilAdapter(
     private val layoutRes: Int,
     private val onClickCallBack: Any? = null,
     private val context: Context? = null,

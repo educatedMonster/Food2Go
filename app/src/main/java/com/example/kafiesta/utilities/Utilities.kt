@@ -8,6 +8,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.os.Parcelable
 import android.provider.MediaStore
@@ -37,6 +38,8 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import timber.log.Timber
 import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 fun setFullscreen(activity: Activity) {
@@ -201,4 +204,22 @@ fun getDialog(fragment: FragmentActivity?, dialogTag: String): Any? {
 
 fun getGlobalDialog(fragment: FragmentActivity, dialogTag: String): GlobalDialog? {
     return fragment.supportFragmentManager.findFragmentByTag(dialogTag) as GlobalDialog?
+}
+
+fun getDateNow(): String {
+    val current = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        LocalDateTime.now()
+    } else {
+        TODO("VERSION.SDK_INT < O")
+    }
+
+    val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    } else {
+        TODO("VERSION.SDK_INT < O")
+    }
+
+    val formatted = current.format(formatter)
+    println("Current Date and Time is: $formatted")
+    return formatted
 }

@@ -25,10 +25,11 @@
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_normal_small_light"
+            android:fontFamily="@font/aileron_regular"
             app:layout_constraintEnd_toEndOf="@+id/text_view_tab_item_img"
             app:layout_constraintStart_toStartOf="@+id/text_view_tab_item_img"
             app:layout_constraintTop_toBottomOf="@+id/text_view_tab_item_img"
-            app:textAllCaps="true"
+            app:textAllCaps="false"
             tools:text="@tools:sample/lorem" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -182,7 +182,7 @@ class ProductEditDialog(
 
 
     private fun startGettingImage() {
-        val fileName = "kafiesta-${System.currentTimeMillis()}"
+        val fileName = "food2Go-${System.currentTimeMillis()}"
         @Suppress("DEPRECATION") val rootDirectory =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val imageFile = File.createTempFile(fileName, ".jpg", rootDirectory)

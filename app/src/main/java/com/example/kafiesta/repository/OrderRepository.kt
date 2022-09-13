@@ -2,17 +2,18 @@ package com.example.kafiesta.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.kafiesta.constants.OrderConst.ORDER_ALL
 import com.example.kafiesta.constants.OrderConst.ORDER_COMPLETED
 import com.example.kafiesta.constants.OrderConst.ORDER_DELIVERY
 import com.example.kafiesta.constants.OrderConst.ORDER_PENDING
 import com.example.kafiesta.constants.OrderConst.ORDER_PREPARING
 import com.example.kafiesta.constants.UserConst
-import com.example.kafiesta.domain.OrderListBaseDomain
-import com.example.kafiesta.domain.SpecificBaseOrderDomain
+import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.network.AppNetwork
 import com.example.kafiesta.network.asDomainModel
 import com.example.kafiesta.network.paramsToRequestBody
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
+import com.example.kafiesta.screens.test.test_order.OrderFormState
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.setBearer
 import kotlinx.coroutines.Dispatchers
@@ -26,20 +27,26 @@ class OrderRepository(
     private val token = sharedPrefs.getString(UserConst.TOKEN)!!
     private val userid = sharedPrefs.getString(UserConst.USER_ID)!!
 
-    private val _orderPendingList = MutableLiveData<List<OrderListBaseDomain>>()
-    val orderListPendingList: LiveData<List<OrderListBaseDomain>> get() = _orderPendingList
+    private val _certainOrderFormState = MutableLiveData<OrderFormState>()
+    val certainOrderFormState: LiveData<OrderFormState> get() = _certainOrderFormState
 
-    private val _orderPreparingList = MutableLiveData<List<OrderListBaseDomain>>()
-    val orderListPreparingList: LiveData<List<OrderListBaseDomain>> get() = _orderPreparingList
+    private val _orderList = MutableLiveData<List<OrderBaseDomain>>()
+    val orderList: LiveData<List<OrderBaseDomain>> get() = _orderList
 
-    private val _orderDeliveryList = MutableLiveData<List<OrderListBaseDomain>>()
-    val orderListDeliveryList: LiveData<List<OrderListBaseDomain>> get() = _orderDeliveryList
+    private val _orderPendingList = MutableLiveData<List<OrderBaseDomain>>()
+    val orderListPending: LiveData<List<OrderBaseDomain>> get() = _orderPendingList
 
-    private val _orderCompletedList = MutableLiveData<List<OrderListBaseDomain>>()
-    val orderListCompletedList: LiveData<List<OrderListBaseDomain>> get() = _orderCompletedList
+    private val _orderPreparingList = MutableLiveData<List<OrderBaseDomain>>()
+    val orderListPreparing: LiveData<List<OrderBaseDomain>> get() = _orderPreparingList
 
-    private val _specificOrder = MutableLiveData<SpecificBaseOrderDomain>()
-    val specificOrder: LiveData<SpecificBaseOrderDomain> get() = _specificOrder
+    private val _orderDeliveryList = MutableLiveData<List<OrderBaseDomain>>()
+    val orderListDelivery: LiveData<List<OrderBaseDomain>> get() = _orderDeliveryList
+
+    private val _orderCompletedList = MutableLiveData<List<OrderBaseDomain>>()
+    val orderListCompleted: LiveData<List<OrderBaseDomain>> get() = _orderCompletedList
+
+    private val _specificOrder = MutableLiveData<OrderBaseDomain>()
+    val specificOrder: LiveData<OrderBaseDomain> get() = _specificOrder
 
     private val _orderStatus = MutableLiveData<String>()
     val orderStatus: LiveData<String> get() = _orderStatus
@@ -49,8 +56,6 @@ class OrderRepository(
 
     suspend fun getAllOrderList(
         orderStatusEnum: OrderStatusEnum,
-//        length: Long,
-//        start: Long,
         search: String,
         merchant_user_id: Long,
         date_from: String,
@@ -61,6 +66,7 @@ class OrderRepository(
                 _isLoading.postValue(true)
 
                 val status = when (orderStatusEnum) {
+                    OrderStatusEnum.ALL -> ORDER_ALL
                     OrderStatusEnum.PENDING -> ORDER_PENDING
                     OrderStatusEnum.PREPARING -> ORDER_PREPARING
                     OrderStatusEnum.DELIVERY -> ORDER_DELIVERY
@@ -68,8 +74,6 @@ class OrderRepository(
                 }
 
                 val params = HashMap<String, Any>()
-//                params["length"] = length
-//                params["start"] = start
                 params["search"] = search
                 params["status"] = status
                 params["merchant_user_id"] = merchant_user_id
@@ -82,17 +86,13 @@ class OrderRepository(
                     .await()
 
                 when (orderStatusEnum) {
-                    OrderStatusEnum.PENDING -> _orderPendingList.postValue(network.result?.map { it.asDomainModel() }
-                        ?: emptyList())
-                    OrderStatusEnum.PREPARING -> _orderPreparingList.postValue(network.result?.map { it.asDomainModel() }
-                        ?: emptyList())
-                    OrderStatusEnum.DELIVERY -> _orderDeliveryList.postValue(network.result?.map { it.asDomainModel() }
-                        ?: emptyList())
-                    OrderStatusEnum.COMPLETED -> _orderCompletedList.postValue(network.result?.map { it.asDomainModel() }
-                        ?: emptyList())
+                    OrderStatusEnum.ALL -> _orderList.postValue(network.result!!.map { it.asDomainModel() })
+                    OrderStatusEnum.PENDING -> _orderPendingList.postValue(network.result!!.map { it.asDomainModel() })
+                    OrderStatusEnum.PREPARING -> _orderPreparingList.postValue(network.result!!.map { it.asDomainModel() })
+                    OrderStatusEnum.DELIVERY -> _orderDeliveryList.postValue(network.result!!.map { it.asDomainModel() })
+                    OrderStatusEnum.COMPLETED -> _orderCompletedList.postValue(network.result!!.map { it.asDomainModel() })
                 }
                 _isLoading.postValue(false)
-
             } catch (e: HttpException) {
                 Timber.e(e.message())
                 _isLoading.postValue(false)
@@ -149,4 +149,72 @@ class OrderRepository(
             }
         }
     }
+
+    suspend fun getCertainOrderStatus(
+        orderPosition: Int,
+        orderTitle: String,
+        orderStatusEnum: OrderStatusEnum,
+        search: String,
+        merchant_user_id: Long,
+        date_from: String,
+        date_to: String,
+    ) {
+        withContext(Dispatchers.IO) {
+            _certainOrderFormState.postValue(
+                OrderFormState(
+                    orderPosition = orderPosition,
+                    orderTitle = orderTitle,
+                    isLoading = true,
+                    certainOrderStatus = orderTitle
+                )
+            )
+
+            try {
+                val status = when (orderStatusEnum) {
+                    OrderStatusEnum.ALL -> ORDER_ALL
+                    OrderStatusEnum.PENDING -> ORDER_PENDING
+                    OrderStatusEnum.PREPARING -> ORDER_PREPARING
+                    OrderStatusEnum.DELIVERY -> ORDER_DELIVERY
+                    OrderStatusEnum.COMPLETED -> ORDER_COMPLETED
+                }
+
+                val params = HashMap<String, Any>()
+                params["search"] = search
+                params["status"] = status
+                params["merchant_user_id"] = merchant_user_id
+                params["date_from"] = date_from
+                params["date_to"] = date_to
+
+                val network = AppNetwork.service.onGetAllOrdersAsync(
+                    bearer = setBearer(token),
+                    params = paramsToRequestBody(params))
+                    .await()
+
+                val list = when (orderStatusEnum) {
+                    OrderStatusEnum.ALL -> network.result!!.map { it.asDomainModel() } as ArrayList<OrderBaseDomain>
+                    OrderStatusEnum.PENDING -> network.result!!.map { it.asDomainModel() } as ArrayList<OrderBaseDomain>
+                    OrderStatusEnum.PREPARING -> network.result!!.map { it.asDomainModel() } as ArrayList<OrderBaseDomain>
+                    OrderStatusEnum.DELIVERY -> network.result!!.map { it.asDomainModel() } as ArrayList<OrderBaseDomain>
+                    OrderStatusEnum.COMPLETED -> network.result!!.map { it.asDomainModel() } as ArrayList<OrderBaseDomain>
+                }
+
+                _certainOrderFormState.postValue(
+                    OrderFormState(
+                        orderPosition = orderPosition,
+                        orderTitle = orderTitle,
+                        certainOrderStatus = status,
+                        isLoading = false,
+                        list = list
+                    )
+                )
+                _isLoading.postValue(false)
+            } catch (e: HttpException) {
+                Timber.e(e.message())
+                _isLoading.postValue(false)
+            } finally {
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
 }

@@ -18,18 +18,18 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
     private val repository = OrderRepository(SharedPrefs(getSecurePrefs(application)))
 
-    val orderPendingList = repository.orderListPendingList
-    val orderPreparingList = repository.orderListPreparingList
-    val orderDeliveryList = repository.orderListDeliveryList
-    val orderCompletedList = repository.orderListCompletedList
+    val certainOrderFormState = repository.certainOrderFormState
+    val orderList = repository.orderList
+    val orderPendingList = repository.orderListPending
+    val orderPreparingList = repository.orderListPreparing
+    val orderDeliveryList = repository.orderListDelivery
+    val orderCompletedList = repository.orderListCompleted
     val specificOrder = repository.specificOrder
     val orderStatus = repository.orderStatus
     val isLoading = repository.isLoading
 
     fun getAllOrderList(
         orderStatusEnum: OrderStatusEnum,
-//        length: Long,
-//        start: Long,
         search: String,
         merchant_user_id: Long,
         date_from: String,
@@ -39,8 +39,6 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 repository.getAllOrderList(
                     orderStatusEnum,
-//                    length,
-//                    start,
                     search,
                     merchant_user_id,
                     date_from,
@@ -77,5 +75,34 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
                 Timber.d(network)
             }
         }
+    }
+
+    fun fetchCertainOrderStatus(
+        orderPosition: Int,
+        orderTitle: String,
+        orderStatusEnum: OrderStatusEnum,
+        search: String,
+        merchant_user_id: Long,
+        date_from: String,
+        date_to: String){
+        viewModelScope.launch {
+            try {
+                repository.getCertainOrderStatus(
+                    orderPosition,
+                    orderTitle,
+                    orderStatusEnum,
+                    search,
+                    merchant_user_id,
+                    date_from,
+                    date_to)
+            }catch (network: IOException){
+                Timber.d(network)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }

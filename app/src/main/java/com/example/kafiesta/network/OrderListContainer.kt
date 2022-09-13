@@ -10,6 +10,11 @@ data class OrderListBaseNetwork (
     val result: List<OrderListBaseResponse>? = null
 )
 
+data class SpecificOrderBaseNetwork (
+    val status: String,
+    val message: String,
+    val result: OrderListBaseResponse
+)
 
 data class OrderListBaseResponse (
     val order: OrderResponse,
@@ -123,7 +128,16 @@ data class OrderUserInformationsResponse (
     val secondaryContact: String,
 
     @SerializedName("complete_address")
-    val completeAddress: String
+    val completeAddress: String,
+
+    @SerializedName("deleted_at")
+    val deletedAt: String? = null,
+
+    @SerializedName("created_at")
+    val createdAt: String,
+
+    @SerializedName("updated_at")
+    val updatedAt: String
 )
 
 
@@ -160,8 +174,16 @@ fun OrderListBaseNetwork.asDomainModel(): OrderListNetworkDomain {
     )
 }
 
-fun OrderListBaseResponse.asDomainModel(): OrderListBaseDomain {
-    return OrderListBaseDomain (
+fun SpecificOrderBaseNetwork.asDomainModel(): SpecificOrderNetworkDomain {
+    return  SpecificOrderNetworkDomain(
+        status = status,
+        message = message,
+        result = result.asDomainModel()
+    )
+}
+
+fun OrderListBaseResponse.asDomainModel(): OrderBaseDomain {
+    return OrderBaseDomain (
         order = order.asDomainModel(),
         orderList = orderList.map { it.asDomainModel() }
     )

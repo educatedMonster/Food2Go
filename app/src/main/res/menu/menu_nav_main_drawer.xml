@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_dashboard"
-        android:icon="@drawable/ic_dashboard_24"
-        android:title="@string/title_nav_drawer_dashboard" />
+        android:id="@+id/nav_weekly_payment"
+        android:icon="@drawable/ic_weekly_payment_24"
+        android:title="@string/title_nav_drawer_weekly_payment" />
 
     <item
         android:id="@+id/nav_my_shop"

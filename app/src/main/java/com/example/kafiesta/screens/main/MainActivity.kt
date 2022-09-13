@@ -3,7 +3,6 @@ package com.example.kafiesta.screens.main
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
@@ -21,16 +20,15 @@ import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityMainBinding
 import com.example.kafiesta.databinding.LayoutCustomNavHeaderBinding
 import com.example.kafiesta.databinding.LayoutCustomToolbarDashboardBinding
-import com.example.kafiesta.screens.product_and_inventory.ProductAndInventoryActivity
 import com.example.kafiesta.screens.BaseActivity
-import com.example.kafiesta.screens.main.fragment.home.HomeFragment
 import com.example.kafiesta.screens.main.fragment.myshop.MyShopFragment
 import com.example.kafiesta.screens.main.fragment.order.OrderFragment
-import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentPending
+import com.example.kafiesta.screens.product_and_inventory.ProductAndInventoryActivity
 import com.example.kafiesta.screens.profile.ProfileSettingActivity
+import com.example.kafiesta.screens.test.test_order.TestOrderFragment
+import com.example.kafiesta.screens.weekly_payment.WeeklyPaymentActivity
 import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
-import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
 import com.example.kafiesta.utilities.helpers.NotificationHelper
 import com.example.kafiesta.utilities.helpers.SharedPrefs
@@ -47,7 +45,6 @@ import com.trackerteer.taskmanagement.utilities.extensions.visible
 import org.json.JSONObject
 import timber.log.Timber
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : BaseActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener,
@@ -61,11 +58,10 @@ class MainActivity : BaseActivity(),
     private var shopId = 0L
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
-
     private val mFragmentList: ArrayList<Fragment> = arrayListOf(
         MyShopFragment(),
         OrderFragment(),
-        HomeFragment()
+        TestOrderFragment()
     )
     private val mFragmentManager: FragmentManager = this.supportFragmentManager
     private val mainContainer = R.id.nav_host_fragment
@@ -114,9 +110,12 @@ class MainActivity : BaseActivity(),
             val orderId = splitMessage[1]
             Timber.d(message)
 
-           runOnUiThread {
-               (mFragmentList[1] as OrderFragment).initRequest() // pass the new received order here from pusher
-           }
+            if (orderId.toLong() != 0L) {
+                runOnUiThread {
+//                    (mFragmentList[1] as OrderFragment).showNewOrderView()
+                    (mFragmentList[1] as OrderFragment).initAddItem(orderId.toLong()) // pass the new received order here from pusher
+                }
+            }
 
             // If order view is not open/focus show notification
             if (!KaFiestaApplication.taskActivityIsOpen) {
@@ -227,27 +226,28 @@ class MainActivity : BaseActivity(),
     }
 
     private fun initLiveData() {
-        mainViewModel.mainFormState.observe(this) {
-            val tag = DialogTag.DIALOG_MAIN_LOGOUT_FORM_STATE
-            if ((it.onLogoutRequest) && (it.isLoggingOut)) {
-                val configureDialog = ConfigureDialog(
-                    activity = this,
-                    title = getString(R.string.main_activity_preparing_logout)
-                )
-                mGlobalDialog = GlobalDialog(configureDialog, null)
-                mGlobalDialog?.show(supportFragmentManager, tag)
-            } else if ((it.onLogoutRequest) && (!it.isLoggingOut)) {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    mGlobalDialog?.dismiss()
-                    proceedToLogout()
-                }, 1000)
+        mainViewModel.apply {
+            mainFormState.observe(this@MainActivity) {
+                val tag = DialogTag.DIALOG_MAIN_LOGOUT_FORM_STATE
+                if ((it.onLogoutRequest) && (it.isLoggingOut)) {
+                    val configureDialog = ConfigureDialog(
+                        activity = this@MainActivity,
+                        title = getString(R.string.main_activity_preparing_logout)
+                    )
+                    mGlobalDialog = GlobalDialog(configureDialog, null)
+                    mGlobalDialog?.show(supportFragmentManager, tag)
+                } else if ((it.onLogoutRequest) && (!it.isLoggingOut)) {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        mGlobalDialog?.dismiss()
+                        proceedToLogout()
+                    }, 1000)
+                }
+            }
+
+            profile.observe(this@MainActivity) {
+
             }
         }
-
-        mainViewModel.profile.observe(this) {
-
-        }
-
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -286,7 +286,8 @@ class MainActivity : BaseActivity(),
                     .commit()
 
                 if (mCurrentInView != mFragmentList[2]) {
-                    (mFragmentList[2] as HomeFragment)
+//                    (mFragmentList[2] as HomeFragment).initRequest()
+                    (mFragmentList[2] as TestOrderFragment).initConfig()
                 }
 
                 setFragmentView(mFragmentList[2])
@@ -296,8 +297,8 @@ class MainActivity : BaseActivity(),
             /**
              * Drawer Navigation View
              */
-            R.id.nav_dashboard -> {
-                showToast("Dashboard is under development")
+            R.id.nav_weekly_payment -> {
+                proceedToActivity(WeeklyPaymentActivity::class.java)
                 setFocus(false)
             }
             R.id.nav_my_shop -> {
@@ -341,7 +342,7 @@ class MainActivity : BaseActivity(),
             is OrderFragment -> {
                 getString(R.string.navigation_title_order)
             }
-            is HomeFragment -> {
+            is TestOrderFragment -> {
                 getString(R.string.navigation_title_home)
             }
             else -> {

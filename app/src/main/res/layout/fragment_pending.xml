@@ -46,10 +46,28 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+        <TextView
+            android:id="@+id/tv_new_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layer_button_global_fill"
+            android:fontFamily="@font/aileron_bold"
+            android:gravity="center_horizontal"
+            android:layout_margin="@dimen/padding_min"
+            android:paddingStart="@dimen/padding_avg"
+            android:paddingTop="@dimen/padding_semi_small"
+            android:paddingEnd="@dimen/padding_avg"
+            android:paddingBottom="@dimen/padding_semi_small"
+            android:text="New order received"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <include
             android:id="@+id/layout_empty_task"
-            layout="@layout/layout_empty_archive"
+            layout="@layout/layout_empty_order"
             android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

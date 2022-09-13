@@ -73,15 +73,15 @@ class ProfileSettingActivity : BaseActivity() {
     private var mOutputFileUri: Uri? = null
     private var mFile: File? = null
     private var isGetImage = false
-    val style = androidx.navigation.ui.ktx.R.style.Base_Theme_MaterialComponents_Light_Dialog
+    private val style = androidx.navigation.ui.ktx.R.style.Base_Theme_MaterialComponents_Light_Dialog
     private val mainViewModel: MainViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(application)
             .create(MainViewModel::class.java)
     }
 
     // Todo - Test dropdown
-    private lateinit var mIAutoCompleteAdapter: ArrayAdapterInstantAuto
-    private var mAutoItems = ArrayList<InstantAutoItem>()
+//    private var mIAutoCompleteAdapter: ArrayAdapterInstantAuto? = null
+//    private var mAutoItems = ArrayList<InstantAutoItem>()
 
     // Todo - Get the selected image path here
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -145,7 +145,7 @@ class ProfileSettingActivity : BaseActivity() {
         initActionBar()
         initLiveData()
         initEventListener()
-        initAutoCompleteAdapter()
+//        initAutoCompleteAdapter()
     }
 
     private fun initRequest() {
@@ -246,17 +246,16 @@ class ProfileSettingActivity : BaseActivity() {
                 val deliveryCharge = binding.textInputDeliveryCharge.text.toString()
 
                 //Todo - Test dropdown
-                if (hasSelected(
-//                        autoCompleteSample,
-                        binding.autoCompleteSample,
-                        mIAutoCompleteAdapter,
-                        true,
-                        R.string.invalid_auto_complete)
-                ) {
-                    return@setSafeOnClickListener
-                }
-
-                val selected: String = mIAutoCompleteAdapter.getSelected()!!.id
+//                if (hasSelected(
+//                        binding.autoCompleteSample,
+//                        mIAutoCompleteAdapter!!,
+//                        true,
+//                        R.string.invalid_auto_complete)
+//                ) {
+//                    return@setSafeOnClickListener
+//                }
+//
+//                val selected: String = mIAutoCompleteAdapter?.getSelected()!!.id
 
                 val userInfo = UserInformationDomain(
                     id = infoId,
@@ -458,7 +457,7 @@ class ProfileSettingActivity : BaseActivity() {
     }
 
     private fun startGettingImage() {
-        val fileName = "kafiesta-${System.currentTimeMillis()}"
+        val fileName = "food2Go-${System.currentTimeMillis()}"
         @Suppress("DEPRECATION") val rootDirectory =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val imageFile = File.createTempFile(fileName, ".jpg", rootDirectory)
@@ -492,17 +491,17 @@ class ProfileSettingActivity : BaseActivity() {
         startActivityForResult(intentChooser, RequestCodeTag.REQUEST_CODE_CAMERA)
     }
 
-    private fun initAutoCompleteAdapter() {
-        getListFromArrayResource(mAutoItems,
-            R.array.status_values,
-            R.array.status_texts)
-        mIAutoCompleteAdapter = ArrayAdapterInstantAuto(this,
-            R.layout.instant_auto_complete_item_simple_text,
-            mAutoItems)
-        initializeAutoComplete(
-            binding.autoCompleteSample,
-            mIAutoCompleteAdapter)
-    }
+//    private fun initAutoCompleteAdapter() {
+//        getListFromArrayResource(mAutoItems,
+//            R.array.status_values,
+//            R.array.status_texts)
+//        mIAutoCompleteAdapter = ArrayAdapterInstantAuto(this,
+//            R.layout.instant_auto_complete_item_simple_text,
+//            mAutoItems)
+//        initializeAutoComplete(
+//            binding.autoCompleteSample,
+//            mIAutoCompleteAdapter!!)
+//    }
 
     private fun getListFromArrayResource(
         list: ArrayList<InstantAutoItem>,

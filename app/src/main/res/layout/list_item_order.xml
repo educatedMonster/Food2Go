@@ -8,7 +8,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.OrderListBaseDomain" />
+            type="com.example.kafiesta.domain.OrderBaseDomain" />
 
         <variable
             name="onClickCallBack"
@@ -18,7 +18,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_small"
         android:onClick="@{() -> onClickCallBack.onClick(model)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,16 +63,13 @@
             android:id="@+id/layout_order_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/padding_avg"
-            android:paddingEnd="@dimen/padding_avg"
-            android:paddingTop="@dimen/padding_avg"
-            android:paddingBottom="@dimen/padding_small"
+            android:padding="@dimen/padding_avg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_order">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_customer_number"
+                android:id="@+id/tv_merchant_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/aileron_regular"
@@ -95,7 +91,7 @@
                 android:textColor="@color/light_gray"
                 android:textSize="@dimen/text_size_small"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_customer_number"
+                app:layout_constraintTop_toTopOf="@+id/tv_merchant_name"
                 tools:text="@tools:sample/date/hhmm" />
 
 
@@ -110,7 +106,7 @@
                 android:textSize="@dimen/text_size_normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_customer_number"
+                app:layout_constraintTop_toBottomOf="@+id/tv_merchant_name"
                 tools:text="@tools:sample/lorem/random" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -120,6 +116,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/aileron_light"
                 android:maxLines="2"
+                android:layout_marginTop="@dimen/margin_min"
                 android:text="@{model.order.users.userInformations.completeAddress}"
                 android:textSize="@dimen/text_size_normal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -144,5 +141,15 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <View
+            android:id="@+id/line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/shimmer_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

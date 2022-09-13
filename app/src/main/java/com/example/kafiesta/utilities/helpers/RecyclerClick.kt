@@ -29,11 +29,15 @@ class AddInventoryRecyclerClick(
 }
 
 class OrderRecyclerClick(
-    val proceed: (Any) -> Unit,
+    val accept: (Any) -> Unit,
+    val move_delivery: (Any) -> Unit,
+    val move_completed: (Any) -> Unit,
     val reject: (Any) -> Unit,
     val proofURL: (Any) -> Unit
 ) {
-    fun onProceedClick(model: Any) = proceed(model)
+    fun onProceedClick(model: Any) = accept(model)
+    fun onMoveDeliveryClick(model: Any) = move_delivery(model)
+    fun onCompletedClick(model: Any) = move_completed(model)
     fun onRejectClick(model: Any) = reject(model)
     fun onProofURLClick(model: Any) = proofURL(model)
 }

@@ -9,18 +9,16 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
-import com.example.kafiesta.constants.OrderConst.ORDER_COMPLETED
+import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.databinding.ListItemOrderBinding
-import com.example.kafiesta.domain.OrderListBaseDomain
+import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.formatDateString
 import com.example.kafiesta.utilities.helpers.getTimeStampDifference
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 class OrderAdapter(
     val context: Context,
@@ -28,9 +26,9 @@ class OrderAdapter(
 ) :
     RecyclerView.Adapter<OrderViewHolder>() {
 
-    private var list: ArrayList<OrderListBaseDomain> = arrayListOf()
+    private var list: ArrayList<OrderBaseDomain> = arrayListOf()
 
-    fun addData(model: OrderListBaseDomain) {
+    fun addData(model: OrderBaseDomain) {
         //to avoid duplication
         if (model !in list) {
             list.add(model)
@@ -38,9 +36,14 @@ class OrderAdapter(
         notifyDataSetChanged()
     }
 
-    fun addItem(item: OrderListBaseDomain) {
+    fun addLastItem(item: OrderBaseDomain) {
         list.add(0, item)
-        notifyDataSetChanged()
+        notifyItemInserted(itemCount - 1)
+    }
+
+    fun addFirstItem(item: OrderBaseDomain) {
+        list.add(0, item)
+        notifyItemInserted(0)
     }
 
     fun clearAdapter() {
@@ -66,7 +69,7 @@ class OrderAdapter(
             it.onClickCallBack = onClickCallBack
 
             val color: Int = when (model.order.status) {
-                ORDER_COMPLETED -> {
+                OrderConst.ORDER_COMPLETED -> {
                     R.color.colorSecondary
                 }
                 else -> {
@@ -76,17 +79,45 @@ class OrderAdapter(
             it.layoutOrder.setBackgroundResource(color)
             //timestamp
 
-            val time = formatDateString(model.order.createdAt!!)
-            val formatter: DateTimeFormatter =
-                DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
-            val localDate: LocalDateTime = LocalDateTime.parse(time, formatter)
-            val timeInMilliseconds: Long = localDate.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli()
+            val createdAt = model.order.createdAt
+            val changedAtPreparing = model.order.changedAtPreparing
+            val changedAtDelivered = model.order.changedAtDelivered
+            val changedAtCompleted = model.order.changedAtCompleted
 
+            var time: String? = null
+            when {
+                model.order.status.matches(OrderConst.ORDER_PENDING.toRegex()) -> {
+                    time = formatDateString(createdAt!!)
+                }
+                model.order.status.matches(OrderConst.ORDER_PREPARING.toRegex()) -> {
+                    val a = changedAtPreparing!!.split(" ")
+                    time = formatDateString(a[0] +"T" +a[1] +".000000Z")
+                }
+                model.order.status.matches(OrderConst.ORDER_DELIVERY.toRegex()) -> {
+                    val a = changedAtDelivered!!.split(" ")
+                    time = formatDateString(a[0] +"T" +a[1] +".000000Z")
+                }
+                model.order.status.matches(OrderConst.ORDER_COMPLETED.toRegex()) -> {
+                    val a = changedAtCompleted!!.split(" ")
+                    time = formatDateString(a[0]+"T"+a[1]+".000000Z")
+                }
+            }
 
+            if (model.order.status.matches(OrderConst.ORDER_COMPLETED.toRegex())) {
+                it.tvTimestamp.text = time
+            } else {
+                val formatter: DateTimeFormatter =
+                    DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+                val localDate: LocalDateTime = LocalDateTime.parse(time, formatter)
 
-//            val a = getTimeStampDifference(context, timeInMilliseconds)
+                val timeInMilliseconds: Long = if(model.order.status.matches(OrderConst.ORDER_PENDING.toRegex())){
+                    localDate.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli()
+                } else {
+                    localDate.atZone(ZoneId.of("Asia/Manila")).toInstant().toEpochMilli()
+                }
 
-            it.tvTimestamp.text = getTimeStampDifference(context, timeInMilliseconds)
+                it.tvTimestamp.text = getTimeStampDifference(context, timeInMilliseconds)
+            }
         }
     }
 

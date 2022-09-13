@@ -31,9 +31,10 @@
     <string name="title_activity_contact_info">Contact Information</string>
     <string name="title_activity_shop_info">Shop Information</string>
     <string name="title_activity_shop">My Shop</string>
+    <string name="title_activity_weekly_payment">Weekly Payment</string>
 
     <!--    Drawer Activity Title-->
-    <string name="title_nav_drawer_dashboard">Dashboard</string>
+    <string name="title_nav_drawer_weekly_payment">Weekly Payment</string>
     <string name="title_nav_drawer_profile">Profile</string>
     <string name="title_nav_drawer_my_shop">My Shop</string>
     <string name="title_nav_drawer_products">Products</string>
@@ -110,8 +111,10 @@
     <string name="title_activity_dashboard">DashboardActivity</string>
 
     <!--    Test Dashboard Viewpager Layout -->
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Pending</string>
+    <string name="tab_text_2">Preparing</string>
+    <string name="tab_text_3">Delivery</string>
+    <string name="tab_text_4">Completed</string>
 
 
     <!--    Order Details -->
@@ -129,5 +132,8 @@
     <string name="minutes_ago">minutes ago</string>
     <string name="minute_ago">minute ago</string>
     <string name="few_seconds_ago">few seconds ago</string>
+
+
+    <string name="no_data_avail">No data Available</string>
 
 </resources>

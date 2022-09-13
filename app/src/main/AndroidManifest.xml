@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KaFiesta">
         <activity
+            android:name=".screens.weekly_payment.WeeklyPaymentActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.empty.EmptyActivity"
             android:exported="false" />
         <activity

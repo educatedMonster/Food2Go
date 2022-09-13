@@ -12,7 +12,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_big"
             android:layout_marginEnd="@dimen/margin_big"
             android:layout_marginTop="@dimen/margin_huge"
@@ -73,7 +73,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/text_layout_email"
                 app:layout_constraintStart_toStartOf="@+id/text_layout_email"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_email"
-                app:endIconMode="password_toggle"
                 app:startIconDrawable="@drawable/ic_password_24">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -86,22 +85,24 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <FrameLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_big"
                 android:layout_marginTop="@dimen/margin_huge"
-                android:layout_marginEnd="@dimen/margin_big"
+                android:layout_marginBottom="@dimen/margin_huge"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/text_layout_password"
+                app:layout_constraintStart_toStartOf="@+id/text_layout_password"
                 app:layout_constraintTop_toBottomOf="@+id/text_layout_password">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_login"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/layer_button_login_fill"
+                    android:background="@drawable/layer_button_global_fill"
                     android:fontFamily="@font/aileron_bold"
                     android:text="@string/login_button_login"
                     android:textAllCaps="false"
-                    android:textColor="@color/color_white"
+                    android:textColor="@color/color_palette_black"
                     android:textSize="@dimen/text_size_normal_plus" />
 
                 <ProgressBar

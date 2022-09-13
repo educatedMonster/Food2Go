@@ -10,7 +10,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.SpecificBaseOrderDomain" />
+            type="com.example.kafiesta.domain.OrderBaseDomain" />
 
         <variable
             name="orderViewModel"

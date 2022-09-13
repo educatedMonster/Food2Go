@@ -41,7 +41,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="1"
-                    tools:src="@drawable/ic_product_24" />
+                    android:src="@drawable/ic_product_24" />
 
             </androidx.cardview.widget.CardView>
 

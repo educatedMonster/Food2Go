@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.example.kafiesta.domain.WeeklyPaymentDomain" />
+
+        <variable
+            name="onClickCallBack"
+            type="com.example.kafiesta.utilities.helpers.RecyclerClick" />
+
+        <variable
+            name="viewModel"
+            type="com.example.kafiesta.screens.weekly_payment.WeeklyPaymentViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_order_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_white"
+            android:padding="@dimen/padding_avg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/text_view_payment_id"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:fontFamily="@font/aileron_bold"
+                android:maxLines="1"
+                android:text="@{model.paymentId}"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:textSize="@dimen/text_size_semi_normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_merchant_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_small"
+                android:fontFamily="@font/aileron_bold"
+                android:singleLine="true"
+                android:text="@{model.merchantName}"
+                android:textSize="@dimen/text_size_semi_normal"
+                app:layout_constraintEnd_toStartOf="@+id/layout_is_delivery"
+                app:layout_constraintStart_toEndOf="@+id/text_view_payment_id"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@tools:sample/full_names" />
+
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_avg"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/layout_is_delivery"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_merchant_name">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_weight="5"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/aileron_regular"
+                        android:maxLines="1"
+                        android:text="@{model.weekBalance}"
+                        android:textSize="@dimen/text_size_normal"
+                        tools:text="Week 1 - Week 2" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_extra_min"
+                    android:layout_marginEnd="@dimen/margin_extra_min"
+                    android:layout_weight="3"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aileron_light"
+                        android:textSize="@dimen/text_size_normal"
+                        android:text="Amount: "/>
+
+                    <TextView
+                        android:id="@+id/text_view_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aileron_regular"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:gravity="start"
+                        android:text="@{model.amount}"
+                        android:textSize="@dimen/text_size_normal"
+                        tools:text="@tools:sample/us_zipcodes" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_extra_min"
+                    android:layout_marginEnd="@dimen/margin_extra_min"
+                    android:layout_weight="2"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="@{model.isPending ? View.GONE: View.VISIBLE}">
+
+                    <TextView
+                        android:id="@+id/text_view2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aileron_light"
+                        android:textSize="@dimen/text_size_normal"
+                        android:text="Status: "/>
+
+                    <TextView
+                        android:id="@+id/text_view_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aileron_light"
+                        android:gravity="end"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:text="@{model.paymentStatus}"
+                        android:textSize="@dimen/text_size_normal"
+                        tools:text="Settled" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_extra_min"
+                    android:layout_marginEnd="@dimen/margin_extra_min"
+                    android:layout_weight="2"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="@{model.isNotPending ? View.VISIBLE: View.GONE}">
+
+                    <TextView
+                        android:id="@+id/text_view3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aileron_light"
+                        android:textSize="@dimen/text_size_normal"
+                        android:text="Proof Image: "/>
+
+                    <TextView
+                        android:id="@+id/text_view_proof_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/aileron_light"
+                        android:gravity="end"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/colorSecondaryVariant"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:text="@{model.proofURL}"
+                        android:textSize="@dimen/text_size_normal"
+                        tools:text="www.google.com/sample/image/link/url" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/mode_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_avg"
+                android:ellipsize="end"
+                android:fontFamily="@font/aileron_bold"
+                android:maxLines="1"
+                android:text="@{model.proofURL}"
+                android:textAllCaps="false"
+                android:textColor="@color/colorSecondaryVariant"
+                android:textSize="@dimen/text_size_normal"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout"
+                tools:text="Click to view payment" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_is_delivery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <FrameLayout
+                    android:id="@+id/frame_button_delivery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_settle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/layer_button_global_fill"
+                        android:onClick="@{() -> onClickCallBack.onClick(model)}"
+                        android:text="Settle"
+                        android:textAllCaps="false"
+                        android:textColor="@color/color_palette_black"
+                        android:visibility="@{model.isPending ? View.VISIBLE : View.GONE}"/>
+
+                </FrameLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/shimmer_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

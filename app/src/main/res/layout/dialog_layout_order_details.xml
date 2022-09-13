@@ -9,7 +9,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.OrderListBaseDomain" />
+            type="com.example.kafiesta.domain.OrderBaseDomain" />
 
         <variable
             name="orderViewModel"
@@ -547,7 +547,7 @@
                                 android:layout_marginEnd="@dimen/padding_big"
                                 android:layout_weight="1"
                                 android:background="@drawable/layer_button_global_fill"
-                                android:onClick="@{() -> onClickCallBack.onProceedClick(model)}"
+                                android:onClick="@{() -> onClickCallBack.onMoveDeliveryClick(model)}"
                                 android:text="Move to Delivery"
                                 android:textAllCaps="false"
                                 android:textColor="@color/color_palette_black"
@@ -597,7 +597,7 @@
                                 android:layout_marginEnd="@dimen/padding_big"
                                 android:layout_weight="1"
                                 android:background="@drawable/layer_button_global_fill"
-                                android:onClick="@{() -> onClickCallBack.onProceedClick(model)}"
+                                android:onClick="@{() -> onClickCallBack.onCompletedClick(model)}"
                                 android:text="Move to Completed"
                                 android:textAllCaps="false"
                                 android:textColor="@color/color_palette_black"

@@ -14,7 +14,7 @@ import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.FragmentCompletedBinding
-import com.example.kafiesta.domain.OrderListBaseDomain
+import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
 import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderAdapter
@@ -26,6 +26,7 @@ import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.example.kafiesta.utilities.extensions.showToast
+import com.trackerteer.taskmanagement.utilities.extensions.gone
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_pending.view.*
 import java.time.LocalDateTime
@@ -87,12 +88,14 @@ class FragmentCompleted : Fragment() {
             context = requireContext(),
             onClickCallBack = RecyclerClick(
                 click = {
-                    val model = it as OrderListBaseDomain
+                    val model = it as OrderBaseDomain
                     val dialog = DialogOrderDetails(
                         status = model.order.status,
                         model = model,
                         onClickCallBack = OrderRecyclerClick(
-                            proceed = {},
+                            accept = {},
+                            move_delivery = {},
+                            move_completed = {},
                             reject = {},
                             proofURL = {}
                         ),
@@ -124,19 +127,28 @@ class FragmentCompleted : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
             }
         })
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            initRequest()
+        }
     }
 
     private fun initLiveData() {
         orderViewModel.apply {
-            orderCompletedList.observe(viewLifecycleOwner) { model ->
-//            mCurrentPage = it.currentPage
-//            mLastPage = it.lastPage
-                if (model.isNotEmpty()) {
-                    for (data in model) {
-                        mAdapter.addData(data)
+            orderCompletedList.observe(viewLifecycleOwner) {
+                when {
+                    it.isNotEmpty() -> {
+                        binding.layoutEmptyTask.root.gone()
+                        it.forEach { model ->
+                            mAdapter.addData(model)
+                        }
                     }
-                } else {
-                    binding.layoutEmptyTask.root.visible()
+                    mAdapter.itemCount == 0 -> {
+                        binding.layoutEmptyTask.root.visible()
+                    }
+                    else -> {
+                        binding.layoutEmptyTask.root.gone()
+                    }
                 }
             }
 
@@ -158,10 +170,8 @@ class FragmentCompleted : Fragment() {
         mAdapter.clearAdapter()
         orderViewModel.getAllOrderList(
             orderStatusEnum = OrderStatusEnum.COMPLETED,
-//            length = 10,
-//            start = 0,
             search = "",
-            merchant_user_id = 5,
+            merchant_user_id = userId,
             date_from = getDateNow(),
             date_to = getDateNow())
     }

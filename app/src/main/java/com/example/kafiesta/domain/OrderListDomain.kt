@@ -5,11 +5,18 @@ import com.example.kafiesta.constants.OrderConst
 data class OrderListNetworkDomain (
     val status: String,
     val message: String,
-    val result: List<OrderListBaseDomain>? = null
+    val result: List<OrderBaseDomain>? = null
+) {
+    val isNotEmptyData = result!!.isNotEmpty()
+}
+
+data class SpecificOrderNetworkDomain (
+    val status: String,
+    val message: String,
+    val result: OrderBaseDomain
 )
 
-
-data class OrderListBaseDomain (
+data class OrderBaseDomain (
     val order: OrderDomain,
     val orderList: List<OrderListDomain>
 )
