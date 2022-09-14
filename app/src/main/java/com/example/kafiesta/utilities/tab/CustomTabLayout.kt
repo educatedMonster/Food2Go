@@ -112,16 +112,20 @@ class CustomTabLayout : TabLayout {
                     textView.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
                     imageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 } else if (mType == TYPE_YELLOW_BG) {
-                    textView.setTextColor(ContextCompat.getColor(context, R.color.color_palette_black))
-                    imageView.setColorFilter(ContextCompat.getColor(context, R.color.color_palette_black))
+                    textView.setTextColor(ContextCompat.getColor(context,
+                        R.color.color_palette_black))
+                    imageView.setColorFilter(ContextCompat.getColor(context,
+                        R.color.color_palette_black))
                 }
             } else {
                 if (mType == TYPE_WHITE_BG) {
                     textView.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
                     imageView.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary))
                 } else if (mType == TYPE_YELLOW_BG) {
-                    textView.setTextColor(ContextCompat.getColor(context, R.color.color_palette_black))
-                    imageView.setColorFilter(ContextCompat.getColor(context, R.color.color_palette_black))
+                    textView.setTextColor(ContextCompat.getColor(context,
+                        R.color.color_palette_black))
+                    imageView.setColorFilter(ContextCompat.getColor(context,
+                        R.color.color_palette_black))
                 }
             }
         }

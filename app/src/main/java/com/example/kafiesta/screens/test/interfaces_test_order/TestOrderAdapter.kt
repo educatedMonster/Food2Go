@@ -5,7 +5,6 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
@@ -28,16 +27,10 @@ class TestOrderAdapter(
 
     private var list: ArrayList<OrderBaseDomain> = arrayListOf()
 
-    fun addData(model: OrderBaseDomain) {
-        //to avoid duplication
-        if (model !in list) {
-            list.add(model)
-        }
-        notifyDataSetChanged()
-    }
-
     fun updateList(newList: ArrayList<OrderBaseDomain>, status: String) {
-        list = newList.filter { order -> order.order.status == status } as ArrayList<OrderBaseDomain>
+        list =
+            newList.filter { order -> order.order.status == status } as ArrayList<OrderBaseDomain>
+        notifyDataSetChanged()
     }
 
     fun removeFirstItem(position: Int) {

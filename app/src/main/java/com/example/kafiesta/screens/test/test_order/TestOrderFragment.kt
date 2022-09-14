@@ -27,9 +27,11 @@ import com.example.kafiesta.screens.image_viewer.ImageViewerActivity
 import com.example.kafiesta.screens.image_viewer.dialog.RejectOrderDialog
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
-import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderAdapter
 import com.example.kafiesta.screens.main.fragment.order.others.dialogs.DialogOrderDetails
-import com.example.kafiesta.screens.test.interfaces_test_order.*
+import com.example.kafiesta.screens.test.interfaces_test_order.Page
+import com.example.kafiesta.screens.test.interfaces_test_order.RefreshOrderListener
+import com.example.kafiesta.screens.test.interfaces_test_order.TestOrderAdapter
+import com.example.kafiesta.screens.test.interfaces_test_order.ViewPagerRecyclerAdapter
 import com.example.kafiesta.screens.test.pages.OrderCompletedPage
 import com.example.kafiesta.screens.test.pages.OrderDeliveryPage
 import com.example.kafiesta.screens.test.pages.OrderPendingPage
@@ -46,7 +48,7 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.trackerteer.taskmanagement.utilities.extensions.gone
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 
-open class TestOrderFragment : Fragment(), RefreshOrderListener{
+open class TestOrderFragment : Fragment(), RefreshOrderListener {
     private val orderViewModel: OrderViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
             .create(OrderViewModel::class.java)
@@ -67,13 +69,13 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener{
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        mSharedPrefs = SharedPrefs(getSecurePrefs(requireActivity().application))
+        userId = mSharedPrefs.getString(UserConst.USER_ID)!!.toLong()
         initConfig()
     }
 
     override fun onResume() {
         super.onResume()
-        mSharedPrefs = SharedPrefs(getSecurePrefs(requireActivity().application))
-        userId = mSharedPrefs.getString(UserConst.USER_ID)!!.toLong()
         initRequest()
     }
 
@@ -97,6 +99,7 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener{
         initTabLayout()
         initRequest()
         initLiveData()
+        initRequest()
     }
 
     private fun initViewPager() {
@@ -109,8 +112,7 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener{
         viewPagerAdapter = ViewPagerRecyclerAdapter(
             requireActivity(),
             pageList,
-            mAdapter!!.onClickCallBack,
-            orderViewModel
+            mAdapter!!.onClickCallBack
         )
 
         viewPagerAdapter.setRefreshOrderListener(this)
@@ -141,7 +143,7 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener{
     private fun initLiveData() {
         orderViewModel.apply {
             orderList.observe(viewLifecycleOwner) {
-//                // for some reason there is a chance that the viewPagerAdapterAdapter
+                // for some reason there is a chance that the viewPagerAdapter
                 // is not yet fully created
                 if (viewPagerAdapter.getAdaptersSize() == 0) {
                     return@observe
@@ -164,21 +166,28 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener{
                     tempList.add(orders)
                 }
 
-                viewPagerAdapter.addData(
+                viewPagerAdapter.resetList(
                     0,
-                    pendingList
+                    pendingList,
+                    ORDER_PENDING
                 )
-                viewPagerAdapter.addData(
+
+                viewPagerAdapter.resetList(
                     1,
-                    preparingList
+                    preparingList,
+                    ORDER_PREPARING
                 )
-                viewPagerAdapter.addData(
+
+                viewPagerAdapter.resetList(
                     2,
-                    deliveryList
+                    deliveryList,
+                    ORDER_DELIVERY
                 )
-                viewPagerAdapter.addData(
+
+                viewPagerAdapter.resetList(
                     3,
-                    completedList
+                    completedList,
+                    ORDER_COMPLETED
                 )
             }
 
@@ -187,7 +196,6 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener{
                     DialogTag.DIALOG_ORDER_DETAILS) as DialogOrderDetails?)?.dismiss()
                 (getDialog(requireActivity(),
                     DialogTag.DIALOG_REJECT_REMARK) as RejectOrderDialog?)?.dismiss()
-                showToast(it)
                 initRequest()
             }
 
@@ -216,7 +224,7 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener{
                             viewPagerAdapter.resetList(
                                 it.orderPosition,
                                 it.list as ArrayList<OrderBaseDomain>,
-                                ORDER_COMPLETED
+                                it.orderTitle
                             )
                             empty.gone()
                         } else {
@@ -269,44 +277,39 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener{
                         model = model,
                         onClickCallBack = OrderRecyclerClick(
                             accept = {
-                                val order = it as OrderBaseDomain
                                 orderViewModel.orderMoveStatus(
-                                    order.order.id,
+                                    model.order.id,
                                     ORDER_PREPARING,
                                     ""
                                 )
                                 showToast(getString(R.string.dialog_message_order_preparing,
-                                    order.order.orderId))
+                                    model.order.orderId))
                             },
                             move_delivery = {
-                                val order = it as OrderBaseDomain
                                 orderViewModel.orderMoveStatus(
-                                    order.order.id,
+                                    model.order.id,
                                     ORDER_DELIVERY,
                                     ""
                                 )
                                 showToast(getString(R.string.dialog_message_order_preparing,
-                                    order.order.orderId))
+                                    model.order.orderId))
                             },
                             move_completed = {
-                                val order = it as OrderBaseDomain
                                 orderViewModel.orderMoveStatus(
-                                    order.order.id,
-                                    ORDER_DELIVERY,
+                                    model.order.id,
+                                    ORDER_COMPLETED,
                                     ""
                                 )
                                 showToast(getString(R.string.dialog_message_order_preparing,
-                                    order.order.orderId))
+                                    model.order.orderId))
                             },
                             reject = {
-                                val order = it as OrderBaseDomain
-                                showWarningRejectDialog(order.order.id)
+                                showWarningRejectDialog(model.order.id)
                             },
                             proofURL = {
-                                val order = it as OrderBaseDomain
                                 val intent =
                                     Intent(requireContext(), ImageViewerActivity::class.java)
-                                intent.putExtra(IntentConst.ORDER_ID, order.order.id)
+                                intent.putExtra(IntentConst.ORDER_ID, model.order.id)
                                 startActivity(intent)
                                 requireActivity().overridePendingTransition(R.anim.enter_from_bottom,
                                     R.anim.stay)

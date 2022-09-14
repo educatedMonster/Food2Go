@@ -1,25 +1,30 @@
 package com.example.kafiesta.screens.weekly_payment
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityWeeklyPaymentBinding
+import com.example.kafiesta.databinding.DialogWeeklyPaymentUrlBinding
 import com.example.kafiesta.domain.WeeklyPaymentDomain
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.weekly_payment.adapter.WeeklyPaymentAdapter
 import com.example.kafiesta.screens.weekly_payment.dialog.WeeklyPaymentDialog
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
 import com.example.kafiesta.utilities.getDialog
-import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
+import com.example.kafiesta.utilities.helpers.WeeklyPaymentRecyclerClick
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
+import com.example.kafiesta.utilities.loadItemImage
 import com.trackerteer.taskmanagement.utilities.extensions.gone
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_pending.view.*
@@ -90,7 +95,7 @@ class WeeklyPaymentActivity : BaseActivity() {
     private fun initAdapter() {
         mAdapter = WeeklyPaymentAdapter(
             context = this,
-            onClickCallBack = RecyclerClick(
+            onClickCallBack = WeeklyPaymentRecyclerClick(
                 click = {
                     val payment = it as WeeklyPaymentDomain
                     val dialog = WeeklyPaymentDialog(
@@ -106,10 +111,35 @@ class WeeklyPaymentActivity : BaseActivity() {
 
                     )
                     dialog.show(supportFragmentManager, DialogTag.DIALOG_WEEKLY_PAYMENT)
+                },
+                proofURL = {
+                    showProofDialog(it as WeeklyPaymentDomain)
                 }
             ),
             viewModel = weeklyPaymentViewModel
         )
+    }
+
+    private fun showProofDialog(payment: WeeklyPaymentDomain) {
+        val alertDialog = AlertDialog.Builder(this)
+        val binding = DataBindingUtil.inflate<DialogWeeklyPaymentUrlBinding>(
+            LayoutInflater.from(this),
+            R.layout.dialog_weekly_payment_url,
+            null,
+            false
+        )
+
+        alertDialog.setView(binding.root)
+        val dialog = alertDialog.create()
+
+        binding.textTitle.text = payment.weekBalance
+        loadItemImage(binding.imageProof, payment.proofURL!!)
+
+        binding.buttonClose.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun initViews() {

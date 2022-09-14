@@ -16,6 +16,7 @@ import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.domain.WeeklyPaymentDomain
 import com.example.kafiesta.screens.weekly_payment.WeeklyPaymentViewModel
 import com.example.kafiesta.utilities.helpers.RecyclerClick
+import com.example.kafiesta.utilities.helpers.WeeklyPaymentRecyclerClick
 import com.example.kafiesta.utilities.helpers.formatDateString
 import com.example.kafiesta.utilities.helpers.getTimeStampDifference
 import java.time.LocalDateTime
@@ -25,7 +26,7 @@ import java.util.*
 
 class WeeklyPaymentAdapter(
     val context: Context,
-    private val onClickCallBack: RecyclerClick,
+    private val onClickCallBack: WeeklyPaymentRecyclerClick,
     private val viewModel: WeeklyPaymentViewModel,
 ) :
     RecyclerView.Adapter<OrderViewHolder>() {

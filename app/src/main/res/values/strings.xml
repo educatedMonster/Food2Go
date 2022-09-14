@@ -134,6 +134,12 @@
     <string name="few_seconds_ago">few seconds ago</string>
 
 
+    <!--    Toast Message-->
+    <string name="toast_error_payment_image_upload">Select image!</string>
+    <string name="toast_error_payment_checkbox">You must check the checkbox to continue payment process!</string>
+
+
+
     <string name="no_data_avail">No data Available</string>
 
 </resources>

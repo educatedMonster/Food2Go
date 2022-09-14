@@ -19,7 +19,6 @@ import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
-import android.webkit.URLUtil
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.FragmentActivity
@@ -28,7 +27,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.RequestCodeTag
 import com.example.kafiesta.constants.ServerConst.IMAGE_PLACE_HOLDER
-import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
 import com.example.kafiesta.utilities.extensions.showToast
 import com.karumi.dexter.Dexter
@@ -36,7 +34,6 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import timber.log.Timber
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -159,6 +156,29 @@ fun getMimeType(context: Context, uri: Uri?): String? {
         MimeTypeMap.getSingleton().getMimeTypeFromExtension(
             fileExtension.toLowerCase(Locale.getDefault())
         )
+    }
+}
+
+@BindingAdapter("loadItemImage")
+fun loadItemImage(imageView: ImageView?, url: Uri?) {
+    val imageUrl = url ?: IMAGE_PLACE_HOLDER
+    imageUrl.let {
+        if (imageView != null) {
+            Glide.with(imageView.context)
+                .load(imageUrl)
+                .into(imageView)
+        }
+    }
+}
+
+@BindingAdapter("loadItemImage")
+fun loadItemImage(imageView: ImageView?, url: String?) {
+    url.let {
+        if (imageView != null) {
+            Glide.with(imageView.context)
+                .load(url)
+                .into(imageView)
+        }
     }
 }
 

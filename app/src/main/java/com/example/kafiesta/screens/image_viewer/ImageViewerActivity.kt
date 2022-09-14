@@ -82,6 +82,7 @@ class ImageViewerActivity : BaseActivity() {
             mActionBar!!.setDisplayHomeAsUpEnabled(true)
             mActionBar!!.setDisplayShowHomeEnabled(true)
             mActionBar!!.setDisplayUseLogoEnabled(true)
+            mActionBar!!.title = "Proof Image"
         } else {
             throw IllegalArgumentException(getString(R.string.error_message_illegal_argument_exception))
         }
@@ -95,8 +96,8 @@ class ImageViewerActivity : BaseActivity() {
         pagerAdapter = Pager2RecyclerAdapter(this)
         binding.pager2.adapter = pagerAdapter
         binding.pager2.setPageTransformer { page, position ->
-            val MIN_SCALE = 0.65f
-            val MIN_ALPHA = 0.3f
+            val minScale = 0.65f
+            val minAlpha = 0.3f
 
             when {
                 position < -1 -> {  // [-Infinity,-1)
@@ -105,11 +106,11 @@ class ImageViewerActivity : BaseActivity() {
                 }
                 position <= 1 -> { // [-1,1]
                     page.scaleX =
-                        MIN_SCALE.coerceAtLeast(1 - abs(position))
+                        minScale.coerceAtLeast(1 - abs(position))
                     page.scaleY =
-                        MIN_SCALE.coerceAtLeast(1 - abs(position))
+                        minScale.coerceAtLeast(1 - abs(position))
                     page.alpha =
-                        MIN_ALPHA.coerceAtLeast(1 - abs(position))
+                        minAlpha.coerceAtLeast(1 - abs(position))
                 }
                 else -> {  // (1,+Infinity]
                     // This page is way off-screen to the right.

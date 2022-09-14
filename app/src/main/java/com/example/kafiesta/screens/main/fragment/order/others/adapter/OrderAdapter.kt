@@ -91,15 +91,15 @@ class OrderAdapter(
                 }
                 model.order.status.matches(OrderConst.ORDER_PREPARING.toRegex()) -> {
                     val a = changedAtPreparing!!.split(" ")
-                    time = formatDateString(a[0] +"T" +a[1] +".000000Z")
+                    time = formatDateString(a[0] + "T" + a[1] + ".000000Z")
                 }
                 model.order.status.matches(OrderConst.ORDER_DELIVERY.toRegex()) -> {
                     val a = changedAtDelivered!!.split(" ")
-                    time = formatDateString(a[0] +"T" +a[1] +".000000Z")
+                    time = formatDateString(a[0] + "T" + a[1] + ".000000Z")
                 }
                 model.order.status.matches(OrderConst.ORDER_COMPLETED.toRegex()) -> {
                     val a = changedAtCompleted!!.split(" ")
-                    time = formatDateString(a[0]+"T"+a[1]+".000000Z")
+                    time = formatDateString(a[0] + "T" + a[1] + ".000000Z")
                 }
             }
 
@@ -110,11 +110,12 @@ class OrderAdapter(
                     DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
                 val localDate: LocalDateTime = LocalDateTime.parse(time, formatter)
 
-                val timeInMilliseconds: Long = if(model.order.status.matches(OrderConst.ORDER_PENDING.toRegex())){
-                    localDate.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli()
-                } else {
-                    localDate.atZone(ZoneId.of("Asia/Manila")).toInstant().toEpochMilli()
-                }
+                val timeInMilliseconds: Long =
+                    if (model.order.status.matches(OrderConst.ORDER_PENDING.toRegex())) {
+                        localDate.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli()
+                    } else {
+                        localDate.atZone(ZoneId.of("Asia/Manila")).toInstant().toEpochMilli()
+                    }
 
                 it.tvTimestamp.text = getTimeStampDifference(context, timeInMilliseconds)
             }

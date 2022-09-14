@@ -1,6 +1,7 @@
 package com.example.kafiesta.domain
 
 import com.example.kafiesta.constants.OrderConst
+import kotlinx.android.parcel.Parcelize
 
 data class WeeklyPaymentBaseNetworkDomain(
     val status: String,

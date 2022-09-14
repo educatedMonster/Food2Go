@@ -41,3 +41,11 @@ class OrderRecyclerClick(
     fun onRejectClick(model: Any) = reject(model)
     fun onProofURLClick(model: Any) = proofURL(model)
 }
+
+class WeeklyPaymentRecyclerClick(
+    val click: (Any) -> Unit,
+    val proofURL: (Any) -> Unit
+) {
+    fun onClick(model: Any) = click(model)
+    fun onProofURLClick(model: Any) = proofURL(model)
+}

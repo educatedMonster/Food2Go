@@ -17,7 +17,7 @@
             android:layout_marginEnd="@dimen/margin_big"
             android:layout_marginTop="@dimen/margin_huge"
             android:layout_marginBottom="@dimen/margin_huge"
-            android:background="@drawable/layer_login_rounded_box"
+            android:background="@drawable/layer_dialog_rounded_box"
             android:elevation="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

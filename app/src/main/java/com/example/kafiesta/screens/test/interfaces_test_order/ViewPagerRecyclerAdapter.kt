@@ -27,8 +27,7 @@ import kotlin.math.roundToInt
 class ViewPagerRecyclerAdapter(
     private val context: Context,
     private val pageList: List<Page>,
-    private val onClickCallBack: RecyclerClick,
-    private val orderViewModel: OrderViewModel,
+    private val onClickCallBack: RecyclerClick
 ) : PagerAdapter() {
 
     private lateinit var binding: TabPageRecyclerBinding
@@ -72,17 +71,6 @@ class ViewPagerRecyclerAdapter(
         binding.progressBottom.visibility = View.GONE
     }
 
-    fun addData(
-        pagePosition: Int,
-        newList: ArrayList<OrderBaseDomain>
-    ) {
-        newList.forEach { order ->
-            adapterList[pagePosition].addData(order)
-        }
-        showHideEmptyLayout(pagePosition, newList)
-        binding.progressBottom.visibility = View.GONE
-    }
-
     fun clearAll(status: String) {
         adapterList.forEachIndexed { index, it ->
             it.updateList(arrayListOf(), status)
@@ -91,7 +79,8 @@ class ViewPagerRecyclerAdapter(
     }
 
     private fun showHideEmptyLayout(pagePosition: Int, newList: ArrayList<OrderBaseDomain>) {
-        if (newList.size == 0) {
+        val list = adapterList[pagePosition].itemCount
+        if (list == 0) {
             emptyLayoutList[pagePosition].visible()
         } else {
             emptyLayoutList[pagePosition].gone()

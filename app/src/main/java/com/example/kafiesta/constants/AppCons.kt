@@ -19,6 +19,7 @@ object ServerConst {
 object PusherConst {
     const val PUSHER_MY_CHANNEL = "my-channel"
     const val PUSHER_MY_EVENT = "my-event"
+    const val PUSHER_ORDER_PIPELINE_EVENT = "order-pipeline-event"
     const val PUSHER_API_KEY = "5916385ce66c483b7a01"
     const val PUSHER_CLUSTER = "ap1"
 
@@ -28,6 +29,7 @@ object PusherConst {
 
 object IntentConst {
     const val ORDER_ID = "ORDER_ID"
+    const val PAYMENT_PROOF_URL = "PAYMENT_PROOF_URL"
 }
 
 object AppConst {
@@ -79,6 +81,7 @@ object DialogTag {
     const val DIALOG_IMAGE_SLIDER = "DIALOG_IMAGE_SLIDER"
     const val DIALOG_REJECT_REMARK = "DIALOG_REJECT_REMARK"
     const val DIALOG_WEEKLY_PAYMENT = "DIALOG_WEEKLY_PAYMENT"
+    const val DIALOG_WEEKLY_PAYMENT_URL = "DIALOG_WEEKLY_PAYMENT_URL"
 }
 
 object RequestCodeTag {

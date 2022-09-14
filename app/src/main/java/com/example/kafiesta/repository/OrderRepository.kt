@@ -119,7 +119,7 @@ class OrderRepository(
                     bearer = setBearer(token),
                     params = paramsToRequestBody(params))
                     .await()
-                _orderStatus.postValue(network.message)
+                _orderStatus.postValue(network.status)
                 _isLoading.postValue(false)
             } catch (e: HttpException) {
                 Timber.e(e.message())

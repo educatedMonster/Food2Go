@@ -14,7 +14,6 @@ import android.os.Environment
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.view.LayoutInflater
-import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.kafiesta.R
@@ -23,7 +22,7 @@ import com.example.kafiesta.databinding.DialogLayoutWeeklyPaymentBinding
 import com.example.kafiesta.domain.WeeklyPaymentDomain
 import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.helpers.FileUtils
-import com.example.kafiesta.utilities.imageUrl
+import com.example.kafiesta.utilities.loadItemImage
 import com.example.kafiesta.utilities.shakeView
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import java.io.File
@@ -58,12 +57,12 @@ class WeeklyPaymentDialog(
                     if (isCamera) {
                         selectedImageUri = mOutputFileUri
                         if (selectedImageUri == null) return
-                        imageUrl(binding.imageProof, mOutputFileUri)
+                        loadItemImage(binding.imageProof, mOutputFileUri)
                     } else {
                         selectedImageUri = data!!.data
                         if (selectedImageUri == null) return
                         mOutputFileUri = selectedImageUri
-                        imageUrl(binding.imageProof, mOutputFileUri)
+                        loadItemImage(binding.imageProof, mOutputFileUri)
                     }
                     binding.imageProof.visible()
 
@@ -88,6 +87,8 @@ class WeeklyPaymentDialog(
             null,
             false
         ) as DialogLayoutWeeklyPaymentBinding
+        binding.model = payment
+
         val view = binding.root
         dialog.setView(view)
 
@@ -101,6 +102,7 @@ class WeeklyPaymentDialog(
                 if (binding.checkboxVerify.isChecked) {
                     if (mFile == null) {
                         shakeView(binding.imageProof, 10, 5)
+                        showToast(getString(R.string.toast_error_payment_image_upload))
                         return@setOnClickListener
                     } else {
                         binding.progressLoading.visible()
@@ -108,7 +110,8 @@ class WeeklyPaymentDialog(
                     }
                 } else {
                     shakeView(binding.checkboxVerify, 10, 5)
-                    showToast("You must tick the checkbox to continue rejecting the order.")
+                    showToast(getString(R.string.toast_error_payment_checkbox))
+                    return@setOnClickListener
                 }
             }
 

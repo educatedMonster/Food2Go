@@ -10,6 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.LayoutItemPager2PageBinding
+import com.example.kafiesta.domain.OrderBaseDomain
+import com.example.kafiesta.utilities.imageUrl
 
 class Pager2RecyclerAdapter(
     val context: Context,

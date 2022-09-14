@@ -106,6 +106,9 @@ class MainActivity : BaseActivity(),
         channel.bind(PusherConst.PUSHER_MY_EVENT) { event ->
             Timber.d( "Received event with data: ${event.data}")
             val message = JSONObject(event.data).getString("message") //New order with order number: #77
+            val order_id = JSONObject(event.data).getString("order_id").toLong() //New order with order number: #77
+            val user_id = JSONObject(event.data).getString("user_id").toLong() //New order with order number: #77
+
             val splitMessage = message.split("#")
             val orderId = splitMessage[1]
             Timber.d(message)

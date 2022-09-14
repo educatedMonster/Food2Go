@@ -7,7 +7,11 @@
 
         <import type="android.view.View" />
 
+        <variable
+            name="model"
+            type="com.example.kafiesta.domain.WeeklyPaymentDomain" />
     </data>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,39 +19,53 @@
         android:background="@color/color_white"
         android:padding="@dimen/padding_avg">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_img_profile"
-            android:layout_width="@dimen/icon_size_create_edit"
-            android:layout_height="@dimen/icon_size_create_edit"
-            app:cardCornerRadius="@dimen/small_icon_size"
-            app:cardElevation="2dp"
-            android:layout_marginTop="@dimen/margin_avg"
-            app:layout_constraintDimensionRatio="1:1"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/itemRoot"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="4:5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintWidth_percent="1">
+            app:layout_constraintTop_toBottomOf="@+id/textView">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/image_proof"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/image_content_description"
+                android:layout_marginStart="@dimen/margin_avg"
+                android:layout_marginTop="@dimen/margin_avg"
+                android:layout_marginEnd="@dimen/margin_avg"
+                app:cardCornerRadius="@dimen/margin_small"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="1"
-                android:src="@drawable/ic_inventory_add_24" />
+                app:layout_constraintTop_toTopOf="parent">
 
-        </androidx.cardview.widget.CardView>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/image_proof"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_inventory_add_24"
+                    android:transitionName="imagePost"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:targetApi="lollipop" />
 
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/aileron_bold"
+            android:text="@{model.weekBalance}"
             android:hint="Week 1 - Week 2"
             android:gravity="center_horizontal"
             android:textSize="@dimen/text_size_semi_normal"
@@ -60,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_img_profile" />
+            app:layout_constraintTop_toBottomOf="@+id/itemRoot" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appCompatTextView"

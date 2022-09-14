@@ -13,7 +13,7 @@
 
         <variable
             name="onClickCallBack"
-            type="com.example.kafiesta.utilities.helpers.RecyclerClick" />
+            type="com.example.kafiesta.utilities.helpers.WeeklyPaymentRecyclerClick" />
 
         <variable
             name="viewModel"
@@ -185,7 +185,7 @@
                         android:textSize="@dimen/text_size_normal"
                         android:text="Proof Image: "/>
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_view_proof_url"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -195,9 +195,9 @@
                         android:maxLines="1"
                         android:textColor="@color/colorSecondaryVariant"
                         android:layout_marginStart="@dimen/margin_small"
-                        android:text="@{model.proofURL}"
-                        android:textSize="@dimen/text_size_normal"
-                        tools:text="www.google.com/sample/image/link/url" />
+                        android:text="Click to view payment"
+                        android:onClick="@{() -> onClickCallBack.onProofURLClick(model)}"
+                        android:textSize="@dimen/text_size_normal" />
 
                 </LinearLayout>
 
