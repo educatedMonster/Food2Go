@@ -20,6 +20,7 @@ object PusherConst {
     const val PUSHER_MY_CHANNEL = "my-channel"
     const val PUSHER_MY_EVENT = "my-event"
     const val PUSHER_ORDER_PIPELINE_EVENT = "order-pipeline-event"
+    const val PUSHER_TRANSACTION_EVENT = "transaction-event"
     const val PUSHER_API_KEY = "5916385ce66c483b7a01"
     const val PUSHER_CLUSTER = "ap1"
 
@@ -29,6 +30,7 @@ object PusherConst {
 
 object IntentConst {
     const val ORDER_ID = "ORDER_ID"
+    const val CUSTOMER_ID = "CUSTOMER_ID"
     const val PAYMENT_PROOF_URL = "PAYMENT_PROOF_URL"
 }
 

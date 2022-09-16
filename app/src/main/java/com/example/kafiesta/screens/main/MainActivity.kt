@@ -56,6 +56,10 @@ class MainActivity : BaseActivity(),
     private var userId = 0L
     private var infoId = 0L
     private var shopId = 0L
+
+    private var message: String? = ""
+    private var user_id: Long = 0L
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
     private val mFragmentList: ArrayList<Fragment> = arrayListOf(
@@ -84,50 +88,6 @@ class MainActivity : BaseActivity(),
     override fun onResume() {
         super.onResume()
         initRequest()
-    }
-
-    private fun initPusher() {
-        val options = PusherOptions()
-        options.setCluster(PusherConst.PUSHER_CLUSTER)
-
-        val pusher = Pusher(PusherConst.PUSHER_API_KEY, options)
-
-        pusher.connect(object : ConnectionEventListener {
-            override fun onConnectionStateChange(change: ConnectionStateChange?) {
-                Timber.d("State changed from ${change!!.previousState} to ${change.currentState}")
-            }
-
-            override fun onError(message: String?, code: String?, e: Exception?) {
-                Timber.d("There was a problem connecting! code ($code), message ($message), exception($e)")
-            }
-        }, ConnectionState.ALL)
-
-        val channel = pusher.subscribe(PusherConst.PUSHER_MY_CHANNEL)
-        channel.bind(PusherConst.PUSHER_MY_EVENT) { event ->
-            Timber.d( "Received event with data: ${event.data}")
-            val message = JSONObject(event.data).getString("message") //New order with order number: #77
-            val order_id = JSONObject(event.data).getString("order_id").toLong() //New order with order number: #77
-            val user_id = JSONObject(event.data).getString("user_id").toLong() //New order with order number: #77
-
-            val splitMessage = message.split("#")
-            val orderId = splitMessage[1]
-            Timber.d(message)
-
-            if (orderId.toLong() != 0L) {
-                runOnUiThread {
-//                    (mFragmentList[1] as OrderFragment).showNewOrderView()
-                    (mFragmentList[1] as OrderFragment).initAddItem(orderId.toLong()) // pass the new received order here from pusher
-                }
-            }
-
-            // If order view is not open/focus show notification
-            if (!KaFiestaApplication.taskActivityIsOpen) {
-                NotificationHelper(this).displayNotification(
-                    message,
-                    Random().nextInt()
-                )
-            }
-        }
     }
 
     /**
@@ -383,6 +343,68 @@ class MainActivity : BaseActivity(),
             binding.drawableLayout.closeDrawer(GravityCompat.START)
         } else {
             super.moveTaskToBack(true)
+        }
+    }
+
+    private fun initPusher() {
+        val options = PusherOptions()
+        options.setCluster(PusherConst.PUSHER_CLUSTER)
+
+        val pusher = Pusher(PusherConst.PUSHER_API_KEY, options)
+        pusher.connect(object : ConnectionEventListener {
+            override fun onConnectionStateChange(change: ConnectionStateChange?) {
+                Timber.d("State changed from ${change!!.previousState} to ${change.currentState}")
+            }
+
+            override fun onError(message: String?, code: String?, e: Exception?) {
+                Timber.d("There was a problem connecting! code ($code), message ($message), exception($e)")
+            }
+        }, ConnectionState.ALL)
+
+        val channel = pusher.subscribe(PusherConst.PUSHER_MY_CHANNEL)
+        channel.bind(PusherConst.PUSHER_MY_EVENT) {
+            Timber.d("Received event with data: ${it.data}")
+            val order_id = JSONObject(it.data).getString("order_id").toLong()
+            user_id = JSONObject(it.data).getString("user_id").toLong()
+            message = JSONObject(it.data).getString("message")
+
+            if (user_id == userId) {
+                if (order_id != 0L) {
+                    runOnUiThread {
+                        (mFragmentList[1] as OrderFragment).initAddItem(order_id) // pass the new received order here from pusher
+
+                        // If order view is not open/focus show notification
+                        if (!KaFiestaApplication.taskActivityIsOpen) {
+                            NotificationHelper(this).displayNotification(
+                                message!!,
+                                Random().nextInt()
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        channel.bind(PusherConst.PUSHER_TRANSACTION_EVENT) {
+            Timber.d("Received event with data: ${it.data}")
+            val user_ids = JSONObject(it.data).getJSONArray("user_ids") // user_ids:[5,6,7,8,9]
+            message = JSONObject(it.data).getString("message")
+
+            val exampleList: MutableList<String> = ArrayList()
+            for (i in 0 until user_ids.length()) {
+                exampleList.add(user_ids.getString(i))
+            }
+            val stringArray = exampleList.toTypedArray()
+            if (stringArray.contains(userId.toString())) {
+                proceedToActivity(WeeklyPaymentActivity::class.java) // proceed to WeeklyPaymentActivity when notification received
+                // If order view is not open/focus show notification
+                if (!KaFiestaApplication.taskActivityIsOpen) {
+                    NotificationHelper(this).displayNotification(
+                        message!!,
+                        Random().nextInt()
+                    )
+                }
+            }
         }
     }
 

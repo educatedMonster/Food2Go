@@ -122,7 +122,7 @@ class ProductEditDialog(
                         name = pName,
                         description = pDesc,
                         imageURL = product.imageURL,
-                        price = pPrice.toDouble(),
+                        price = pPrice,
                         tags = pTags,
                         status = pStatus
                     )

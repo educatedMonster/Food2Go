@@ -47,11 +47,10 @@ data class Producttest (
     @SerializedName("image_url")
     val imageURL: String? = null,
 
-    val price: Double,
+    val price: String,
     val tags: String,
     val status: String
 ) {
-    val priceString = price.toString()
     val statusBool = status.matches("active".toRegex())
     val isIdExist = id != 0L
 }

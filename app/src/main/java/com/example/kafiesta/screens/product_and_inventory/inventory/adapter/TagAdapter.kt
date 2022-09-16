@@ -32,10 +32,8 @@ class TagAdapter(
         holder.viewDataBinding.also {
             tagString = list[position]
             it.tagString = tagString
-            val a: String = it.tagString as String
-            holder.viewDataBinding.layoutTag.setBackgroundResource(R.drawable.tag_rectangle_round_2)
             holder.viewDataBinding.layoutTag.setOnClickListener {
-                context.showToast(a)
+                context.showToast(tagString)
             }
         }
     }

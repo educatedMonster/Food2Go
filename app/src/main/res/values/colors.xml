@@ -35,12 +35,16 @@
     <color name="color_palette_white">#E7DDF0</color>
     <color name="color_palette_black">#505050</color>
 
+    <!-- My order color palette-->
+    <color name="color_palette_completed">#BDF14C</color>
+    <color name="color_palette_pending">#BFFFCC00</color>
+
     <!--    Tag-->
     <color name="tag_color_1">#db8fad</color>
     <color name="tag_color_2">#a1cf9b</color>
     <color name="tag_color_3">#d9d2f7</color>
     <color name="tag_color_4">#e3c1a3</color>
-    <color name="tag_color_5">#c7d4d1</color>
+    <color name="tag_color_5">#c7d4d1</color> //
     <color name="tag_color_6">#e090dc</color>
     <color name="tag_color_7">#e8fac8</color>
     <color name="tag_color_8">#b86cde</color>

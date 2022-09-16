@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
@@ -15,6 +16,7 @@ import com.example.kafiesta.databinding.FragmentProductBinding
 import com.example.kafiesta.domain.ProductDomain
 import com.example.kafiesta.domain.ProductDomaintest
 import com.example.kafiesta.screens.product_and_inventory.product.adapter.ProductAdapter
+import com.example.kafiesta.screens.test.interfaces_test_order.ViewPagerRecyclerAdapter
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
 import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
@@ -142,9 +144,15 @@ class FragmentProduct : Fragment() {
                     }).show(requireActivity().supportFragmentManager,
                     DialogTag.DIALOG_FORM_INITIAL_PRODUCT)
             }
+            val mGridTwoColLayoutManager = GridLayoutManager(context,
+                ViewPagerRecyclerAdapter.calculateNosOfColumn(requireContext(), 180),
+                RecyclerView.VERTICAL,
+                false)
 
             recyclerViewProducts.apply {
                 adapter = mAdapter
+                layoutManager = mGridTwoColLayoutManager
+
                 addItemDecoration(
                     DividerItemDecoration(
                         context,

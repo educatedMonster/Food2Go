@@ -7,6 +7,8 @@ import com.example.kafiesta.constants.OrderConst.ORDER_COMPLETED
 import com.example.kafiesta.constants.OrderConst.ORDER_DELIVERY
 import com.example.kafiesta.constants.OrderConst.ORDER_PENDING
 import com.example.kafiesta.constants.OrderConst.ORDER_PREPARING
+import com.example.kafiesta.constants.PusherConst.PUSHER_MY_CHANNEL
+import com.example.kafiesta.constants.PusherConst.PUSHER_ORDER_PIPELINE_EVENT
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.network.AppNetwork
@@ -16,6 +18,7 @@ import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
 import com.example.kafiesta.screens.test.test_order.OrderFormState
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.setBearer
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -120,6 +123,37 @@ class OrderRepository(
                     params = paramsToRequestBody(params))
                     .await()
                 _orderStatus.postValue(network.status)
+
+                val params2 = HashMap<String, Any>()
+                var data: String? = null
+                val message: String?
+                when {
+                    status.matches(ORDER_PREPARING.toRegex()) -> {
+                        message = "Order is now preparing"
+                        data =
+                            "{order_id: $order_id, user_id: $userid, message: $message}"
+
+                    }
+                    status.matches(ORDER_DELIVERY.toRegex()) -> {
+                        message = "Your rider is on the way"
+                        data =
+                            "{order_id: $order_id, user_id: $userid, message: $message}"
+
+                    }
+                    status.matches(ORDER_COMPLETED.toRegex()) -> {
+                        message = "Order completed."
+                        data =
+                            "{order_id: $order_id, user_id: $userid, message: $message}"
+                    }
+                }
+                params2["data"] = data!!
+                params2["event_name"] = PUSHER_ORDER_PIPELINE_EVENT
+                params2["channel_name"] = PUSHER_MY_CHANNEL
+                val network2 = AppNetwork.service.onTriggerPusherAsync(
+                    bearer = setBearer(token),
+                    params = paramsToRequestBody(params2)
+                ).await()
+                Timber.d(Gson().toJson(network2))
                 _isLoading.postValue(false)
             } catch (e: HttpException) {
                 Timber.e(e.message())

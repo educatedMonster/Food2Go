@@ -125,7 +125,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/aileron_regular"
                         android:layout_marginStart="@dimen/margin_small"
-                        android:gravity="start"
                         android:text="@{model.amount}"
                         android:textSize="@dimen/text_size_normal"
                         tools:text="@tools:sample/us_zipcodes" />
@@ -157,7 +156,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/aileron_light"
-                        android:gravity="end"
                         android:layout_marginStart="@dimen/margin_small"
                         android:text="@{model.paymentStatus}"
                         android:textSize="@dimen/text_size_normal"

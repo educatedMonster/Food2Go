@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -22,14 +23,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/padding_semi_avg"
-        android:paddingTop="@dimen/padding_avg"
-        android:paddingEnd="@dimen/padding_semi_avg">
+        android:padding="@dimen/padding_avg">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_img_profile"
-            android:layout_width="@dimen/extra_large_icon_size"
-            android:layout_height="@dimen/extra_large_icon_size"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             app:cardCornerRadius="@dimen/small_icon_size"
             app:cardElevation="2dp"
             app:layout_constraintDimensionRatio="1:1"
@@ -52,75 +51,121 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text_view_name"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="start"
-            android:lines="2"
-            android:padding="@dimen/padding_min"
-            android:text="@{model.name}"
-            android:textColor="@color/color_palette_black"
-            android:textSize="@dimen/text_size_normal"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/padding_semi_avg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card_img_profile"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/lorem/random" />
+            app:layout_constraintTop_toTopOf="@+id/card_img_profile">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="start"
-            android:lines="1"
-            android:padding="@dimen/padding_min"
-            android:text="@{model.quantityString}"
-            android:textColor="@color/color_palette_black"
-            android:textSize="@dimen/text_size_normal_small"
-            app:layout_constraintStart_toStartOf="@+id/text_view_name"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_name"
-            tools:text="@tools:sample/us_zipcodes" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_view_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:lines="2"
+                android:padding="@dimen/padding_min"
+                android:text="@{model.name}"
+                android:fontFamily="@font/aileron_bold"
+                android:textColor="@color/color_palette_black"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintEnd_toStartOf="@+id/image_view_button_more"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@tools:sample/lorem/random" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="start"
-            android:lines="1"
-            android:padding="@dimen/padding_min"
-            android:text="@{model.price}"
-            android:textColor="@color/color_palette_black"
-            android:textSize="@dimen/text_size_normal_small"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_name"
-            tools:text="@tools:sample/us_zipcodes" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:lines="1"
+                android:padding="@dimen/padding_min"
+                android:text="Quantity"
+                android:fontFamily="@font/aileron_regular"
+                android:textColor="@color/color_palette_black"
+                android:textSize="@dimen/text_size_normal_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_price" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_tag"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="@+id/text_view_name"
-            app:layout_constraintStart_toEndOf="@+id/card_img_profile"
-            app:layout_constraintTop_toBottomOf="@+id/tv_price"
-            tools:listitem="@layout/list_item_tag" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/aileron_regular"
+                android:gravity="start"
+                android:lines="1"
+                android:padding="@dimen/padding_min"
+                android:text="@{model.quantityString}"
+                android:textColor="@color/color_palette_black"
+                android:textSize="@dimen/text_size_normal_small"
+                app:layout_constraintStart_toEndOf="@+id/tv_2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_price"
+                tools:text="@tools:sample/us_zipcodes" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:lines="1"
+                android:padding="@dimen/padding_min"
+                android:text="Price"
+                android:fontFamily="@font/aileron_regular"
+                android:textColor="@color/color_palette_black"
+                android:textSize="@dimen/text_size_normal_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_name"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/aileron_regular"
+                android:gravity="start"
+                android:lines="1"
+                android:padding="@dimen/padding_min"
+                android:text="@{model.price}"
+                android:textColor="@color/color_palette_black"
+                android:textSize="@dimen/text_size_normal_small"
+                app:layout_constraintStart_toEndOf="@+id/tv_1"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_name"
+                tools:text="@tools:sample/us_zipcodes" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_tag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_min"
+                android:background="@color/transparent_white_percent_95"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/margin_min"
+                android:paddingBottom="@dimen/margin_min"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_quantity"
+                tools:listitem="@layout/list_item_tag" />
 
 
-        <ImageView
-            android:id="@+id/image_view_button_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/image_content_description"
-            android:onClick="@{() -> onClickCallBack.onClick2(model,view)}"
-            android:src="@drawable/ic_more_vert_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/image_view_button_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/image_content_description"
+                android:onClick="@{() -> onClickCallBack.onClick2(model,view)}"
+                android:src="@drawable/ic_more_vert_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

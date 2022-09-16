@@ -111,12 +111,13 @@
                                         android:layout_height="0dp"
                                         android:adjustViewBounds="true"
                                         android:fitsSystemWindows="true"
-                                        android:scaleType="fitCenter"
+                                        android:scaleType="fitXY"
                                         android:src="@drawable/ic_profile_24"
                                         app:layout_constraintDimensionRatio="16:9"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        tools:src="@tools:sample/backgrounds/scenic" />
 
                                     <TextView
                                         android:id="@+id/text_view_full_name"
@@ -127,7 +128,7 @@
                                         android:layout_marginEnd="@dimen/margin_avg"
                                         android:fontFamily="@font/aileron_semibold"
                                         android:maxLines="2"
-                                        android:text="@{mainViewModel.profile.fullName}"
+                                        android:text="@{mainViewModel.profile.user_shop.name}"
                                         android:textAlignment="center"
                                         android:textSize="@dimen/text_size_semi_normal"
                                         app:layout_constraintEnd_toEndOf="parent"

@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
+import com.example.kafiesta.constants.IntentConst.CUSTOMER_ID
 import com.example.kafiesta.constants.IntentConst.ORDER_ID
 import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.FragmentPendingBinding
 import com.example.kafiesta.domain.OrderBaseDomain
+import com.example.kafiesta.screens.empty.EmptyViewModel
 import com.example.kafiesta.screens.image_viewer.ImageViewerActivity
 import com.example.kafiesta.screens.image_viewer.dialog.RejectOrderDialog
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
@@ -110,13 +112,14 @@ class FragmentPending : Fragment() {
                             move_completed = {},
                             reject = { model ->
                                 val order = model as OrderBaseDomain
-                                showWarningRejectDialog(order.order.id)
+                                showWarningRejectDialog(order.order.id, order.order.customerUserID)
                             },
                             proofURL = { model ->
                                 val order = model as OrderBaseDomain
                                 val intent =
                                     Intent(requireContext(), ImageViewerActivity::class.java)
                                 intent.putExtra(ORDER_ID, order.order.id)
+                                intent.putExtra(CUSTOMER_ID, order.order.customerUserID)
                                 startActivity(intent)
                                 requireActivity().overridePendingTransition(R.anim.enter_from_bottom,
                                     R.anim.stay)
@@ -194,9 +197,9 @@ class FragmentPending : Fragment() {
 
 
             specificOrder.observe(viewLifecycleOwner) {
+                binding.layoutEmptyTask.root.gone()
                 moveToBottom()
                 mAdapter.addLastItem(it!!)
-
             }
         }
     }
@@ -235,7 +238,7 @@ class FragmentPending : Fragment() {
         binding
     }
 
-    private fun showWarningRejectDialog(orderId: Long) {
+    private fun showWarningRejectDialog(orderId: Long, customerId: Long) {
         RejectOrderDialog(
             listener = object : RejectOrderDialog.Listener {
                 override fun onRejectOrder(remark: String) {

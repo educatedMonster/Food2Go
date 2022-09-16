@@ -7,7 +7,7 @@ import com.example.kafiesta.screens.test.interfaces_test_order.ViewPagerRecycler
 
 class OrderPendingPage: Page {
     private var position = 0
-    private val layoutType: Int = ViewPagerRecyclerAdapter.LAYOUT_GRID_TWO_COL
+    private val layoutType: Int = ViewPagerRecyclerAdapter.LAYOUT_LINEAR_VERTICAL
 
     override fun type(pageFactory: PageFactory): Int = pageFactory.type(this)
 

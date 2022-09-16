@@ -26,6 +26,7 @@ import kotlin.math.abs
 class ImageViewerActivity : BaseActivity() {
     private var userId = 0L
     private var orderId = 0L
+    private var customerId = 0L
     private var mActionBar: ActionBar? = null
     override val hideStatusBar: Boolean get() = false
     override val showBackButton: Boolean get() = false
@@ -90,6 +91,7 @@ class ImageViewerActivity : BaseActivity() {
 
     private fun initExtras() {
         orderId = intent.getLongExtra(IntentConst.ORDER_ID, -1L)
+        customerId = intent.getLongExtra(IntentConst.CUSTOMER_ID, -1L)
     }
 
     private fun initAdapter() {

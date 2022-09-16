@@ -14,43 +14,46 @@
         android:id="@+id/header_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_header_height"
-        android:background="@color/background_color_normal"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/nav_header_vertical_padding"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/nav_header_vertical_padding">
+        android:background="@color/background_color_normal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image_profile"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:contentDescription="@string/image_content_description"
-            android:scaleType="centerCrop"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/circle_add_product"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:fitsSystemWindows="true"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_profile_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
+            imageUrl="@{mainViewModel.profile.user_shop.imageURL}"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/backgrounds/scenic" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_small"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/image_profile"
+            android:background="@color/transparent_white_percent_20"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/image_profile"
-            app:layout_constraintTop_toTopOf="@+id/image_profile">
+            app:layout_constraintStart_toStartOf="parent"
+            android:paddingStart="@dimen/padding_semi_avg"
+            android:paddingEnd="@dimen/padding_semi_avg"
+            android:paddingTop="@dimen/padding_semi_small"
+            android:paddingBottom="@dimen/padding_semi_small">
 
             <TextView
                 android:id="@+id/text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:fontFamily="@font/aileron_bold"
+                android:fontFamily="@font/aileron_regular"
+                android:gravity="end"
                 android:maxLines="1"
-                android:text="@{mainViewModel.profile.fullName}"
-                android:textColor="@color/color_white"
+                android:text="@{mainViewModel.profile.user_shop.name}"
+                android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size_normal"
                 tools:text="@string/title_layout_nav_header_name" />
 
@@ -59,10 +62,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:fontFamily="@font/aileron_bold"
+                android:fontFamily="@font/aileron_regular"
+                android:gravity="end"
                 android:maxLines="1"
                 android:text="@{mainViewModel.profile.email}"
-                android:textColor="@color/color_white"
+                android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size_normal_small_light"
                 tools:text="@string/title_layout_nav_header_email" />
 

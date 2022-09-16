@@ -182,6 +182,21 @@ interface AppService {
         @Path("weeklypayment_id") weeklypayment_id: Long,
         @Part params: MultipartBody.Part,
     ): Deferred<Any>
+
+
+    //Todo
+//    /reports/salesReport
+//    /reports/eodReport
+
+    //endregion
+
+    // region pusher
+    @Multipart
+    @POST("pusher/trigger")
+    fun onTriggerPusherAsync(
+        @Header("Authorization") bearer: String,
+        @PartMap params: HashMap<String, RequestBody>,
+    ): Deferred<Any>
     //endregion
 
 }

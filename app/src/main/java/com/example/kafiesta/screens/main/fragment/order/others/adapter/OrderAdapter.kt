@@ -70,10 +70,10 @@ class OrderAdapter(
 
             val color: Int = when (model.order.status) {
                 OrderConst.ORDER_COMPLETED -> {
-                    R.color.colorSecondary
+                    R.color.color_palette_completed
                 }
                 else -> {
-                    R.color.light_gray2
+                    R.color.color_palette_pending
                 }
             }
             it.layoutOrder.setBackgroundResource(color)

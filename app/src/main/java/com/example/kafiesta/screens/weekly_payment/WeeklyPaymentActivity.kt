@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
 import com.example.kafiesta.constants.UserConst
@@ -37,7 +36,7 @@ class WeeklyPaymentActivity : BaseActivity() {
 
     private var userId = 0L
     private lateinit var binding: ActivityWeeklyPaymentBinding
-    private lateinit var mAdapter: WeeklyPaymentAdapter
+    private var mAdapter: WeeklyPaymentAdapter? = null
     private var mActionBar: ActionBar? = null
     private val weeklyPaymentViewModel: WeeklyPaymentViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(application)
@@ -52,12 +51,12 @@ class WeeklyPaymentActivity : BaseActivity() {
     }
 
     private fun initConfig() {
-        initRequest()
         initBinding()
         initActionBar()
         initAdapter()
         initViews()
         initLiveData()
+        initRequest()
     }
 
     override fun onResume() {
@@ -174,10 +173,10 @@ class WeeklyPaymentActivity : BaseActivity() {
                     it.result.isNotEmpty() -> {
                         binding.layoutEmptyTask.root.gone()
                         it.result.forEach { model ->
-                            mAdapter.addData(model)
+                            mAdapter!!.addData(model)
                         }
                     }
-                    mAdapter.itemCount == 0 -> {
+                    mAdapter!!.itemCount == 0 -> {
                         binding.layoutEmptyTask.root.visible()
                     }
                     else -> {
@@ -189,7 +188,7 @@ class WeeklyPaymentActivity : BaseActivity() {
             isUploaded.observe(this@WeeklyPaymentActivity) {
                 (getDialog(this@WeeklyPaymentActivity,
                     DialogTag.DIALOG_WEEKLY_PAYMENT) as WeeklyPaymentDialog?)?.dismiss()
-                mAdapter.clearAdapter()
+                mAdapter!!.clearAdapter()
                 initRequest()
             }
 
@@ -200,6 +199,7 @@ class WeeklyPaymentActivity : BaseActivity() {
     }
 
     fun initRequest() {
+        mAdapter!!.clearAdapter()
         weeklyPaymentViewModel.getWeeklyPayment(userId)
     }
 

@@ -43,3 +43,9 @@ data class InventoryLinkDomain(
     val label: String,
     val active: Boolean,
 )
+
+data class TriggerPusher(
+    val id: Long,
+    val message: String,
+
+)
