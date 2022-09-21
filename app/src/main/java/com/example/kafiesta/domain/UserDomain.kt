@@ -16,11 +16,14 @@ data class ProfileDomain(
     val lastName: String,
     val fullName: String,
     val email: String,
+    val password: String? = null,
     val status: String,
     val role: String,
     val userInformation: UserInformationDomain? = null,
     val user_shop: UserShopDomain? = null,
-)
+) {
+    val uidString = "UID-$id"
+}
 
 data class UserInformationDomain(
     val id: Long,

@@ -13,6 +13,7 @@
         android:fitsSystemWindows="true"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_profile_24"
+        android:tint="@color/shimmer_background"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -57,8 +57,10 @@ class MainActivity : BaseActivity(),
     private var infoId = 0L
     private var shopId = 0L
 
+    private var action: String? = null
     private var message: String? = ""
     private var user_id: Long = 0L
+    private var order_id: Long = 0L
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
@@ -113,11 +115,9 @@ class MainActivity : BaseActivity(),
     }
 
     private fun initExtras() {
-        val orderData = intent.getSerializableExtra(PusherConst.ORDER_DATA)
-        if (orderData != null) {
-            Timber.d(orderData.toString())
-            refreshOrderFragment()
-        }
+        val orderId = intent.getLongExtra(PusherConst.ORDER_ID, 0L)
+        Timber.d(orderId.toString())
+        refreshOrderFragment()
     }
 
     private fun initBinding() {
@@ -250,7 +250,7 @@ class MainActivity : BaseActivity(),
 
                 if (mCurrentInView != mFragmentList[2]) {
 //                    (mFragmentList[2] as HomeFragment).initRequest()
-                    (mFragmentList[2] as TestOrderFragment).initConfig()
+                    (mFragmentList[2] as TestOrderFragment).initRequest()
                 }
 
                 setFragmentView(mFragmentList[2])
@@ -362,20 +362,30 @@ class MainActivity : BaseActivity(),
         }, ConnectionState.ALL)
 
         val channel = pusher.subscribe(PusherConst.PUSHER_MY_CHANNEL)
-        channel.bind(PusherConst.PUSHER_MY_EVENT) {
+        channel.bind(PusherConst.PUSHER_ORDER_EVENT) {
+            action = PusherConst.PUSHER_ORDER_EVENT
             Timber.d("Received event with data: ${it.data}")
-            val order_id = JSONObject(it.data).getString("order_id").toLong()
+            order_id = JSONObject(it.data).getString("order_id").toLong()
             user_id = JSONObject(it.data).getString("user_id").toLong()
             message = JSONObject(it.data).getString("message")
+
 
             if (user_id == userId) {
                 if (order_id != 0L) {
                     runOnUiThread {
-                        (mFragmentList[1] as OrderFragment).initAddItem(order_id) // pass the new received order here from pusher
+//                        (mFragmentList[1] as OrderFragment).initAddItem(order_id) // pass the new received order here from pusher
+
+                        if (mCurrentInView != mFragmentList[2]) {
+                            (mFragmentList[2] as TestOrderFragment).initRequest()
+                        } else {
+                            (mFragmentList[2] as TestOrderFragment).initAddItem(order_id) // pass the new received order here from pusher
+                        }
 
                         // If order view is not open/focus show notification
                         if (!KaFiestaApplication.taskActivityIsOpen) {
                             NotificationHelper(this).displayNotification(
+                                action,
+                                order_id,
                                 message!!,
                                 Random().nextInt()
                             )
@@ -386,6 +396,7 @@ class MainActivity : BaseActivity(),
         }
 
         channel.bind(PusherConst.PUSHER_TRANSACTION_EVENT) {
+            action = PusherConst.PUSHER_TRANSACTION_EVENT
             Timber.d("Received event with data: ${it.data}")
             val user_ids = JSONObject(it.data).getJSONArray("user_ids") // user_ids:[5,6,7,8,9]
             message = JSONObject(it.data).getString("message")
@@ -396,10 +407,11 @@ class MainActivity : BaseActivity(),
             }
             val stringArray = exampleList.toTypedArray()
             if (stringArray.contains(userId.toString())) {
-                proceedToActivity(WeeklyPaymentActivity::class.java) // proceed to WeeklyPaymentActivity when notification received
                 // If order view is not open/focus show notification
                 if (!KaFiestaApplication.taskActivityIsOpen) {
                     NotificationHelper(this).displayNotification(
+                        action,
+                        userId,
                         message!!,
                         Random().nextInt()
                     )

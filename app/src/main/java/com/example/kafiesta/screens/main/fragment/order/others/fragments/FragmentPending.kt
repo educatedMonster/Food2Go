@@ -18,7 +18,6 @@ import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.FragmentPendingBinding
 import com.example.kafiesta.domain.OrderBaseDomain
-import com.example.kafiesta.screens.empty.EmptyViewModel
 import com.example.kafiesta.screens.image_viewer.ImageViewerActivity
 import com.example.kafiesta.screens.image_viewer.dialog.RejectOrderDialog
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
@@ -102,6 +101,7 @@ class FragmentPending : Fragment() {
                                 val order = model as OrderBaseDomain
                                 orderViewModel.orderMoveStatus(
                                     order.order.id,
+                                    order.order.customerUserID,
                                     OrderConst.ORDER_PREPARING,
                                     ""
                                 )
@@ -224,18 +224,15 @@ class FragmentPending : Fragment() {
         orderViewModel.getAllOrderList(
             orderStatusEnum = OrderStatusEnum.PENDING,
             search = "",
-            merchant_user_id = 5,
+            merchant_user_id = userId,
             date_from = getDateNow(),
             date_to = getDateNow())
     }
 
     fun initAddItem(orderId: Long) {
-        orderViewModel.getSpecificOrderId(orderId)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding
+        if (orderId != 0L) {
+            orderViewModel.getSpecificOrderId(orderId)
+        }
     }
 
     private fun showWarningRejectDialog(orderId: Long, customerId: Long) {
@@ -244,6 +241,7 @@ class FragmentPending : Fragment() {
                 override fun onRejectOrder(remark: String) {
                     orderViewModel.orderMoveStatus(
                         orderId,
+                        customerId,
                         OrderConst.ORDER_REJECTED,
                         remark
                     )
@@ -264,4 +262,8 @@ class FragmentPending : Fragment() {
         }, 1000)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding
+    }
 }

@@ -24,6 +24,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val mainFormState = mainRepository.mainFormState
     val updateFormState = mainRepository.updateFormState
     val profile = mainRepository.profile
+    val isUploaded = mainRepository.isUploaded
     val isLoading = mainRepository.isLoading
 
     fun logout() {

@@ -21,6 +21,8 @@ import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.getDialog
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
+import com.trackerteer.taskmanagement.utilities.extensions.gone
+import com.trackerteer.taskmanagement.utilities.extensions.visible
 import kotlin.math.abs
 
 class ImageViewerActivity : BaseActivity() {
@@ -60,9 +62,9 @@ class ImageViewerActivity : BaseActivity() {
     }
 
     private fun initConfig() {
+        initExtras()
         initBinding()
         initActionBar()
-        initExtras()
         initAdapter()
         initEventListener()
         initLiveData()
@@ -90,8 +92,9 @@ class ImageViewerActivity : BaseActivity() {
     }
 
     private fun initExtras() {
-        orderId = intent.getLongExtra(IntentConst.ORDER_ID, -1L)
+        val orderId = intent.getLongExtra(IntentConst.ORDER_ID, -1L)
         customerId = intent.getLongExtra(IntentConst.CUSTOMER_ID, -1L)
+        orderViewModel.getSpecificOrderId(orderId)
     }
 
     private fun initAdapter() {
@@ -132,6 +135,7 @@ class ImageViewerActivity : BaseActivity() {
             btnAccept.setOnClickListener {
                 orderViewModel!!.orderMoveStatus(
                     orderId,
+                    customerId,
                     OrderConst.ORDER_PREPARING,
                     ""
                 )
@@ -143,6 +147,12 @@ class ImageViewerActivity : BaseActivity() {
         orderViewModel.apply {
             specificOrder.observe(this@ImageViewerActivity) {
                 model = it as OrderBaseDomain
+                orderId = model!!.order.id
+
+                if(model!!.order.isPending){
+                    binding.layoutButtonUpdate.visible()
+                }
+
                 if (model!!.order.proofURL != null) {
                     pagerAdapter.addData(model!!.order.proofURL!!)
                 }
@@ -169,6 +179,7 @@ class ImageViewerActivity : BaseActivity() {
                 override fun onRejectOrder(remark: String) {
                     orderViewModel.orderMoveStatus(
                         orderId,
+                        customerId,
                         OrderConst.ORDER_REJECTED,
                         remark
                     )

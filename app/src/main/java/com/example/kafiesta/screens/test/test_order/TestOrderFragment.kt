@@ -28,6 +28,7 @@ import com.example.kafiesta.screens.image_viewer.dialog.RejectOrderDialog
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
 import com.example.kafiesta.screens.main.fragment.order.others.dialogs.DialogOrderDetails
+import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentPending
 import com.example.kafiesta.screens.test.interfaces_test_order.Page
 import com.example.kafiesta.screens.test.interfaces_test_order.RefreshOrderListener
 import com.example.kafiesta.screens.test.interfaces_test_order.TestOrderAdapter
@@ -97,9 +98,7 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener {
         initAdapter()
         initViewPager()
         initTabLayout()
-        initRequest()
         initLiveData()
-        initRequest()
     }
 
     private fun initViewPager() {
@@ -166,25 +165,25 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener {
                     tempList.add(orders)
                 }
 
-                viewPagerAdapter.resetList(
+                viewPagerAdapter.updateDataList(
                     0,
                     pendingList,
                     ORDER_PENDING
                 )
 
-                viewPagerAdapter.resetList(
+                viewPagerAdapter.updateDataList(
                     1,
                     preparingList,
                     ORDER_PREPARING
                 )
 
-                viewPagerAdapter.resetList(
+                viewPagerAdapter.updateDataList(
                     2,
                     deliveryList,
                     ORDER_DELIVERY
                 )
 
-                viewPagerAdapter.resetList(
+                viewPagerAdapter.updateDataList(
                     3,
                     completedList,
                     ORDER_COMPLETED
@@ -220,8 +219,8 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener {
                         shimmer.gone()
                         shimmer.stopShimmer()
                         recycler.visible()
-                        if (viewPagerAdapter.getAdapterItemList(it.orderPosition) != 0) {
-                            viewPagerAdapter.resetList(
+                        if (viewPagerAdapter.getDataCount(it.orderPosition) != 0) {
+                            viewPagerAdapter.updateDataList(
                                 it.orderPosition,
                                 it.list as ArrayList<OrderBaseDomain>,
                                 it.orderTitle
@@ -231,6 +230,17 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener {
                             empty.visible()
                         }
                     }, 500)
+                }
+            }
+
+            specificOrder.observe(viewLifecycleOwner) {
+                val recycler =
+                    binding.viewPager.findViewWithTag<RecyclerView>(it.order.status + "recycler")
+                if (viewPagerAdapter.getDataCount(0) != 0) {
+                    viewPagerAdapter.addLastItem(0, it!!)
+                    recycler.postDelayed({
+                        recycler.scrollToPosition(recycler.adapter!!.itemCount - 1)
+                    }, 1000)
                 }
             }
         }
@@ -279,6 +289,7 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener {
                             accept = {
                                 orderViewModel.orderMoveStatus(
                                     model.order.id,
+                                    model.order.customerUserID,
                                     ORDER_PREPARING,
                                     ""
                                 )
@@ -288,6 +299,7 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener {
                             move_delivery = {
                                 orderViewModel.orderMoveStatus(
                                     model.order.id,
+                                    model.order.customerUserID,
                                     ORDER_DELIVERY,
                                     ""
                                 )
@@ -297,6 +309,7 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener {
                             move_completed = {
                                 orderViewModel.orderMoveStatus(
                                     model.order.id,
+                                    model.order.customerUserID,
                                     ORDER_COMPLETED,
                                     ""
                                 )
@@ -304,7 +317,7 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener {
                                     model.order.orderId))
                             },
                             reject = {
-                                showWarningRejectDialog(model.order.id)
+                                showWarningRejectDialog(model.order.id, model.order.customerUserID)
                             },
                             proofURL = {
                                 val intent =
@@ -326,17 +339,24 @@ open class TestOrderFragment : Fragment(), RefreshOrderListener {
             ))
     }
 
-    private fun showWarningRejectDialog(orderId: Long) {
+    private fun showWarningRejectDialog(orderId: Long, customerId: Long) {
         RejectOrderDialog(
             listener = object : RejectOrderDialog.Listener {
                 override fun onRejectOrder(remark: String) {
                     orderViewModel.orderMoveStatus(
                         orderId,
+                        customerId,
                         OrderConst.ORDER_REJECTED,
                         remark
                     )
                 }
             }
         ).show(requireActivity().supportFragmentManager, DialogTag.DIALOG_REJECT_REMARK)
+    }
+
+    fun initAddItem(orderId: Long) {
+        if (orderId != 0L) {
+            orderViewModel.getSpecificOrderId(orderId)
+        }
     }
 }

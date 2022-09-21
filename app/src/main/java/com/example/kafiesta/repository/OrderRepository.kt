@@ -107,6 +107,7 @@ class OrderRepository(
 
     suspend fun onOrderMoveStatus(
         order_id: Long,
+        customerId: Long,
         status: String,
         remarks: String?,
     ) {
@@ -125,28 +126,21 @@ class OrderRepository(
                 _orderStatus.postValue(network.status)
 
                 val params2 = HashMap<String, Any>()
-                var data: String? = null
-                val message: String?
+                val data: String?
+                var message: String? = null
                 when {
                     status.matches(ORDER_PREPARING.toRegex()) -> {
                         message = "Order is now preparing"
-                        data =
-                            "{order_id: $order_id, user_id: $userid, message: $message}"
-
                     }
                     status.matches(ORDER_DELIVERY.toRegex()) -> {
                         message = "Your rider is on the way"
-                        data =
-                            "{order_id: $order_id, user_id: $userid, message: $message}"
-
                     }
                     status.matches(ORDER_COMPLETED.toRegex()) -> {
                         message = "Order completed."
-                        data =
-                            "{order_id: $order_id, user_id: $userid, message: $message}"
                     }
                 }
-                params2["data"] = data!!
+                data = orderMoveResponse(order_id, customerId, message!!)
+                params2["data"] = data
                 params2["event_name"] = PUSHER_ORDER_PIPELINE_EVENT
                 params2["channel_name"] = PUSHER_MY_CHANNEL
                 val network2 = AppNetwork.service.onTriggerPusherAsync(
@@ -249,6 +243,14 @@ class OrderRepository(
                 _isLoading.postValue(false)
             }
         }
+    }
+
+    private fun orderMoveResponse(
+        order_id: Long,
+        user_id: Long,
+        message: String,
+    ): String {
+        return "{\"order_id\": \"$order_id\",\"user_id\": \"$user_id\",\"message\":\"$message\"}"
     }
 
 }

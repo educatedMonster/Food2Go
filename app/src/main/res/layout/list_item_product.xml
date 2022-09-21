@@ -17,125 +17,134 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="@{() -> onClickCallBack.onClick(model)}"
-        android:background="@drawable/circle_background"
-        android:paddingTop="@dimen/padding_avg"
-        android:paddingBottom="@dimen/padding_avg"
-        android:paddingStart="@dimen/padding_semi_small"
-        android:paddingEnd="@dimen/padding_semi_small" >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/itemRoot"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="5:6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_background"
+            android:onClick="@{() -> onClickCallBack.onClick(model)}"
+            android:paddingStart="@dimen/padding_semi_small"
+            android:paddingTop="@dimen/padding_avg"
+            android:paddingEnd="@dimen/padding_semi_small"
+            android:paddingBottom="@dimen/padding_avg"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_photo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:cardCornerRadius="@dimen/margin_small"
-                app:cardElevation="2dp"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/itemRoot"
+                android:layout_width="185dp"
+                android:layout_height="225dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/image_proof"
-                    imageUrl="@{model.imageURL}"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_photo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/ic_inventory_add_24"
-                    android:transitionName="imagePost"
+                    app:cardCornerRadius="@dimen/margin_small"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_proof"
+                        imageUrl="@{model.imageURL}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_inventory_add_24"
+                        android:transitionName="imagePost"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:targetApi="lollipop" />
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/padding_semi_avg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/itemRoot">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/text_view_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/aileron_bold"
+                    android:gravity="start"
+                    android:lines="2"
+                    android:padding="@dimen/padding_min"
+                    android:text="@{model.name}"
+                    android:textColor="@color/color_palette_black"
+                    android:textSize="@dimen/text_size_normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:targetApi="lollipop" />
+                    tools:text="@tools:sample/lorem/random" />
 
-            </androidx.cardview.widget.CardView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingStart="@dimen/padding_semi_avg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemRoot">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_view_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="@font/aileron_bold"
-                android:gravity="start"
-                android:lines="2"
-                android:padding="@dimen/padding_min"
-                android:text="@{model.name}"
-                android:textColor="@color/color_palette_black"
-                android:textSize="@dimen/text_size_normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="@tools:sample/lorem/random" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="@font/aileron_regular"
-                android:gravity="start"
-                android:lines="1"
-                android:padding="@dimen/padding_min"
-                android:text="Price"
-                android:textColor="@color/color_palette_black"
-                android:textSize="@dimen/text_size_normal_small"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_name" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/aileron_regular"
+                    android:gravity="start"
+                    android:lines="1"
+                    android:padding="@dimen/padding_min"
+                    android:text="Price"
+                    android:textColor="@color/color_palette_black"
+                    android:textSize="@dimen/text_size_normal_small"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_name" />
 
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="@font/aileron_regular"
-                android:gravity="start"
-                android:lines="1"
-                android:padding="@dimen/padding_min"
-                android:text="@{model.price}"
-                android:textColor="@color/color_palette_black"
-                android:textSize="@dimen/text_size_normal_small"
-                app:layout_constraintStart_toEndOf="@+id/tv_1"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_name"
-                tools:text="@tools:sample/us_zipcodes" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/aileron_regular"
+                    android:gravity="start"
+                    android:lines="1"
+                    android:padding="@dimen/padding_min"
+                    android:text="@{model.price}"
+                    android:textColor="@color/color_palette_black"
+                    android:textSize="@dimen/text_size_normal_small"
+                    app:layout_constraintStart_toEndOf="@+id/tv_1"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_name"
+                    tools:text="@tools:sample/us_zipcodes" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rc_tag"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_min"
-                android:background="@color/transparent_white_percent_95"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/margin_min"
-                android:paddingBottom="@dimen/margin_min"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_price"
-                tools:listitem="@layout/list_item_tag" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rc_tag"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_min"
+                    android:background="@color/transparent_white_percent_95"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/margin_min"
+                    android:paddingBottom="@dimen/margin_min"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_price"
+                    tools:listitem="@layout/list_item_tag" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

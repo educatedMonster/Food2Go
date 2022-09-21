@@ -33,19 +33,35 @@ class TestOrderAdapter(
         notifyDataSetChanged()
     }
 
+    fun addData(model: OrderBaseDomain) {
+        //to avoid duplication
+        if (model !in list) {
+            list.add(model)
+        }
+        notifyDataSetChanged()
+    }
+
+    fun getDataItem(position: Int): OrderBaseDomain {
+        return list[position]
+    }
+
     fun removeFirstItem(position: Int) {
         list.removeAt(position)
         notifyItemRemoved(position)
     }
 
     fun addLastItem(item: OrderBaseDomain) {
-        list.add(0, item)
-        notifyItemInserted(itemCount - 1)
+        //to avoid duplication
+        if (item !in list) {
+            list.add(itemCount, item)
+            notifyItemInserted(itemCount)
+        }
+        notifyDataSetChanged()
     }
 
     fun addDataItem(item: OrderBaseDomain) {
         list.add(item)
-        notifyItemInserted(list.size - 1)
+        notifyItemInserted(itemCount - 1)
     }
 
     fun insertDataItem(position: Int, item: OrderBaseDomain) {
@@ -75,6 +91,14 @@ class TestOrderAdapter(
     fun removeItemRange(start: Int, end: Int) {
         list.subList(start, end).clear()
         notifyItemRangeRemoved(start, end)
+    }
+
+    fun addDataList(newList: List<OrderBaseDomain>) {
+        if (newList.isEmpty()) {
+            return
+        }
+        list.addAll(newList)
+        notifyItemRangeInserted(itemCount - newList.size, newList.size)
     }
 
     fun clearDataList() {
@@ -110,7 +134,7 @@ class TestOrderAdapter(
                     R.color.colorSecondary
                 }
                 else -> {
-                    R.color.light_gray2
+                    R.color.color_palette_pending
                 }
             }
             it.layoutOrder.setBackgroundResource(color)

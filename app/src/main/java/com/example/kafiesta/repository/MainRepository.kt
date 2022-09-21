@@ -72,7 +72,14 @@ class MainRepository(private val sharedPrefs: SharedPrefs) {
                 params["first_name"] = profileDomain.firstName
                 params["last_name"] = profileDomain.lastName
                 params["email"] = profileDomain.email
-
+                if (profileDomain.password != null) {
+                    if (profileDomain.password.isNotBlank() &&
+                        profileDomain.password.isNotEmpty() &&
+                        profileDomain.password.toString().trim().isNotEmpty() &&
+                        (!profileDomain.password.matches("".toRegex()))) {
+                    params["password"] = profileDomain.password
+                    }
+                }
                 // stick to this shitty long updating form for the mean time
                 // Contact Info
                 params["user_informations[complete_address]"] = profileDomain.userInformation!!.complete_address

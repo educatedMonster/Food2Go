@@ -14,7 +14,6 @@ import androidx.viewpager.widget.PagerAdapter
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.TabPageRecyclerBinding
 import com.example.kafiesta.domain.OrderBaseDomain
-import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.tab.CustomTabLayout.Companion.TAB_COUNT_FOR_FIXED
 import com.example.kafiesta.utilities.tab.CustomTabLayout.Companion.TYPE_WHITE_BG
@@ -27,7 +26,7 @@ import kotlin.math.roundToInt
 class ViewPagerRecyclerAdapter(
     private val context: Context,
     private val pageList: List<Page>,
-    private val onClickCallBack: RecyclerClick
+    private val onClickCallBack: RecyclerClick,
 ) : PagerAdapter() {
 
     private lateinit var binding: TabPageRecyclerBinding
@@ -61,14 +60,51 @@ class ViewPagerRecyclerAdapter(
         container.removeView(obj as View)
     }
 
-    fun resetList(
+    fun updateDataList(
         pagePosition: Int,
         newList: ArrayList<OrderBaseDomain>,
         status: String,
     ) {
         adapterList[pagePosition].updateList(newList, status)
         showHideEmptyLayout(pagePosition, newList)
-        binding.progressBottom.visibility = View.GONE
+        binding.progressBottom.gone()
+    }
+
+    fun getDataItem(pagePosition: Int, recyclerPosition: Int): OrderBaseDomain{
+        return adapterList[pagePosition].getDataItem(recyclerPosition)
+    }
+
+    fun addData(pagePosition: Int, order: OrderBaseDomain) {
+        adapterList[pagePosition].addData(order)
+    }
+
+    fun addLastItem(pagePosition: Int, order: OrderBaseDomain) {
+        adapterList[pagePosition].addLastItem(order)
+    }
+
+
+    fun addDataItem(pagePosition: Int, order: OrderBaseDomain) {
+        adapterList[pagePosition].addDataItem(order)
+    }
+
+    fun updateDataItem(position: Int, order: OrderBaseDomain, recyclerPosition: Int) {
+        adapterList[position].updateDataItem(recyclerPosition, order)
+    }
+
+    fun removeItem(pagerPosition: Int, adapterPosition: Int) {
+        adapterList[pagerPosition].removeItem(adapterPosition)
+    }
+
+    fun removeItemRange(pagerPosition: Int, startAdapterPosition: Int, endAdapterPosition: Int) {
+        adapterList[pagerPosition].removeItemRange(startAdapterPosition, endAdapterPosition)
+    }
+
+    fun clearData(pagePosition: Int) {
+        adapterList[pagePosition].clearDataList()
+    }
+
+    fun getDataCount(pagePosition: Int): Int {
+        return adapterList[pagePosition].itemCount
     }
 
     fun clearAll(status: String) {
@@ -87,8 +123,10 @@ class ViewPagerRecyclerAdapter(
         }
     }
 
-    fun getAdapterItemList(pagePosition: Int): Int {
-        return adapterList[pagePosition].itemCount
+    fun addDataList(pagePosition: Int, dataList: ArrayList<OrderBaseDomain>) {
+        adapterList[pagePosition].addDataList(dataList)
+        showHideEmptyLayout(pagePosition, dataList)
+        binding.progressBottom.gone()
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -130,6 +168,7 @@ class ViewPagerRecyclerAdapter(
             recyclerView.apply {
                 layoutManager = linearLayoutManager
                 adapter = viewModelAdapter
+                isNestedScrollingEnabled
                 tag = pageTitle + "recycler"
             }
 
@@ -204,6 +243,18 @@ class ViewPagerRecyclerAdapter(
         }
 
         return view
+    }
+
+    fun moveToLastItem() {
+        binding.recyclerView.postDelayed({
+            binding.recyclerView.scrollToPosition(binding.recyclerView.adapter!!.itemCount - 1)
+        }, 1000)
+    }
+
+    fun moveToFirstItem() {
+        binding.recyclerView.postDelayed({
+            binding.recyclerView.scrollToPosition(0)
+        }, 1000)
     }
 
     companion object {

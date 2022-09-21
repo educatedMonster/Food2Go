@@ -105,43 +105,6 @@ fun initMultiplePermission(activity: Activity) {
         }).check()
 }
 
-
-fun createImageFileName(): Uri {
-    val fileName = "image-${System.currentTimeMillis()}"
-
-    @Suppress("DEPRECATION")
-    val rootDirectory =
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-    val imageFile = File.createTempFile(fileName, ".jpg", rootDirectory)
-    return Uri.fromFile(imageFile)
-}
-
-@SuppressLint("QueryPermissionsNeeded")
-fun setFileChooser(activity: Activity, uri: Uri) {
-    val intentCameraArray = ArrayList<Intent>()
-    val intentCapture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-    val cameraList = activity.packageManager.queryIntentActivities(intentCapture, 0)
-    for (cl in cameraList) {
-        val packageName = cl.activityInfo.packageName
-        val intent = Intent(intentCapture)
-        intent.component = ComponentName(cl.activityInfo.packageName, cl.activityInfo.name)
-        intent.setPackage(packageName)
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-        intentCameraArray.add(intent)
-    }
-    val intentGallery = Intent()
-    intentGallery.type = "image/*"
-    intentGallery.action = Intent.ACTION_PICK
-
-    val intentChooser =
-        Intent.createChooser(intentGallery, activity.getString(R.string.title_select_image))
-    intentChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS,
-        intentCameraArray.toTypedArray<Parcelable>()
-    )
-
-    activity.startActivityForResult(intentChooser, RequestCodeTag.REQUEST_CODE_CAMERA)
-}
-
 fun getMimeType(context: Context, uri: Uri?): String? {
     if (uri == null) return null
 
@@ -160,61 +123,62 @@ fun getMimeType(context: Context, uri: Uri?): String? {
 }
 
 @BindingAdapter("loadItemImage")
-fun loadItemImage(imageView: ImageView?, url: Uri?) {
+fun loadItemImage(imageView: ImageView, url: Uri?) {
     val imageUrl = url ?: IMAGE_PLACE_HOLDER
     imageUrl.let {
-        if (imageView != null) {
-            Glide.with(imageView.context)
-                .load(imageUrl)
-                .into(imageView)
-        }
+        Glide.with(imageView.context)
+            .load(imageUrl)
+            .apply(
+                RequestOptions()
+                    .fitCenter()
+            )
+            .into(imageView)
     }
 }
 
 @BindingAdapter("loadItemImage")
-fun loadItemImage(imageView: ImageView?, url: String?) {
+fun loadItemImage(imageView: ImageView, url: String?) {
+    val imageUrl = url ?: IMAGE_PLACE_HOLDER
     url.let {
-        if (imageView != null) {
-            Glide.with(imageView.context)
-                .load(url)
-                .into(imageView)
-        }
+        Glide.with(imageView.context)
+            .load(imageUrl)
+            .apply(
+                RequestOptions()
+                    .fitCenter()
+            )
+            .into(imageView)
     }
 }
 
 @BindingAdapter("imageUrl")
-fun imageUrl(imageView: ImageView?, url: String?) {
+fun imageUrl(imageView: ImageView, url: String?) {
     val imageUrl = url ?: IMAGE_PLACE_HOLDER
     imageUrl.let {
-        if (imageView != null) {
-            Glide.with(imageView.context)
-                .load(imageUrl)
-                .apply(
-                    RequestOptions()
-                        .centerCrop()
-                        .placeholder(R.drawable.loading_animation)
-                        .error(R.drawable.ic_broken_image)
-                )
-                .into(imageView)
-        }
+        Glide.with(imageView.context)
+            .load(imageUrl)
+            .apply(
+                RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.drawable.loading_animation)
+                    .error(R.drawable.ic_broken_image)
+            )
+            .into(imageView)
     }
 }
 
 @BindingAdapter("imageUrl")
-fun imageUrl(imageView: ImageView?, url: Uri?) {
+fun imageUrl(imageView: ImageView, url: Uri?) {
     val imageUrl = url ?: IMAGE_PLACE_HOLDER
     imageUrl.let {
-        if (imageView != null) {
-            Glide.with(imageView.context)
-                .load(imageUrl)
-                .apply(
-                    RequestOptions()
-                        .centerCrop()
-                        .placeholder(R.drawable.loading_animation)
-                        .error(R.drawable.ic_broken_image)
-                )
-                .into(imageView)
-        }
+        Glide.with(imageView.context)
+            .load(imageUrl)
+            .apply(
+                RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.drawable.loading_animation)
+                    .error(R.drawable.ic_broken_image)
+            )
+            .into(imageView)
     }
 }
 

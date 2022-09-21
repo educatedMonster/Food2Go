@@ -24,6 +24,8 @@ import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.example.kafiesta.utilities.hideKeyboard
 import com.example.kafiesta.utilities.extensions.showToast
+import com.trackerteer.taskmanagement.utilities.extensions.gone
+import com.trackerteer.taskmanagement.utilities.extensions.visible
 import timber.log.Timber
 
 /**
@@ -221,19 +223,13 @@ class FragmentInventory : Fragment() {
             binding.apply {
                 swipeRefreshLayout.isRefreshing = set
                 if (set) {
-                    //is Loading
-//                    textViewMarkAll.isEnabled = false
-//                    shimmerViewContainer.startShimmer()
-//                    shimmerViewContainer.visible()
-//                    recyclerView.gone()
-//                    linearLayoutProgressOffset.gone()
-//                } else {
-                    //not loading
-//                    textViewMarkAll.isEnabled = true
-//                    shimmerViewContainer.stopShimmer()
-//                    shimmerViewContainer.gone()
-//                    recyclerView.visible()
-//                    linearLayoutProgressOffset.visible()
+                    shimmerViewContainer.startShimmer()
+                    shimmerViewContainer.visible()
+                    recyclerViewProducts.gone()
+                } else {
+                    shimmerViewContainer.stopShimmer()
+                    shimmerViewContainer.gone()
+                    recyclerViewProducts.visible()
                 }
             }
         } catch (e: Exception) {

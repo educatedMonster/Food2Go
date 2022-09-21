@@ -17,12 +17,13 @@ import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityProductAndInventoryBinding
 import com.example.kafiesta.databinding.LayoutCustomToolbarInventoryBinding
 import com.example.kafiesta.screens.BaseActivity
-import com.example.kafiesta.screens.product_and_inventory.product.FragmentProduct
 import com.example.kafiesta.screens.product_and_inventory.inventory.FragmentInventory
 import com.example.kafiesta.screens.product_and_inventory.inventory.InventoryViewModel
 import com.example.kafiesta.screens.product_and_inventory.inventory.dialogs.DialogProductSearch
+import com.example.kafiesta.screens.product_and_inventory.product.FragmentProduct
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
+import com.example.kafiesta.utilities.initMultiplePermission
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.trackerteer.taskmanagement.utilities.extensions.gone
@@ -72,6 +73,7 @@ class ProductAndInventoryActivity : BaseActivity() {
     private fun initConfig() {
         initBinding()
         initActionBar()
+        initMultiplePermission(this)
         initViewPager()
         initTabLayout()
         initEventListener()
@@ -91,7 +93,7 @@ class ProductAndInventoryActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initBinding(){
+    private fun initBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_product_and_inventory)
         binding.lifecycleOwner = this
         binding.model = inventoryViewModel
@@ -145,7 +147,8 @@ class ProductAndInventoryActivity : BaseActivity() {
                 null
             ) as ConstraintLayout
 
-            val tabContent = tabLinearLayout.findViewById<View>(R.id.text_view_tab_item_name) as TextView
+            val tabContent =
+                tabLinearLayout.findViewById<View>(R.id.text_view_tab_item_name) as TextView
             tabContent.text = mProductInventoryManager.pageTitle(i)
             tabLayout.getTabAt(i)?.customView = tabContent
         }
@@ -153,27 +156,27 @@ class ProductAndInventoryActivity : BaseActivity() {
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 Timber.d("onTabSelected ${tab?.text}")
-                if(tab?.text!!.matches("Products".toRegex())){
+                if (tab?.text!!.matches("Products".toRegex())) {
                     toolbarAddBinding.imgMore.gone()
-                } else if(tab.text!!.matches("Inventory".toRegex())){
+                } else if (tab.text!!.matches("Inventory".toRegex())) {
                     toolbarAddBinding.imgMore.visible()
                 }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 Timber.d("onTabUnselected ${tab?.text}")
-                if(tab?.text!!.matches("Inventory".toRegex())){
+                if (tab?.text!!.matches("Inventory".toRegex())) {
                     toolbarAddBinding.imgMore.gone()
-                } else if(tab.text!!.matches("Products".toRegex())){
+                } else if (tab.text!!.matches("Products".toRegex())) {
                     toolbarAddBinding.imgMore.visible()
                 }
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 Timber.d("onTabReselected ${tab?.text}")
-                if(tab?.text!!.matches("Inventory".toRegex())){
+                if (tab?.text!!.matches("Inventory".toRegex())) {
                     toolbarAddBinding.imgMore.visible()
-                } else if(tab.text!!.matches("Products".toRegex())){
+                } else if (tab.text!!.matches("Products".toRegex())) {
                     toolbarAddBinding.imgMore.gone()
                 }
             }
@@ -186,7 +189,8 @@ class ProductAndInventoryActivity : BaseActivity() {
                 val dialog = DialogProductSearch(
                     userId = userId,
                     application = application)
-                dialog.setParentActivity(this@ProductAndInventoryActivity, this@ProductAndInventoryActivity)
+                dialog.setParentActivity(this@ProductAndInventoryActivity,
+                    this@ProductAndInventoryActivity)
                 dialog.show(supportFragmentManager,
                     DialogTag.DIALOG_BOTTOM_SEARCH_INVENTORY)
             }

@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.kafiesta.R
 import com.example.kafiesta.databinding.OrderFragmentBinding
-import com.example.kafiesta.domain.OrderBaseDomain
 import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentCompleted
 import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentDelivery
 import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentPending
@@ -82,8 +81,7 @@ class OrderFragment : Fragment() {
         mOrderFragmentManager =
             OrderFragmentManager(mFragmentList,
                 requireContext(),
-                requireActivity().supportFragmentManager,
-                lifecycle)
+                requireActivity())
         //Add adapter to view pager
         mViewPager2 = binding.viewPager2
         mViewPager2.adapter = mOrderFragmentManager

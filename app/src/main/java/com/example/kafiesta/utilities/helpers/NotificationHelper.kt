@@ -8,13 +8,17 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
+import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.AppConst
-import com.example.kafiesta.constants.PusherConst.ORDER_DATA
+import com.example.kafiesta.constants.PusherConst
+import com.example.kafiesta.constants.PusherConst.ORDER_ID
+import com.example.kafiesta.constants.PusherConst.MERCHANT_ID
 import com.example.kafiesta.screens.main.MainActivity
-import com.example.kafiesta.screens.main.fragment.order.OrderFragment
+import com.example.kafiesta.screens.splash.SplashActivity
+import com.example.kafiesta.screens.weekly_payment.WeeklyPaymentActivity
 
 class NotificationHelper(base: Context?) : ContextWrapper(base) {
 
@@ -38,6 +42,13 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
             notificationChannel.enableVibration(true)
             notificationChannel.lightColor = Color.YELLOW
             notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+            notificationChannel.setSound(
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                    .build()
+            )
             getNotificationManager()?.createNotificationChannel(notificationChannel)
         }
     }
@@ -51,18 +62,35 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
 
 
     private fun getChannelNotification(
+        action: String?,
+        uid: Long?,
         data: String?,
     ): Notification.Builder? {
-
         // onClick notification triggers here.
-        val intent = Intent(baseContext, MainActivity::class.java)
-        intent.putExtra(ORDER_DATA, data)
+        val intent = when (action) {
+            PusherConst.PUSHER_ORDER_EVENT  -> {
+                val intent = Intent(baseContext, MainActivity::class.java)
+                intent.putExtra(ORDER_ID, uid!!)
+            }
+            PusherConst.PUSHER_TRANSACTION_EVENT  -> {
+                val intent = Intent(baseContext, WeeklyPaymentActivity::class.java)  // proceed to WeeklyPaymentActivity when notification received
+                intent.putExtra(MERCHANT_ID, uid!!)
+            }
+            else -> {
+                Intent(baseContext, SplashActivity::class.java)
+            }
+        }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            baseContext, 0, intent,
-            PendingIntent.FLAG_ONE_SHOT
-        )
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.getActivity(
+                baseContext, 0, intent,
+    //            PendingIntent.FLAG_ONE_SHOT
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            TODO("VERSION.SDK_INT < M")
+        }
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
@@ -86,11 +114,15 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
     }
 
     fun displayNotification(
+        action: String?,
+        uid: Long?,
         data: String,
         id: Int,
     ) {
         val notificationBuilder =
             getChannelNotification(
+                action,
+                uid!!,
                 data
             )
         getNotificationManager()?.notify(id, notificationBuilder?.build())

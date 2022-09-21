@@ -51,6 +51,7 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
 
     fun orderMoveStatus(
         order_id: Long,
+        customer_id: Long,
         status: String,
         remarks: String?,
     ) {
@@ -58,6 +59,7 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 repository.onOrderMoveStatus(
                     order_id,
+                    customer_id,
                     status,
                     remarks)
             } catch (network: IOException) {
@@ -84,7 +86,8 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
         search: String,
         merchant_user_id: Long,
         date_from: String,
-        date_to: String){
+        date_to: String,
+    ) {
         viewModelScope.launch {
             try {
                 repository.getCertainOrderStatus(
@@ -95,7 +98,7 @@ class OrderViewModel(application: Application) : AndroidViewModel(application) {
                     merchant_user_id,
                     date_from,
                     date_to)
-            }catch (network: IOException){
+            } catch (network: IOException) {
                 Timber.d(network)
             }
         }

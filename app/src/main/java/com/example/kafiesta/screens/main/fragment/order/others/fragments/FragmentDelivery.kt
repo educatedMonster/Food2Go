@@ -1,5 +1,6 @@
 package com.example.kafiesta.screens.main.fragment.order.others.fragments
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,21 +13,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
+import com.example.kafiesta.constants.IntentConst
 import com.example.kafiesta.constants.OrderConst
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.FragmentDeliveryBinding
 import com.example.kafiesta.domain.OrderBaseDomain
+import com.example.kafiesta.screens.image_viewer.ImageViewerActivity
 import com.example.kafiesta.screens.main.fragment.order.OrderStatusEnum
-import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderAdapter
 import com.example.kafiesta.screens.main.fragment.order.OrderViewModel
+import com.example.kafiesta.screens.main.fragment.order.others.adapter.OrderAdapter
 import com.example.kafiesta.screens.main.fragment.order.others.dialogs.DialogOrderDetails
 import com.example.kafiesta.utilities.decorator.DividerItemDecoration
+import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.getDialog
 import com.example.kafiesta.utilities.helpers.OrderRecyclerClick
 import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
-import com.example.kafiesta.utilities.extensions.showToast
 import com.trackerteer.taskmanagement.utilities.extensions.gone
 import com.trackerteer.taskmanagement.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_pending.view.*
@@ -56,7 +59,8 @@ class FragmentDelivery : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        userId = SharedPrefs(getSecurePrefs(requireContext())).getString(UserConst.USER_ID)!!.toLong()
+        userId =
+            SharedPrefs(getSecurePrefs(requireContext())).getString(UserConst.USER_ID)!!.toLong()
         initConfig()
     }
 
@@ -87,32 +91,46 @@ class FragmentDelivery : Fragment() {
         mAdapter = OrderAdapter(
             context = requireContext(),
             onClickCallBack = RecyclerClick(
-            click = {
-                val a = it as OrderBaseDomain
-                val dialog = DialogOrderDetails(
-                    status = a.order.status,
-                    model = a,
-                    onClickCallBack = OrderRecyclerClick(
-                        accept = {},
-                        move_delivery = {},
-                        move_completed = { model ->
-                            val order = model as OrderBaseDomain
-                            orderViewModel.orderMoveStatus(
-                                order.order.id,
-                                OrderConst.ORDER_COMPLETED,
-                                ""
-                            )
-                            showToast(getString(R.string.dialog_message_order_completed, order.order.orderId))
-                        },
-                        reject = {},
-                        proofURL = {}
-                    ),
-                    activity = requireActivity()
-                )
-                dialog.show(requireActivity().supportFragmentManager,
-                    DialogTag.DIALOG_ORDER_DETAILS)
-            }
-        ))
+                click = {
+                    val a = it as OrderBaseDomain
+                    val dialog = DialogOrderDetails(
+                        status = a.order.status,
+                        model = a,
+                        onClickCallBack = OrderRecyclerClick(
+                            accept = {},
+                            move_delivery = {},
+                            move_completed = { model ->
+                                val order = model as OrderBaseDomain
+                                orderViewModel.orderMoveStatus(
+                                    order.order.id,
+                                    order.order.customerUserID,
+                                    OrderConst.ORDER_COMPLETED,
+                                    ""
+                                )
+                                showToast(getString(R.string.dialog_message_order_completed,
+                                    order.order.orderId))
+                            },
+                            reject = {},
+                            proofURL = { model ->
+                                val order = model as OrderBaseDomain
+                                val intent =
+                                    Intent(requireContext(), ImageViewerActivity::class.java)
+                                intent.putExtra(IntentConst.ORDER_ID, order.order.id)
+                                intent.putExtra(IntentConst.CUSTOMER_ID, order.order.customerUserID)
+                                startActivity(intent)
+                                requireActivity().overridePendingTransition(R.anim.enter_from_bottom,
+                                    R.anim.stay)
+
+                                (getDialog(requireActivity(),
+                                    DialogTag.DIALOG_ORDER_DETAILS) as DialogOrderDetails?)?.dismiss()
+                            }
+                        ),
+                        activity = requireActivity()
+                    )
+                    dialog.show(requireActivity().supportFragmentManager,
+                        DialogTag.DIALOG_ORDER_DETAILS)
+                }
+            ))
     }
 
     private fun initViews() {
@@ -165,7 +183,8 @@ class FragmentDelivery : Fragment() {
             }
 
             orderStatus.observe(viewLifecycleOwner) {
-                (getDialog(requireActivity(), DialogTag.DIALOG_ORDER_DETAILS) as DialogOrderDetails?)?.dismiss()
+                (getDialog(requireActivity(),
+                    DialogTag.DIALOG_ORDER_DETAILS) as DialogOrderDetails?)?.dismiss()
                 showToast(it)
                 initRequest()
             }
@@ -176,21 +195,13 @@ class FragmentDelivery : Fragment() {
         mAdapter.clearAdapter()
         orderViewModel.getAllOrderList(
             orderStatusEnum = OrderStatusEnum.DELIVERY,
-//            length = 10,
-//            start = 0,
             search = "",
-            merchant_user_id = 5,
+            merchant_user_id = userId,
             date_from = getDateNow(),
             date_to = getDateNow())
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding
-    }
-
-    private fun getDateNow() :  String{
+    private fun getDateNow(): String {
         val current = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDateTime.now()
         } else {
@@ -208,5 +219,8 @@ class FragmentDelivery : Fragment() {
         return formatted
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding
+    }
 }

@@ -24,6 +24,9 @@ data class UserProfileResponse(
     @SerializedName("email")
     val email: String,
 
+    @SerializedName("password")
+    val password: String? = null,
+
     @SerializedName("remember_token")
     val rememberToken: Any? = null,
 
@@ -123,6 +126,7 @@ fun UserProfileResponse.asDomainModel(): ProfileDomain {
         lastName = last_name,
         fullName = fullName,
         email = email,
+        password = password,
         status = status,
         role = role,
         userInformation = userInformation.asDomainModel(),

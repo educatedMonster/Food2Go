@@ -22,6 +22,7 @@ import com.example.kafiesta.utilities.dialog.ConfigureDialog
 import com.example.kafiesta.utilities.dialog.GlobalDialog
 import com.example.kafiesta.utilities.dialog.ProductAddDialog
 import com.example.kafiesta.utilities.dialog.ProductEditDialog
+import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.getDialog
 import com.example.kafiesta.utilities.getGlobalDialog
 import com.example.kafiesta.utilities.helpers.GlobalDialogClicker
@@ -29,7 +30,9 @@ import com.example.kafiesta.utilities.helpers.RecyclerClick
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
 import com.example.kafiesta.utilities.hideKeyboard
-import com.example.kafiesta.utilities.extensions.showToast
+import com.example.kafiesta.utilities.initMultiplePermission
+import com.trackerteer.taskmanagement.utilities.extensions.gone
+import com.trackerteer.taskmanagement.utilities.extensions.visible
 import timber.log.Timber
 import java.io.File
 
@@ -83,6 +86,7 @@ class FragmentProduct : Fragment() {
     }
 
     private fun initConfig() {
+        initMultiplePermission(requireActivity())
         initAdapter()
         initEventListener()
         initLiveData()
@@ -121,7 +125,8 @@ class FragmentProduct : Fragment() {
                                         getGlobalDialog(requireActivity(), tag)?.dismiss()
                                     },
                                 )
-                                GlobalDialog(configureDialog, null).show(requireActivity().supportFragmentManager,
+                                GlobalDialog(configureDialog,
+                                    null).show(requireActivity().supportFragmentManager,
                                     tag)
                             }
                         }).show(requireActivity().supportFragmentManager,
@@ -270,19 +275,13 @@ class FragmentProduct : Fragment() {
             binding.apply {
                 swipeRefreshLayout.isRefreshing = set
                 if (set) {
-                    //is Loading
-//                    textViewMarkAll.isEnabled = false
-//                    shimmerViewContainer.startShimmer()
-//                    shimmerViewContainer.visible()
-//                    recyclerView.gone()
-//                    linearLayoutProgressOffset.gone()
-//                } else {
-                    //not loading
-//                    textViewMarkAll.isEnabled = true
-//                    shimmerViewContainer.stopShimmer()
-//                    shimmerViewContainer.gone()
-//                    recyclerView.visible()
-//                    linearLayoutProgressOffset.visible()
+                    shimmerViewContainer.startShimmer()
+                    shimmerViewContainer.visible()
+                    recyclerViewProducts.gone()
+                } else {
+                    shimmerViewContainer.stopShimmer()
+                    shimmerViewContainer.gone()
+                    recyclerViewProducts.visible()
                 }
             }
         } catch (e: Exception) {

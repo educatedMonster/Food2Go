@@ -129,4 +129,7 @@ dependencies {
 
     // Pusher
     implementation 'com.pusher:pusher-java-client:2.4.0'
+
+    //Notification error on Android version 12
+    implementation 'androidx.work:work-runtime-ktx:2.7.0'
 }

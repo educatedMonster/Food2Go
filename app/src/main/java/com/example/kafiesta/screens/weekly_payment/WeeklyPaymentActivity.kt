@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kafiesta.R
 import com.example.kafiesta.constants.DialogTag
+import com.example.kafiesta.constants.PusherConst
 import com.example.kafiesta.constants.UserConst
 import com.example.kafiesta.databinding.ActivityWeeklyPaymentBinding
 import com.example.kafiesta.databinding.DialogWeeklyPaymentUrlBinding
@@ -51,12 +52,12 @@ class WeeklyPaymentActivity : BaseActivity() {
     }
 
     private fun initConfig() {
+        initExtras()
         initBinding()
         initActionBar()
         initAdapter()
         initViews()
         initLiveData()
-        initRequest()
     }
 
     override fun onResume() {
@@ -69,6 +70,11 @@ class WeeklyPaymentActivity : BaseActivity() {
             android.R.id.home -> onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun initExtras() {
+        val merchantId = intent.getLongExtra(PusherConst.MERCHANT_ID, 0L)
+        weeklyPaymentViewModel.getWeeklyPayment(merchantId)
     }
 
     private fun initBinding() {
@@ -199,7 +205,6 @@ class WeeklyPaymentActivity : BaseActivity() {
     }
 
     fun initRequest() {
-        mAdapter!!.clearAdapter()
         weeklyPaymentViewModel.getWeeklyPayment(userId)
     }
 

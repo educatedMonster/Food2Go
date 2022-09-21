@@ -12,20 +12,16 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Parcelable
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import androidx.annotation.ArrayRes
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.kafiesta.R
-import com.example.kafiesta.autocomplete.ArrayAdapterInstantAuto
-import com.example.kafiesta.autocomplete.InstantAutoComplete
-import com.example.kafiesta.autocomplete.InstantAutoItem
-import com.example.kafiesta.autocomplete.InstantAutoTextWatcher
 import com.example.kafiesta.constants.RequestCodeTag
 import com.example.kafiesta.constants.ServerConst.IS_SUCCESS
 import com.example.kafiesta.constants.UserConst
@@ -38,14 +34,11 @@ import com.example.kafiesta.domain.UserInformationDomain
 import com.example.kafiesta.domain.UserShopDomain
 import com.example.kafiesta.screens.BaseActivity
 import com.example.kafiesta.screens.main.MainViewModel
-import com.example.kafiesta.utilities.extensions.hasSelected
-import com.example.kafiesta.utilities.extensions.isEmailValid
-import com.example.kafiesta.utilities.extensions.isNotEmpty
 import com.example.kafiesta.utilities.extensions.showToast
 import com.example.kafiesta.utilities.helpers.FileUtils
 import com.example.kafiesta.utilities.helpers.SharedPrefs
 import com.example.kafiesta.utilities.helpers.getSecurePrefs
-import com.google.android.material.textfield.TextInputEditText
+import com.example.kafiesta.utilities.initMultiplePermission
 import com.trackerteer.taskmanagement.utilities.extensions.gone
 import com.trackerteer.taskmanagement.utilities.extensions.setSafeOnClickListener
 import com.trackerteer.taskmanagement.utilities.extensions.visible
@@ -70,10 +63,11 @@ class ProfileSettingActivity : BaseActivity() {
     private lateinit var toolbarShopBinding: LayoutCustomToolbarShopBinding
     private var mActionBar: ActionBar? = null
     private var imageUrl: String? = null
-    private var mOutputFileUri: Uri? = null
+    private var outputFileUri: Uri? = null
     private var mFile: File? = null
     private var isGetImage = false
-    private val style = androidx.navigation.ui.ktx.R.style.Base_Theme_MaterialComponents_Light_Dialog
+    private val style =
+        androidx.navigation.ui.ktx.R.style.Base_Theme_MaterialComponents_Light_Dialog
     private val mainViewModel: MainViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(application)
             .create(MainViewModel::class.java)
@@ -97,22 +91,19 @@ class ProfileSettingActivity : BaseActivity() {
                     }
                     val selectedImageUri: Uri?
                     if (isCamera) {
-                        selectedImageUri = mOutputFileUri
+                        selectedImageUri = outputFileUri
                         if (selectedImageUri == null) return
-                        Glide.with(this).load(selectedImageUri)
-                            .into(binding.circleAddProduct)
+                        Glide.with(this).load(selectedImageUri).into(binding.imageView)
                     } else {
                         selectedImageUri = data!!.data
                         if (selectedImageUri == null) return
-                        mOutputFileUri = selectedImageUri
-                        Glide.with(this).load(selectedImageUri)
-                            .into(binding.circleAddProduct)
+                        outputFileUri = selectedImageUri
+                        Glide.with(this).load(selectedImageUri).into(binding.imageView)
                     }
-                    binding.circleAddProduct.visible()
-                    if (mOutputFileUri != null) {
-                        mFile = FileUtils.getFile(this, mOutputFileUri)!!
+                    binding.imageView.visible()
+                    if (outputFileUri != null) {
+                        mFile = FileUtils.getFile(this, outputFileUri)!!
                     }
-
                     isGetImage = true
                 }
             }
@@ -140,19 +131,15 @@ class ProfileSettingActivity : BaseActivity() {
     }
 
     private fun initConfig() {
-        initRequest()
         initBinding()
         initActionBar()
+        initMultiplePermission(this)
         initLiveData()
         initEventListener()
 //        initAutoCompleteAdapter()
     }
 
     private fun initRequest() {
-        requestMainViewModel()
-    }
-
-    private fun requestMainViewModel() {
         mainViewModel.getMe()
     }
 
@@ -187,12 +174,11 @@ class ProfileSettingActivity : BaseActivity() {
 
     private fun initLiveData() {
         mainViewModel.profile.observe(this) {
-            imageUrl = it.user_shop!!.imageURL
-            if (mOutputFileUri == null) {
+            imageUrl = it!!.user_shop!!.imageURL
+            if (outputFileUri == null) {
                 Glide.with(this).load(imageUrl)
-                    .into(binding.circleAddProduct)
+                    .into(binding.imageView)
             }
-
         }
 
         mainViewModel.updateFormState.observe(this) {
@@ -200,6 +186,12 @@ class ProfileSettingActivity : BaseActivity() {
                 onBackPressed()
             }
             showToast(it.message)
+        }
+
+        mainViewModel.isUploaded.observe(this) {
+            if (it) {
+                setLoading(it)
+            }
         }
 
         mainViewModel.isLoading.observe(this) {
@@ -212,6 +204,22 @@ class ProfileSettingActivity : BaseActivity() {
             if (toolbarShopBinding.activeInactiveToggleStore.isChecked) toolbarShopBinding.activeInactiveText.text =
                 "Open" else toolbarShopBinding.activeInactiveText.text = "Closed"
         }
+
+        binding.textInputChangePassword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                @Suppress("DEPRECATION")
+                binding.textLayoutPassword.isPasswordVisibilityToggleEnabled =
+                    binding.textInputChangePassword.text.toString().isNotEmpty()
+            }
+        })
 
         binding.apply {
             buttonUpdate.setSafeOnClickListener {
@@ -244,6 +252,7 @@ class ProfileSettingActivity : BaseActivity() {
                 val cbGcash = binding.cbGcash.isChecked
                 val cbCod = binding.cbCod.isChecked
                 val deliveryCharge = binding.textInputDeliveryCharge.text.toString()
+                val password = binding.textInputChangePassword.text.toString()
 
                 //Todo - Test dropdown
 //                if (hasSelected(
@@ -295,6 +304,7 @@ class ProfileSettingActivity : BaseActivity() {
                     lastName = lastName,
                     fullName = "$firstName $lastName",
                     email = emailAddress,
+                    password = password,
                     status = PROFILE_STATUS,
                     role = PROFILE_ROLE,
                     userInformation = userInfo,
@@ -302,37 +312,37 @@ class ProfileSettingActivity : BaseActivity() {
                 )
 
                 if (isGetImage) {
-                    mainViewModel?.updateUserInfo(userProfile, mFile!!)
+                    mainViewModel!!.updateUserInfo(userProfile, mFile!!)
                 } else {
-                    mainViewModel?.updateUserInfo(userProfile, null)
+                    mainViewModel!!.updateUserInfo(userProfile, null)
                 }
             }
 
             layoutContactUser.setOnClickListener {
-                if (this.layoutIncludeUser.visibility == View.VISIBLE) {
-                    this.layoutIncludeUser.gone()
+                if (layoutIncludeUser.visibility == View.VISIBLE) {
+                    layoutIncludeUser.gone()
                 } else {
-                    this.layoutIncludeUser.visible()
+                    layoutIncludeUser.visible()
                 }
             }
 
             layoutContactInfo.setOnClickListener {
-                if (this.layoutIncludeContact.visibility == View.VISIBLE) {
-                    this.layoutIncludeContact.gone()
+                if (layoutIncludeContact.visibility == View.VISIBLE) {
+                    layoutIncludeContact.gone()
                 } else {
-                    this.layoutIncludeContact.visible()
+                    layoutIncludeContact.visible()
                 }
             }
 
             layoutShopInfo.setOnClickListener {
-                if (this.layoutIncludeShop.visibility == View.VISIBLE) {
-                    this.layoutIncludeShop.gone()
+                if (layoutIncludeShop.visibility == View.VISIBLE) {
+                    layoutIncludeShop.gone()
                 } else {
-                    this.layoutIncludeShop.visible()
+                    layoutIncludeShop.visible()
                 }
             }
 
-            circleAddProduct.setSafeOnClickListener {
+            imageView.setSafeOnClickListener {
                 startGettingImage()
             }
 
@@ -353,26 +363,6 @@ class ProfileSettingActivity : BaseActivity() {
         } catch (e: Exception) {
             Timber.e(e)
         }
-    }
-
-    private fun onValidate(
-        firstName: TextInputEditText,
-        lastName: TextInputEditText,
-        emailAddress: TextInputEditText,
-    ): Boolean {
-        if (!isNotEmpty(firstName, true)) {
-            return false
-        } else if (!isNotEmpty(lastName, true)) {
-            return false
-        } else if (!isNotEmpty(emailAddress, true)) {
-            return false
-        } else if (!isEmailValid(emailAddress, true)) {
-            return false
-        }
-        return true
-
-        Timber.d("Validate")
-
     }
 
     private fun onValidateCb(b: Boolean): Long {
@@ -441,7 +431,6 @@ class ProfileSettingActivity : BaseActivity() {
         var time: LocalTime? = null
         var formatter: DateTimeFormatter? = null
         try {
-//        val timeComeFromServer = "0:00 PM" // testing
             val parser: DateTimeFormatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
             } else {
@@ -457,11 +446,13 @@ class ProfileSettingActivity : BaseActivity() {
     }
 
     private fun startGettingImage() {
-        val fileName = "food2Go-${System.currentTimeMillis()}"
-        @Suppress("DEPRECATION") val rootDirectory =
+        val fileName = "foodtwogo-${System.currentTimeMillis()}"
+
+        @Suppress("DEPRECATION")
+        val rootDirectory =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val imageFile = File.createTempFile(fileName, ".jpg", rootDirectory)
-        mOutputFileUri = Uri.fromFile(imageFile)
+        outputFileUri = Uri.fromFile(imageFile)
         setFileChooser()
     }
 
@@ -475,7 +466,7 @@ class ProfileSettingActivity : BaseActivity() {
             val intent = Intent(intentCapture)
             intent.component = ComponentName(cl.activityInfo.packageName, cl.activityInfo.name)
             intent.setPackage(packageName)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mOutputFileUri)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
             intentCameraArray.add(intent)
         }
         val intentGallery = Intent()
@@ -503,35 +494,35 @@ class ProfileSettingActivity : BaseActivity() {
 //            mIAutoCompleteAdapter!!)
 //    }
 
-    private fun getListFromArrayResource(
-        list: ArrayList<InstantAutoItem>,
-        @ArrayRes valueRes: Int,
-        @ArrayRes textRes: Int,
-    ) {
-        val ids = this.resources.getStringArray(valueRes)
-        val texts = this.resources.getStringArray(textRes)
-        for (i in ids.indices) {
-            list.add(InstantAutoItem(ids[i], texts[i]))
-        }
-    }
-
-    private fun initializeAutoComplete(
-        autoComplete: InstantAutoComplete,
-        adapter: ArrayAdapterInstantAuto,
-    ) {
-        autoComplete.threshold = 0 //will start working from first character
-        autoComplete.setShowUnfilteredListWhenClicked(true)
-        autoComplete.setAdapter(adapter)
-        autoComplete.onItemClickListener =
-            AdapterView.OnItemClickListener { parent1: AdapterView<*>, view: View?, position: Int, id: Long ->
-                autoComplete.error = null
-                val item = parent1.getItemAtPosition(position) as InstantAutoItem
-                adapter.setSelected(item)
-
-                Timber.d("ITEM $item.id : $item.text")
-                Timber.d("ADAPTER ITEM ${adapter.getSelected()!!.text}" )
-
-            }
-        autoComplete.addTextChangedListener(InstantAutoTextWatcher(adapter))
-    }
+//    private fun getListFromArrayResource(
+//        list: ArrayList<InstantAutoItem>,
+//        @ArrayRes valueRes: Int,
+//        @ArrayRes textRes: Int,
+//    ) {
+//        val ids = this.resources.getStringArray(valueRes)
+//        val texts = this.resources.getStringArray(textRes)
+//        for (i in ids.indices) {
+//            list.add(InstantAutoItem(ids[i], texts[i]))
+//        }
+//    }
+//
+//    private fun initializeAutoComplete(
+//        autoComplete: InstantAutoComplete,
+//        adapter: ArrayAdapterInstantAuto,
+//    ) {
+//        autoComplete.threshold = 0 //will start working from first character
+//        autoComplete.setShowUnfilteredListWhenClicked(true)
+//        autoComplete.setAdapter(adapter)
+//        autoComplete.onItemClickListener =
+//            AdapterView.OnItemClickListener { parent1: AdapterView<*>, view: View?, position: Int, id: Long ->
+//                autoComplete.error = null
+//                val item = parent1.getItemAtPosition(position) as InstantAutoItem
+//                adapter.setSelected(item)
+//
+//                Timber.d("ITEM $item.id : $item.text")
+//                Timber.d("ADAPTER ITEM ${adapter.getSelected()!!.text}")
+//
+//            }
+//        autoComplete.addTextChangedListener(InstantAutoTextWatcher(adapter))
+//    }
 }

@@ -18,14 +18,15 @@ object ServerConst {
 
 object PusherConst {
     const val PUSHER_MY_CHANNEL = "my-channel"
-    const val PUSHER_MY_EVENT = "my-event"
+    const val PUSHER_ORDER_EVENT = "my-event"
     const val PUSHER_ORDER_PIPELINE_EVENT = "order-pipeline-event"
     const val PUSHER_TRANSACTION_EVENT = "transaction-event"
     const val PUSHER_API_KEY = "5916385ce66c483b7a01"
     const val PUSHER_CLUSTER = "ap1"
 
     const val NOTIFICATION_ID = "INTENT_KEY_NOTIFICATION_ID"
-    const val ORDER_DATA = "ORDER_DATA"
+    const val ORDER_ID = "ORDER_ID"
+    const val MERCHANT_ID = "MERCHANT_ID"
 }
 
 object IntentConst {

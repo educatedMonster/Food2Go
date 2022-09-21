@@ -3,8 +3,6 @@ package com.example.kafiesta.screens.main.fragment.order
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.kafiesta.R
 import com.example.kafiesta.screens.main.fragment.order.others.fragments.FragmentCompleted
@@ -19,10 +17,9 @@ import com.example.kafiesta.screens.main.fragment.order.others.fragments.Fragmen
 class OrderFragmentManager(
     private val mFragmentList: ArrayList<Fragment>,
     someContext: Context,
-    fm: FragmentManager,
-    lifecycle: Lifecycle
+    fragmentActivity: FragmentActivity,
 ) :
-    FragmentStateAdapter(fm, lifecycle) {
+    FragmentStateAdapter(fragmentActivity) {
 
     val context = someContext.applicationContext ?: someContext
 

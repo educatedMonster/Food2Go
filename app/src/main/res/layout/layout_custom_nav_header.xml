@@ -35,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/transparent_white_percent_20"
+            android:background="@color/transparent_white_percent_35"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +53,7 @@
                 android:gravity="end"
                 android:maxLines="1"
                 android:text="@{mainViewModel.profile.user_shop.name}"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/colorOnSecondary"
                 android:textSize="@dimen/text_size_normal"
                 tools:text="@string/title_layout_nav_header_name" />
 
@@ -66,7 +66,7 @@
                 android:gravity="end"
                 android:maxLines="1"
                 android:text="@{mainViewModel.profile.email}"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/colorOnSecondary"
                 android:textSize="@dimen/text_size_normal_small_light"
                 tools:text="@string/title_layout_nav_header_email" />
 

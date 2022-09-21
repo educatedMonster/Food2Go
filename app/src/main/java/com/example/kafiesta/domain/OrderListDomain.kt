@@ -51,7 +51,7 @@ data class OrderDomain (
     private val netTotal2 = netTotal + deliveryCharge.toDouble() + convenienceFee.toDouble()
     val netTotalString = netTotal2.toString()
     val showButton = !proofURL.isNullOrEmpty()
-
+    val showNote = !note.isNullOrEmpty()
     val isPending = status.matches(OrderConst.ORDER_PENDING.toRegex())
     val isPrepareToDelivery = status.matches(OrderConst.ORDER_PREPARING.toRegex())
     val isPrepareToDeliveryToCompleted = status.matches(OrderConst.ORDER_DELIVERY.toRegex())

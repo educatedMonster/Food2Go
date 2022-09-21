@@ -37,8 +37,8 @@ class OrderAdapter(
     }
 
     fun addLastItem(item: OrderBaseDomain) {
-        list.add(0, item)
-        notifyItemInserted(itemCount - 1)
+        list.add(itemCount, item)
+        notifyItemInserted(itemCount)
     }
 
     fun addFirstItem(item: OrderBaseDomain) {
