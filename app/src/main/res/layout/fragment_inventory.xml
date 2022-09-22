@@ -9,7 +9,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.screens.product_and_inventory.inventory.InventoryViewModel" />
+            type="com.example.food2go.screens.product_and_inventory.inventory.InventoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

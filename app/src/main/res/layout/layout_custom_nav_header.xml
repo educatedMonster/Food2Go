@@ -7,7 +7,7 @@
 
         <variable
             name="mainViewModel"
-            type="com.example.kafiesta.screens.main.MainViewModel" />
+            type="com.example.food2go.screens.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

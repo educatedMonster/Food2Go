@@ -8,7 +8,7 @@
 
         <variable
             name="homeViewModel"
-            type="com.example.kafiesta.screens.main.fragment.home.HomeViewModel" />
+            type="com.example.food2go.screens.main.fragment.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

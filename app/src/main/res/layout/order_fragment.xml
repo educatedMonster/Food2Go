@@ -9,7 +9,7 @@
 
         <variable
             name="orderViewModel"
-            type="com.example.kafiesta.screens.main.fragment.order.OrderViewModel" />
+            type="com.example.food2go.screens.main.fragment.order.OrderViewModel" />
 
     </data>
 

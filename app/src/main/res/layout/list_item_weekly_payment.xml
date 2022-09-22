@@ -9,15 +9,15 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.WeeklyPaymentDomain" />
+            type="com.example.food2go.domain.WeeklyPaymentDomain" />
 
         <variable
             name="onClickCallBack"
-            type="com.example.kafiesta.utilities.helpers.WeeklyPaymentRecyclerClick" />
+            type="com.example.food2go.utilities.helpers.WeeklyPaymentRecyclerClick" />
 
         <variable
             name="viewModel"
-            type="com.example.kafiesta.screens.weekly_payment.WeeklyPaymentViewModel" />
+            type="com.example.food2go.screens.weekly_payment.WeeklyPaymentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -7,16 +7,16 @@
 
         <variable
             name="orderViewModel"
-            type="com.example.kafiesta.screens.main.fragment.order.OrderViewModel" />
+            type="com.example.food2go.screens.main.fragment.order.OrderViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".screens.test.test_order.TestOrderFragment">
+        tools:context=".screens.test_order.test_order.TestOrderFragment">
 
-            <com.example.kafiesta.utilities.tab.CustomTabLayout
+            <com.example.food2go.utilities.tab.CustomTabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/normal_icon_size"

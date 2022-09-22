@@ -8,11 +8,11 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.OrderBaseDomain" />
+            type="com.example.food2go.domain.OrderBaseDomain" />
 
         <variable
             name="onClickCallBack"
-            type="com.example.kafiesta.utilities.helpers.RecyclerClick" />
+            type="com.example.food2go.utilities.helpers.RecyclerClick" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

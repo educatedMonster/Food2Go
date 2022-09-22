@@ -9,15 +9,15 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.OrderBaseDomain" />
+            type="com.example.food2go.domain.OrderBaseDomain" />
 
         <variable
             name="orderViewModel"
-            type="com.example.kafiesta.screens.main.fragment.order.OrderViewModel" />
+            type="com.example.food2go.screens.main.fragment.order.OrderViewModel" />
 
         <variable
             name="onClickCallBack"
-            type="com.example.kafiesta.utilities.helpers.OrderRecyclerClick" />
+            type="com.example.food2go.utilities.helpers.OrderRecyclerClick" />
     </data>
 
     <androidx.core.widget.NestedScrollView

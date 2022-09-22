@@ -10,11 +10,11 @@
 
         <variable
             name="mainViewModel"
-            type="com.example.kafiesta.screens.main.MainViewModel" />
+            type="com.example.food2go.screens.main.MainViewModel" />
 
         <variable
             name="onClickCallBack"
-            type="com.example.kafiesta.utilities.helpers.RecyclerClick" />
+            type="com.example.food2go.utilities.helpers.RecyclerClick" />
 
     </data>
 
@@ -72,7 +72,7 @@
                         android:layout_height="wrap_content">
 
 <!--                        Testing Purpose-->
-                        <com.example.kafiesta.autocomplete.InstantAutoComplete
+                        <com.example.food2go.autocomplete.InstantAutoComplete
                             android:id="@+id/auto_complete_sample"
                             style="@style/EditProfileSelectInput"
                             android:visibility="visible"

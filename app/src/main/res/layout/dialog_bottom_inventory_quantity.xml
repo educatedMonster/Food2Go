@@ -8,7 +8,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.ProductInventoryDomain" />
+            type="com.example.food2go.domain.ProductInventoryDomain" />
     </data>
 
 

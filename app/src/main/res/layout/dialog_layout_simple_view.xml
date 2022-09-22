@@ -6,7 +6,7 @@
     <data>
         <variable
             name="model"
-            type="com.example.kafiesta.domain.ProductDomain" />
+            type="com.example.food2go.domain.ProductDomain" />
     </data>
 
     <RelativeLayout

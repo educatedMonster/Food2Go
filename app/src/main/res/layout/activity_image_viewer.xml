@@ -10,11 +10,11 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.OrderBaseDomain" />
+            type="com.example.food2go.domain.OrderBaseDomain" />
 
         <variable
             name="orderViewModel"
-            type="com.example.kafiesta.screens.main.fragment.order.OrderViewModel" />
+            type="com.example.food2go.screens.main.fragment.order.OrderViewModel" />
 
     </data>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.kafiesta">
+    package="com.example.food2go">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -15,14 +15,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.KaFiesta"
+        android:theme="@style/Theme.Food2Go"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.kafiesta.utilities.LocalStorageProvider"
+            android:authorities="com.example.food2go.utilities.LocalStorageProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -31,24 +31,26 @@
         </provider>
 
         <activity
-            android:name=".screens.weekly_payment.WeeklyPaymentActivity"
+            android:name="com.example.food2go.screens.weekly_payment.WeeklyPaymentActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Food2Go.NoActionBar"/>
+        <activity
+            android:name="com.example.food2go.screens.empty.EmptyActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.empty.EmptyActivity"
+            android:name="com.example.food2go.screens.image_viewer.ImageViewerActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.image_viewer.ImageViewerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.product_and_inventory.ProductAndInventoryActivity"
+            android:name="com.example.food2go.screens.product_and_inventory.ProductAndInventoryActivity"
             android:exported="false"
             android:label="@string/title_activity_dashboard"
-            android:theme="@style/Theme.KaFiesta.NoActionBar" />
+            android:theme="@style/Theme.Food2Go.NoActionBar" />
         <activity
-            android:name=".screens.profile.ProfileSettingActivity"
-            android:exported="false" />
+            android:name="com.example.food2go.screens.profile.ProfileSettingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Food2Go.NoActionBar"/>
         <activity
-            android:name=".screens.splash.SplashActivity"
+            android:name="com.example.food2go.screens.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,9 +58,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".screens.login.LoginActivity" />
+        <activity android:name="com.example.food2go.screens.login.LoginActivity" />
         <activity
-            android:name=".screens.main.MainActivity"
+            android:name="com.example.food2go.screens.main.MainActivity"
             android:screenOrientation="portrait" />
     </application>
 

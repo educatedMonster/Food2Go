@@ -9,7 +9,7 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.WeeklyPaymentDomain" />
+            type="com.example.food2go.domain.WeeklyPaymentDomain" />
     </data>
 
 

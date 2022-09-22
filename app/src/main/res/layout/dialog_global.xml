@@ -9,7 +9,7 @@
 
         <variable
             name="configureDialog"
-            type="com.example.kafiesta.utilities.dialog.ConfigureDialog" />
+            type="com.example.food2go.utilities.dialog.ConfigureDialog" />
 
     </data>
 

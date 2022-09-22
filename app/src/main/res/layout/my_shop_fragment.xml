@@ -9,7 +9,7 @@
 
         <variable
             name="myShopViewModel"
-            type="com.example.kafiesta.screens.main.fragment.myshop.MyShopViewModel" />
+            type="com.example.food2go.screens.main.fragment.myshop.MyShopViewModel" />
 
     </data>
 

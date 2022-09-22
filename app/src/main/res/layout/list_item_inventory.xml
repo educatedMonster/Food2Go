@@ -9,11 +9,11 @@
 
         <variable
             name="model"
-            type="com.example.kafiesta.domain.InventoryDomain" />
+            type="com.example.food2go.domain.InventoryDomain" />
 
         <variable
             name="onClickCallBack"
-            type="com.example.kafiesta.utilities.helpers.RecyclerClick2View" />
+            type="com.example.food2go.utilities.helpers.RecyclerClick2View" />
 
         <variable
             name="view"

@@ -8,7 +8,7 @@
 
         <variable
             name="inventoryViewModel"
-            type="com.example.kafiesta.screens.product_and_inventory.inventory.InventoryViewModel" />
+            type="com.example.food2go.screens.product_and_inventory.inventory.InventoryViewModel" />
     </data>
 
     <RelativeLayout
