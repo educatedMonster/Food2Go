@@ -1,19 +1,21 @@
-package com.example.food2go.domain
+package com.example.food2go.network
 
+import com.example.food2go.domain.LinkDomaintest
+import com.example.food2go.domain.ListDMaintest
+import com.example.food2go.domain.ProductDomaintest
+import com.example.food2go.domain.ResultDomaintest
 import com.google.gson.annotations.SerializedName
 
-
-data class ListNetworktest (
+data class ListNetworkTest (
     val status: String,
     val message: String,
-    val result: Resulttest
+    val result: ResultTest
 )
 
-
-data class Resulttest (
+data class ResultTest (
     @SerializedName("current_page")
     val currentPage: Long,
-    val data: List<Producttest>,
+    val data: List<ProductTest>,
     @SerializedName("first_page_url")
     val firstPageURL: String,
     val from: Long,
@@ -33,8 +35,7 @@ data class Resulttest (
     val total: Long
 )
 
-
-data class Producttest (
+data class ProductTest (
     @SerializedName("id")
     val id: Long,
 
@@ -61,7 +62,7 @@ data class Link (
     val active: Boolean
 )
 
-fun ListNetworktest.asDomainMode() : ListDMaintest{
+fun ListNetworkTest.asDomainMode() : ListDMaintest {
     return ListDMaintest(
         status = status,
         message = message,
@@ -69,7 +70,7 @@ fun ListNetworktest.asDomainMode() : ListDMaintest{
     )
 }
 
-fun Resulttest.asDomainModel(): ResultDomaintest {
+fun ResultTest.asDomainModel(): ResultDomaintest {
     return ResultDomaintest(
         currentPage = currentPage,
         data = data.map { it.asDomainModel() },
@@ -88,7 +89,7 @@ fun Resulttest.asDomainModel(): ResultDomaintest {
 
 }
 
-fun Producttest.asDomainModel(): ProductDomaintest {
+fun ProductTest.asDomainModel(): ProductDomaintest {
     return ProductDomaintest(
         id = id,
         userID = userID,

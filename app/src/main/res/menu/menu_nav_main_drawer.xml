@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_weekly_payment"
-        android:icon="@drawable/ic_weekly_payment_24"
-        android:title="@string/title_nav_drawer_weekly_payment" />
-
-    <item
         android:id="@+id/nav_my_shop"
         android:icon="@drawable/ic_store_24"
         android:title="@string/title_nav_drawer_my_shop" />
@@ -15,6 +10,16 @@
         android:id="@+id/nav_inventory"
         android:icon="@drawable/ic_inventory_24"
         android:title="@string/title_nav_drawer_inventory" />
+
+    <item
+        android:id="@+id/nav_weekly_payment"
+        android:icon="@drawable/ic_weekly_payment_24"
+        android:title="@string/title_nav_drawer_weekly_payment" />
+
+    <item
+        android:id="@+id/nav_report"
+        android:icon="@drawable/ic_report_24"
+        android:title="@string/title_nav_drawer_report" />
 
     <item
         android:id="@+id/nav_logout"

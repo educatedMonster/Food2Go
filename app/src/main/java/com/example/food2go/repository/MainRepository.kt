@@ -13,8 +13,10 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.File
@@ -135,7 +137,7 @@ class MainRepository(private val sharedPrefs: SharedPrefs) {
                 val params = HashMap<String, Any>()
                 params["file"] = file
 
-                val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
+                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
                 val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
                 val network = AppNetwork.service.onUploadImageAsync(
                     bearer = setBearer(token),

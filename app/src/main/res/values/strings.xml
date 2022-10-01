@@ -35,6 +35,7 @@
 
     <!--    Drawer Activity Title-->
     <string name="title_nav_drawer_weekly_payment">Weekly Payment</string>
+    <string name="title_nav_drawer_report">Report</string>
     <string name="title_nav_drawer_profile">Profile</string>
     <string name="title_nav_drawer_my_shop">My Shop</string>
     <string name="title_nav_drawer_products">Products</string>
@@ -63,6 +64,8 @@
     <string name="activity_shop_time_close">Closing Time</string>
     <string name="activity_shop_open">Open</string>
     <string name="activity_shop_close">Closed</string>
+    <string name="activity_report_date_from">Date From</string>
+    <string name="activity_report_date_to">Date To</string>
 
     <!--    Error Message -->
     <string name="error_message_illegal_argument_exception">Unable to construct action bar</string>
@@ -137,7 +140,6 @@
     <!--    Toast Message-->
     <string name="toast_error_payment_image_upload">Select image!</string>
     <string name="toast_error_payment_checkbox">You must check the checkbox to continue payment process!</string>
-
 
 
     <string name="no_data_avail">No data Available</string>

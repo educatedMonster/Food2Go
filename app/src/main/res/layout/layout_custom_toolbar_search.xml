@@ -6,9 +6,6 @@
 
         <import type="android.view.View" />
 
-        <variable
-            name="inventoryViewModel"
-            type="com.example.food2go.screens.product_and_inventory.inventory.InventoryViewModel" />
     </data>
 
     <RelativeLayout

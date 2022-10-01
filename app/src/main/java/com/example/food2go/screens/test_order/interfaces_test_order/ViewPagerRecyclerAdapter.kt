@@ -149,7 +149,7 @@ class ViewPagerRecyclerAdapter(
                 startShimmer()
             }
 
-            emptyLayoutList.add(layoutEmptyTask).apply {
+            emptyLayoutList.add(layoutEmpty).apply {
                 try {
                     emptyLayoutList[position].tag = pageTitle + "empty"
                 } catch (e: IndexOutOfBoundsException) {

@@ -18,6 +18,7 @@ class EmptyViewModel(application: Application) : AndroidViewModel(application) {
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
     private val repository = EmptyRepository(SharedPrefs(getSecurePrefs(application)))
 
+    val isLoading = repository.isLoading
 
     fun triggerPusher(
         data: Any,

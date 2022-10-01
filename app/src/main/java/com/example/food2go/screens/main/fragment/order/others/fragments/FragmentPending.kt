@@ -167,16 +167,16 @@ class FragmentPending : Fragment() {
             orderPendingList.observe(viewLifecycleOwner) {
                 when {
                     it.isNotEmpty() -> {
-                        binding.layoutEmptyTask.root.gone()
+                        binding.layoutEmpty.root.gone()
                         it.forEach { model ->
                             mAdapter.addData(model)
                         }
                     }
                     mAdapter.itemCount == 0 -> {
-                        binding.layoutEmptyTask.root.visible()
+                        binding.layoutEmpty.root.visible()
                     }
                     else -> {
-                        binding.layoutEmptyTask.root.gone()
+                        binding.layoutEmpty.root.gone()
                     }
                 }
             }
@@ -197,7 +197,7 @@ class FragmentPending : Fragment() {
 
 
             specificOrder.observe(viewLifecycleOwner) {
-                binding.layoutEmptyTask.root.gone()
+                binding.layoutEmpty.root.gone()
                 moveToBottom()
                 mAdapter.addLastItem(it!!)
             }

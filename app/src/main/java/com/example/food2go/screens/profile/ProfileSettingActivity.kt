@@ -14,9 +14,9 @@ import android.os.Parcelable
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -30,7 +30,6 @@ import com.example.food2go.constants.UserConst.PROFILE_STATUS
 import com.example.food2go.constants.UserConst.SHOP_CLOSED_STATUS
 import com.example.food2go.constants.UserConst.SHOP_OPEN_STATUS
 import com.example.food2go.databinding.ActivityProfileSettingBinding
-import com.example.food2go.databinding.LayoutCustomToolbarShopBinding
 import com.example.food2go.domain.ProfileDomain
 import com.example.food2go.domain.UserInformationDomain
 import com.example.food2go.domain.UserShopDomain
@@ -63,7 +62,6 @@ class ProfileSettingActivity : BaseActivity() {
     private var closeHour: Int = 0
     private var closeMinute: Int = 0
     private lateinit var binding: ActivityProfileSettingBinding
-    private lateinit var toolbarShopBinding: LayoutCustomToolbarShopBinding
     private var mActionBar: ActionBar? = null
     private var imageUrl: String? = null
     private var outputFileUri: Uri? = null
@@ -71,8 +69,6 @@ class ProfileSettingActivity : BaseActivity() {
     private var isGetImage = false
     private var profile: ProfileDomain? = null
     private var openCloseStatus: String? = null
-    private val style =
-        androidx.navigation.ui.ktx.R.style.Base_Theme_MaterialComponents_Light_Dialog
     private val mainViewModel: MainViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(application)
             .create(MainViewModel::class.java)
@@ -81,39 +77,6 @@ class ProfileSettingActivity : BaseActivity() {
     // Todo - Test dropdown
 //    private var mIAutoCompleteAdapter: ArrayAdapterInstantAuto? = null
 //    private var mAutoItems = ArrayList<InstantAutoItem>()
-
-    // Todo - Get the selected image path here
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                RequestCodeTag.REQUEST_CODE_CAMERA -> {
-                    val isCamera: Boolean = if (data == null || data.data == null) {
-                        true
-                    } else {
-                        val action = data.action
-                        action != null && action == MediaStore.ACTION_IMAGE_CAPTURE
-                    }
-                    val selectedImageUri: Uri?
-                    if (isCamera) {
-                        selectedImageUri = outputFileUri
-                        if (selectedImageUri == null) return
-                        Glide.with(this).load(selectedImageUri).into(binding.imageView)
-                    } else {
-                        selectedImageUri = data!!.data
-                        if (selectedImageUri == null) return
-                        outputFileUri = selectedImageUri
-                        Glide.with(this).load(selectedImageUri).into(binding.imageView)
-                    }
-                    binding.imageView.visible()
-                    if (outputFileUri != null) {
-                        mFile = FileUtils.getFile(this, outputFileUri)!!
-                    }
-                    isGetImage = true
-                }
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,9 +91,39 @@ class ProfileSettingActivity : BaseActivity() {
         initRequest()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.example_menu, menu)
-        return true
+    override fun shouldRegisterForActivityResult(): Boolean {
+        return true // this will override the BaseActivity method and we can use onActivityResult
+    }
+
+    override fun onActivityResult(requestCode: Int, result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                RequestCodeTag.REQUEST_CODE_CAMERA -> {
+                    val isCamera: Boolean = if (result.data == null || result.data!!.data == null) {
+                        true
+                    } else {
+                        val action = result.data!!.action
+                        action != null && action == MediaStore.ACTION_IMAGE_CAPTURE
+                    }
+                    val selectedImageUri: Uri?
+                    if (isCamera) {
+                        selectedImageUri = outputFileUri
+                        if (selectedImageUri == null) return
+                        Glide.with(this).load(selectedImageUri).into(binding.imageView)
+                    } else {
+                        selectedImageUri = result.data!!.data
+                        if (selectedImageUri == null) return
+                        outputFileUri = selectedImageUri
+                        Glide.with(this).load(selectedImageUri).into(binding.imageView)
+                    }
+                    binding.imageView.visible()
+                    if (outputFileUri != null) {
+                        mFile = FileUtils.getFile(this, outputFileUri)!!
+                    }
+                    isGetImage = true
+                }
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -140,11 +133,9 @@ class ProfileSettingActivity : BaseActivity() {
             }
             R.id.open -> {
                 openCloseStatus = SHOP_OPEN_STATUS
-                showToast("Store set to $openCloseStatus.")
             }
             R.id.close -> {
-            openCloseStatus = SHOP_CLOSED_STATUS
-            showToast("Store set to $openCloseStatus.")
+                openCloseStatus = SHOP_CLOSED_STATUS
             }
         }
         return super.onOptionsItemSelected(item)
@@ -156,7 +147,6 @@ class ProfileSettingActivity : BaseActivity() {
         initMultiplePermission(this)
         initLiveData()
         initEventListener()
-//        initAutoCompleteAdapter()
     }
 
     private fun initRequest() {
@@ -177,6 +167,8 @@ class ProfileSettingActivity : BaseActivity() {
             mActionBar!!.setDisplayHomeAsUpEnabled(true)
             mActionBar!!.setDisplayShowHomeEnabled(true)
             mActionBar!!.setDisplayUseLogoEnabled(true)
+            binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
+            binding.collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
         } else {
             throw IllegalArgumentException(getString(R.string.error_message_illegal_argument_exception))
         }
@@ -260,18 +252,6 @@ class ProfileSettingActivity : BaseActivity() {
                 val cbCod = binding.cbCod.isChecked
                 val deliveryCharge = binding.textInputDeliveryCharge.text.toString()
                 val password = binding.textInputChangePassword.text.toString()
-
-                //Todo - Test dropdown
-//                if (hasSelected(
-//                        binding.autoCompleteSample,
-//                        mIAutoCompleteAdapter!!,
-//                        true,
-//                        R.string.invalid_auto_complete)
-//                ) {
-//                    return@setSafeOnClickListener
-//                }
-//
-//                val selected: String = mIAutoCompleteAdapter?.getSelected()!!.id
 
                 val userInfo = UserInformationDomain(
                     id = infoId,
@@ -402,7 +382,7 @@ class ProfileSettingActivity : BaseActivity() {
             val minuteString = if (openMinute < 10) "0$openMinute" else "$openMinute"
             binding.textInputTimeOpen.text = "$openHour:$minuteString $timeSet"
         }
-        val timePiker = TimePickerDialog(this, style, timePickerDialog, openHour, openMinute, false)
+        val timePiker = TimePickerDialog(this, R.style.DialogTheme, timePickerDialog, openHour, openMinute, false)
         timePiker.setTitle("Select Opening Time")
         timePiker.show()
     }
@@ -430,12 +410,13 @@ class ProfileSettingActivity : BaseActivity() {
         }
 
         val timePiker =
-            TimePickerDialog(this, style, timePickerDialog, closeHour, closeMinute, false)
+            TimePickerDialog(this, R.style.DialogTheme, timePickerDialog, closeHour, closeMinute, false)
         timePiker.setTitle("Select Opening Time")
         timePiker.show()
     }
 
     private fun set24Hours(timeComeFromServer: String): String {
+        val timeComeFromServer2 = timeComeFromServer.uppercase(Locale.getDefault())
         var time: LocalTime? = null
         var formatter: DateTimeFormatter? = null
         try {
@@ -445,12 +426,12 @@ class ProfileSettingActivity : BaseActivity() {
                 TODO("VERSION.SDK_INT < O")
             }
 
-            formatter = DateTimeFormatter.ofPattern("HH:mm")
-            time = LocalTime.parse(timeComeFromServer, parser)
+            formatter = DateTimeFormatter.ofPattern("h:mm a")
+            time = LocalTime.parse(timeComeFromServer2, parser)!!
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-        return time!!.format(formatter)
+        return time!!.format(formatter!!)
     }
 
     private fun startGettingImage() {
@@ -487,50 +468,6 @@ class ProfileSettingActivity : BaseActivity() {
             Intent.EXTRA_INITIAL_INTENTS,
             intentCameraArray.toTypedArray<Parcelable>()
         )
-        startActivityForResult(intentChooser, RequestCodeTag.REQUEST_CODE_CAMERA)
+        startActivityForResult(RequestCodeTag.REQUEST_CODE_CAMERA, intentChooser)
     }
-
-//    private fun initAutoCompleteAdapter() {
-//        getListFromArrayResource(mAutoItems,
-//            R.array.status_values,
-//            R.array.status_texts)
-//        mIAutoCompleteAdapter = ArrayAdapterInstantAuto(this,
-//            R.layout.instant_auto_complete_item_simple_text,
-//            mAutoItems)
-//        initializeAutoComplete(
-//            binding.autoCompleteSample,
-//            mIAutoCompleteAdapter!!)
-//    }
-
-//    private fun getListFromArrayResource(
-//        list: ArrayList<InstantAutoItem>,
-//        @ArrayRes valueRes: Int,
-//        @ArrayRes textRes: Int,
-//    ) {
-//        val ids = this.resources.getStringArray(valueRes)
-//        val texts = this.resources.getStringArray(textRes)
-//        for (i in ids.indices) {
-//            list.add(InstantAutoItem(ids[i], texts[i]))
-//        }
-//    }
-//
-//    private fun initializeAutoComplete(
-//        autoComplete: InstantAutoComplete,
-//        adapter: ArrayAdapterInstantAuto,
-//    ) {
-//        autoComplete.threshold = 0 //will start working from first character
-//        autoComplete.setShowUnfilteredListWhenClicked(true)
-//        autoComplete.setAdapter(adapter)
-//        autoComplete.onItemClickListener =
-//            AdapterView.OnItemClickListener { parent1: AdapterView<*>, view: View?, position: Int, id: Long ->
-//                autoComplete.error = null
-//                val item = parent1.getItemAtPosition(position) as InstantAutoItem
-//                adapter.setSelected(item)
-//
-//                Timber.d("ITEM $item.id : $item.text")
-//                Timber.d("ADAPTER ITEM ${adapter.getSelected()!!.text}")
-//
-//            }
-//        autoComplete.addTextChangedListener(InstantAutoTextWatcher(adapter))
-//    }
 }

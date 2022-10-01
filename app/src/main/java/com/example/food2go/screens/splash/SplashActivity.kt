@@ -1,6 +1,8 @@
 package com.example.food2go.screens.splash
 
+import android.app.Activity
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
 import androidx.databinding.DataBindingUtil
 import com.example.food2go.R
 import com.example.food2go.constants.UserConst
@@ -10,6 +12,7 @@ import com.example.food2go.screens.login.LoginActivity
 import com.example.food2go.screens.main.MainActivity
 import com.example.food2go.utilities.helpers.SharedPrefs
 import com.example.food2go.utilities.helpers.getSecurePrefs
+import java.util.ArrayList
 
 class SplashActivity : BaseActivity() {
 
@@ -32,6 +35,19 @@ class SplashActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         finish()
+    }
+
+    override fun shouldRegisterForActivityResult(): Boolean {
+        return true // this will override the BaseActivity method and we can use onActivityResult
+    }
+
+    override fun onActivityResult(requestCode: Int, result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                // ToDo : requestCode here
+
+            }
+        }
     }
 
     /**

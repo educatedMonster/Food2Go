@@ -28,6 +28,7 @@ import com.example.food2go.utilities.getDialog
 import com.example.food2go.utilities.helpers.OrderRecyclerClick
 import com.example.food2go.utilities.helpers.RecyclerClick
 import com.example.food2go.utilities.extensions.showToast
+import com.example.food2go.utilities.getDateNow
 import com.example.food2go.utilities.helpers.SharedPrefs
 import com.example.food2go.utilities.helpers.getSecurePrefs
 import com.trackerteer.taskmanagement.utilities.extensions.gone
@@ -162,16 +163,16 @@ class FragmentPrepare : Fragment() {
             orderPreparingList.observe(viewLifecycleOwner) {
                 when {
                     it.isNotEmpty() -> {
-                        binding.layoutEmptyTask.root.gone()
+                        binding.layoutEmpty.root.gone()
                         it.forEach { model ->
                             mAdapter.addData(model)
                         }
                     }
                     mAdapter.itemCount == 0 -> {
-                        binding.layoutEmptyTask.root.visible()
+                        binding.layoutEmpty.root.visible()
                     }
                     else -> {
-                        binding.layoutEmptyTask.root.gone()
+                        binding.layoutEmpty.root.gone()
                     }
                 }
             }
@@ -198,24 +199,6 @@ class FragmentPrepare : Fragment() {
             merchant_user_id = userId,
             date_from = getDateNow(),
             date_to = getDateNow())
-    }
-
-    private fun getDateNow(): String {
-        val current = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime.now()
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
-
-        val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
-
-        val formatted = current.format(formatter)
-        println("Current Date and Time is: $formatted")
-        return formatted
     }
 
     override fun onDestroyView() {

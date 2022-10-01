@@ -1,7 +1,9 @@
 package com.example.food2go.screens.empty
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +37,19 @@ class EmptyActivity : BaseActivity() {
         super.onResume()
     }
 
+    override fun shouldRegisterForActivityResult(): Boolean {
+        return true // this will override the BaseActivity method and we can use onActivityResult
+    }
+
+    override fun onActivityResult(requestCode: Int, result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                // ToDo : requestCode here
+
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> onBackPressed()
@@ -60,6 +75,9 @@ class EmptyActivity : BaseActivity() {
             mActionBar!!.setDisplayHomeAsUpEnabled(true)
             mActionBar!!.setDisplayShowHomeEnabled(true)
             mActionBar!!.setDisplayUseLogoEnabled(true)
+            binding.toolbar.title = "Empty Activity"
+            binding.collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
+            binding.collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
         } else {
             throw IllegalArgumentException(getString(R.string.error_message_illegal_argument_exception))
         }

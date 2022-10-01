@@ -209,9 +209,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container"
@@ -220,6 +218,7 @@
                 android:padding="@dimen/padding_avg"
                 app:layout_constraintBottom_toTopOf="@+id/layout_button"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_product_details">
 
@@ -421,18 +420,18 @@
                     android:id="@+id/proof_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:fontFamily="@font/aileron_bold"
-                    android:maxLines="1"
                     android:layout_marginTop="@dimen/text_size_normal"
-                    android:text="Click to view payment"
-                    android:textSize="@dimen/text_size_normal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/const_note"
-                    android:textColor="@color/colorSecondaryVariant"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/aileron_bold"
+                    android:gravity="end"
+                    android:maxLines="1"
                     android:onClick="@{() -> onClickCallBack.onProofURLClick(model)}"
-                    android:visibility="@{model.order.showButton ? View.VISIBLE : View.GONE}" />
+                    android:text="Click to view payment"
+                    android:textColor="@color/color_url_link"
+                    android:textSize="@dimen/text_size_normal"
+                    android:visibility="@{model.order.showButton ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/const_note" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

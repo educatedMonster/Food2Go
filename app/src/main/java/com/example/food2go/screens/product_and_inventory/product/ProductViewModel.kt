@@ -27,7 +27,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     val isDeleted = repository.isDeleted
     val isAddedInventory = repository.isAddedInventory
     val isProductCreated = repository.isProductCreated
-    val isUploaded = repository.isUploaded
+    val isState = repository.isState
 
     fun getAllProducts(length: Long, start: Long, search: String) {
         viewModelScope.launch {

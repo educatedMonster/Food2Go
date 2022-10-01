@@ -4,20 +4,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.food2go.constants.ServerConst.IS_SUCCESS
 import com.example.food2go.constants.UserConst
+import com.example.food2go.domain.OrderBaseDomain
 import com.example.food2go.domain.ProductDomain
 import com.example.food2go.domain.ProductDomaintest
 import com.example.food2go.domain.ResultDomaintest
-import com.example.food2go.domain.asDomainModel
-import com.example.food2go.network.AppNetwork
 import com.example.food2go.network.asDomainModel
+import com.example.food2go.network.AppNetwork
 import com.example.food2go.network.paramsToRequestBody
 import com.example.food2go.utilities.helpers.SharedPrefs
 import com.example.food2go.utilities.setBearer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.File
@@ -45,8 +47,8 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _isUploaded = MutableLiveData<Boolean>()
-    val isUploaded: LiveData<Boolean> get() = _isUploaded
+    private val _isState = MutableLiveData<AddEditFormState>()
+    val isState: LiveData<AddEditFormState> get() = _isState
 
     suspend fun onGetAllProducts(length: Long, start: Long, search: String) {
         withContext(Dispatchers.IO) {
@@ -113,7 +115,7 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
                 if (network.status.matches((IS_SUCCESS.toRegex()))) {
                     val productDomain = network.result.asDomainModel()
                     // when the Product Form successfully created , get the id and pass to the file image
-                    onUploadProductImage(productDomain.id, selectedFile)
+                    onUploadProductImage(productDomain.id, selectedFile, AddEditFormState(isAdd = true))
                 }
             } catch (e: HttpException) {
                 Timber.e(e.message())
@@ -143,7 +145,7 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
                 ).await()
                 if (selectedFile != null) {
                     // when the Product Form successfully created , get the id and pass to the file image
-                    onUploadProductImage(prod.id, selectedFile)
+                    onUploadProductImage(prod.id, selectedFile, AddEditFormState(isAdd = true))
                 }
                 _isLoading.postValue(false)
                 _isUpdated.postValue(true)
@@ -156,21 +158,21 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
         }
     }
 
-    private suspend fun onUploadProductImage(productId: Long, file: File) {
+    private suspend fun onUploadProductImage(productId: Long, file: File, formState: AddEditFormState) {
         withContext(Dispatchers.IO) {
             try {
                 _isLoading.postValue(true)
                 val params = HashMap<String, Any>()
                 params["file"] = file
 
-                val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
+                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
                 val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
                 val network = AppNetwork.service.onAddProductImageAsync(
                     bearer = setBearer(token),
                     productId,
                     params = body
                 ).await()
-                _isUploaded.postValue(true)
+                _isState.postValue(formState)
                 _isLoading.postValue(false)
             } catch (e: HttpException) {
                 Timber.e(e.message())
@@ -202,3 +204,8 @@ class ProductRepository(private val sharedPrefs: SharedPrefs) {
         }
     }
 }
+
+data class AddEditFormState(
+    var isAdd: Boolean = false,
+    var isEdit: Boolean = false,
+)

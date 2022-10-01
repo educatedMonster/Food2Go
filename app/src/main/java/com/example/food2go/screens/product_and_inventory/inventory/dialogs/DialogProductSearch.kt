@@ -190,7 +190,7 @@ class DialogProductSearch(
                         mAdapter.addData(data)
                     }
                 } else {
-                    binding.layoutEmptyTask.root.visible()
+                    binding.layoutEmpty.root.visible()
                 }
             }
 

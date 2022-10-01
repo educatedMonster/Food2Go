@@ -4,10 +4,11 @@ import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.widget.MultiAutoCompleteTextView
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import java.util.*
 
-class InstantAutoComplete : AppCompatAutoCompleteTextView {
+class InstantAutoComplete : androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView {
     private var mShowUnfilteredListWhenClicked = false
     private val MAX_CLICK_DURATION = 300
     private val MAX_CLICK_DISTANCE = 5

@@ -2,53 +2,54 @@ package com.example.food2go.network
 
 import com.example.food2go.utilities.helpers.UploadRequestBody
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
 
 
 fun toRequestBody(value: Long?): RequestBody {
-    return RequestBody.create(MediaType.parse("text/plain"), (value!!).toString())
+    return (value!!).toString().toRequestBody("text/plain".toMediaTypeOrNull())
 }
 
 fun toRequestBody(value: Float?): RequestBody {
-    return RequestBody.create(MediaType.parse("text/plain"), (value!!).toString())
+    return (value!!).toString().toRequestBody("text/plain".toMediaTypeOrNull())
 }
 
 fun toRequestBody(value: Double?): RequestBody {
-    return RequestBody.create(MediaType.parse("text/plain"), (value!!).toString())
+    return (value!!).toString().toRequestBody("text/plain".toMediaTypeOrNull())
 }
 
 fun toRequestBody(value: Int): RequestBody {
-    return RequestBody.create(MediaType.parse("text/plain"), value.toString())
+    return value.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 }
 
 fun toRequestBody(string: String): RequestBody {
-    return RequestBody.create(MediaType.parse("text/plain"), string)
+    return string.toRequestBody("text/plain".toMediaTypeOrNull())
 }
 
 fun toRequestBody(jsonObject: JSONObject): RequestBody {
-    return RequestBody.create(
-        MediaType.parse("application/json; charset=utf-8"),
-        jsonObject.toString()
-    )
+    return jsonObject.toString()
+        .toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
 }
 
 fun imageToRequestBody(file: File): RequestBody {
-    return RequestBody.create(MediaType.parse("image/*"), file)
+    return file.asRequestBody("image/*".toMediaTypeOrNull())
 }
 
 fun videoToRequestBody(file: File): RequestBody {
-    return RequestBody.create(MediaType.parse("video/*"), file)
+    return file.asRequestBody("video/*".toMediaTypeOrNull())
 }
 
 fun pdfToRequestBody(file: File): RequestBody {
-    return RequestBody.create(MediaType.parse("application/pdf"), file)
+    return file.asRequestBody("application/pdf".toMediaTypeOrNull())
 }
 
 fun fileToMultipartBody(partName: String, file: File, fileContentType: String): MultipartBody.Part {
-    val requestBody = RequestBody.create(MediaType.parse(fileContentType), file)
+    val requestBody = file.asRequestBody(fileContentType.toMediaTypeOrNull())
     return MultipartBody.Part.createFormData(partName, file.name, requestBody)
 }
 

@@ -1,9 +1,11 @@
 package com.example.food2go.screens.login
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
+import androidx.activity.result.ActivityResult
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.food2go.R
@@ -18,6 +20,7 @@ import com.example.food2go.utilities.extensions.showView
 import com.example.food2go.utilities.hideKeyboard
 import com.example.food2go.utilities.initMultiplePermission
 import timber.log.Timber
+import java.util.ArrayList
 
 class LoginActivity : BaseActivity() {
 
@@ -30,6 +33,19 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initConfig()
+    }
+
+    override fun shouldRegisterForActivityResult(): Boolean {
+        return true // this will override the BaseActivity method and we can use onActivityResult
+    }
+
+    override fun onActivityResult(requestCode: Int, result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                // ToDo : requestCode here
+
+            }
+        }
     }
 
     /**

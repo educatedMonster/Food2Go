@@ -47,8 +47,8 @@
                     tools:listitem="@layout/list_item_search_inventory" />
 
                 <include
-                    android:id="@+id/layout_empty_task"
-                    layout="@layout/layout_empty_order"
+                    android:id="@+id/layout_empty"
+                    layout="@layout/layout_empty"
                     android:visibility="@{model.productInventoryList.notEmptyData ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

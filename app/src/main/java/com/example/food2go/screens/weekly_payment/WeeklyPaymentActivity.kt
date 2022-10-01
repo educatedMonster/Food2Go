@@ -1,9 +1,11 @@
 package com.example.food2go.screens.weekly_payment
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
+import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.ActionBar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -15,8 +17,6 @@ import com.example.food2go.constants.PusherConst
 import com.example.food2go.constants.UserConst
 import com.example.food2go.databinding.ActivityWeeklyPaymentBinding
 import com.example.food2go.databinding.DialogWeeklyPaymentUrlBinding
-import com.example.food2go.databinding.LayoutCustomCollapsibleToolbarBinding
-import com.example.food2go.databinding.LayoutCustomToolbarShopBinding
 import com.example.food2go.domain.WeeklyPaymentDomain
 import com.example.food2go.screens.BaseActivity
 import com.example.food2go.screens.weekly_payment.adapter.WeeklyPaymentAdapter
@@ -32,6 +32,7 @@ import com.trackerteer.taskmanagement.utilities.extensions.visible
 import kotlinx.android.synthetic.main.fragment_pending.view.*
 import timber.log.Timber
 import java.io.File
+import java.util.ArrayList
 
 class WeeklyPaymentActivity : BaseActivity() {
     override val hideStatusBar: Boolean get() = false
@@ -74,6 +75,19 @@ class WeeklyPaymentActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun shouldRegisterForActivityResult(): Boolean {
+        return true // this will override the BaseActivity method and we can use onActivityResult
+    }
+
+    override fun onActivityResult(requestCode: Int, result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                // ToDo : requestCode here
+
+            }
+        }
+    }
+
     private fun initExtras() {
         val merchantId = intent.getLongExtra(PusherConst.MERCHANT_ID, 0L)
         weeklyPaymentViewModel.getWeeklyPayment(merchantId)
@@ -93,7 +107,7 @@ class WeeklyPaymentActivity : BaseActivity() {
             mActionBar!!.setDisplayHomeAsUpEnabled(true)
             mActionBar!!.setDisplayShowHomeEnabled(true)
             mActionBar!!.setDisplayUseLogoEnabled(true)
-            binding.toolbar.title = getString(R.string.title_activity_weekly_payment)
+            mActionBar!!.title = getString(R.string.title_activity_weekly_payment)
         } else {
             throw IllegalArgumentException(getString(R.string.error_message_illegal_argument_exception))
         }
@@ -170,6 +184,7 @@ class WeeklyPaymentActivity : BaseActivity() {
         })
 
         binding.swipeRefreshLayout.setOnRefreshListener {
+            mAdapter!!.clearAdapter()
             initRequest()
         }
     }
@@ -179,16 +194,15 @@ class WeeklyPaymentActivity : BaseActivity() {
             weeklyPayment.observe(this@WeeklyPaymentActivity) {
                 when {
                     it.result.isNotEmpty() -> {
-                        binding.layoutEmptyTask.root.gone()
-                        it.result.forEach { model ->
-                            mAdapter!!.addData(model)
-                        }
+                        binding.layoutEmpty.root.gone()
+                        mAdapter!!.addData(it.result as ArrayList<WeeklyPaymentDomain>)
+
                     }
-                    mAdapter!!.itemCount == 0 -> {
-                        binding.layoutEmptyTask.root.visible()
+                    mAdapter!!.itemCount == 0 || it.result.isEmpty() -> {
+                        binding.layoutEmpty.root.visible()
                     }
                     else -> {
-                        binding.layoutEmptyTask.root.gone()
+                        binding.layoutEmpty.root.gone()
                     }
                 }
             }

@@ -2,18 +2,13 @@
 <resources>
 
     <color name="colorPrimary">@color/color_palette_main</color>
-    <color name="colorPrimaryVariant">@color/color_palette_white</color>
+    <color name="colorPrimaryVariant">@color/color_palette_accent</color>
     <color name="colorAccent">@color/color_palette_accent</color>
     <color name="colorBlack">@color/color_palette_black</color>
 
-
-<!--    <color name="colorPrimary">#F38C8C</color>-->
-<!--    <color name="colorPrimaryVariant">#FF5757</color>-->
-<!--    <color name="colorAccent">#33405f</color>-->
-
     <color name="colorSecondary">#BDF14C</color>
-    <color name="colorSecondaryVariant">#21C1D6</color>
-    <color name="colorOnSecondary">#000</color>
+    <color name="colorSecondaryVariant">@color/color_palette_accent</color>
+    <color name="colorOnSecondary">@color/color_palette_black</color>
 
     <!-- Global Colors - this can be use all themes -->
     <color name="color_white">#FFF</color>
@@ -26,14 +21,18 @@
     <color name="background_color_normal">@color/color_palette_main</color>
     <color name="background_color_pressed">@color/color_palette_main</color>
     <color name="background_color_delete">#FF0000</color>
+    <color name="color_url_link">#002AFF</color>
+    <color name="color_blue">#4971AC</color>
     <color name="red_icon">#F82D2D</color>
 
 
-    <!-- My color palette-->
+    <!-- Theme -->
     <color name="color_palette_main">#ffcc00</color>
     <color name="color_palette_accent">#ff6633</color>
-    <color name="color_palette_white">#E7DDF0</color>
+    <color name="color_palette_white">#ffd9c9</color>
     <color name="color_palette_black">#505050</color>
+    <color name="light_header_lemonade_main">#FFE9DE</color>
+    <color name="android_background_color">#fafafa</color>
 
     <!-- My order color palette-->
     <color name="color_palette_completed">#BDF14C</color>

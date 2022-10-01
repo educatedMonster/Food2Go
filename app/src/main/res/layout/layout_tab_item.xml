@@ -16,14 +16,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/colorAccent" />
+            app:tint="@color/color_palette_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_view_tab_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/color_palette_black"
             android:textSize="@dimen/text_size_normal_small_light"
             android:fontFamily="@font/aileron_regular"
             app:layout_constraintEnd_toEndOf="@+id/text_view_tab_item_img"

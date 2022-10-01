@@ -25,9 +25,9 @@
         <item name="themeColorPrimary">@color/colorPrimary</item>
         <item name="themeColorPrimaryDark">@color/colorPrimaryVariant</item>
         <item name="themeColorAccent">@color/colorAccent</item>
-        <item name="themeColorLightPrimary">@color/color_white</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="themeColorLightPrimary">@color/color_palette_white</item>
+        <item name="themeColorLightOpacityPrimary">@color/color_palette_black</item>
+        <item name="themeColorLightHeaderPrimary">@color/light_header_lemonade_main</item>
     </style>
 
     <style name="UploadImageButtonStyle">
@@ -71,7 +71,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:background">@drawable/layer_button_dialog_stroke</item>
+        <item name="android:background">@drawable/layer_button_global_fill</item>
         <item name="android:textColor">@color/color_palette_black</item>
         <item name="android:layout_marginStart">@dimen/margin_small</item>
         <item name="android:layout_marginEnd">@dimen/margin_small</item>
@@ -95,6 +95,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">@color/color_palette_black</item>
         <item name="android:layout_marginTop">@dimen/margin_min</item>
         <item name="android:background">@drawable/bg_white_bordered</item>
     </style>
@@ -120,20 +121,18 @@
         <item name="android:windowIsFloating">false</item>
     </style>
 
-    <style name="EditProfileSelectInput">
+    <style name="AutoCompleteInput">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/tag_rectangle_round_5</item>
-        <item name="android:paddingStart">@dimen/margin_small</item>
-        <item name="android:paddingEnd">@dimen/margin_small</item>
-        <item name="android:paddingBottom">0dp</item>
-        <item name="android:paddingTop">0dp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:background">@drawable/layer_button_global_sub</item>
+        <item name="android:padding">@dimen/margin_small</item>
+        <item name="android:layout_margin">@dimen/margin_small</item>
+        <item name="android:textColor">@color/color_palette_black</item>
         <item name="android:textColorHint">@color/gray</item>
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:minHeight">34dp</item>
         <item name="android:maxHeight">34dp</item>
-        <item name="android:drawableTint" tools:targetApi="m">@color/colorPrimary</item>
+        <item name="android:drawableTint" tools:targetApi="m">@color/colorBlack</item>
         <item name="android:drawableEnd">@drawable/ic_dropdown_arrow</item>
     </style>
 
@@ -151,6 +150,36 @@
     <style name="CustomProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/custom_progress_bar</item>
         <item name="android:minWidth">200dp</item>
+    </style>
+
+    <style name="ExpandedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:fontFamily">@font/aileron_semibold</item>
+    </style>
+
+    <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@color/color_palette_black</item>
+        <item name="android:fontFamily">@font/aileron_semibold</item>
+    </style>
+
+    <!--  Date Picker Styles   -->
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/color_blue</item>           <!-- Header Background -->
+        <item name="android:colorAccent">@color/color_blue</item>
+        <item name="android:textColor">@color/color_blue</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/DialogButtonStyled</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DialogButtonStyled</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/DialogButtonStyled</item>
+        <item name="android:colorControlActivated">@color/color_url_link</item>        <!--selected day-->
+        <!--        <item name="android:textColorPrimary">#89B5F6</item> &lt;!&ndash;days of the month&ndash;&gt;-->
+        <!--        <item name="android:textColorSecondary">#0E3E85</item>    &lt;!&ndash;days of the week&ndash;&gt;-->
+    </style>
+
+    <!-- Date picker ok/cancel button styles    -->
+    <style name="DialogButtonStyled" parent="Theme.MaterialComponents.Light">
+        <item name="android:textColor">@color/color_blue</item>
+        <item name="android:background">@color/transparent_white_percent_0</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
     </style>
 
 </resources>

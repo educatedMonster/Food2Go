@@ -227,16 +227,22 @@ class FragmentProduct : Fragment() {
                 initRequest()
             }
 
-            isUploaded.observe(viewLifecycleOwner) {
-                if (it) {
-                    showToast("Product has been added to the list")
-                    hideKeyboard(requireActivity())
+            isState.observe(viewLifecycleOwner) {
+                showToast("Product has been added to the list")
+                hideKeyboard(requireActivity())
+                if (it.isAdd) {
                     (getDialog(
                         requireActivity(),
                         DialogTag.DIALOG_FORM_INITIAL_PRODUCT
                     ) as ProductAddDialog?)?.dismiss()
-                    initRequest()
+                } else {
+                    (getDialog(
+                        requireActivity(),
+                        DialogTag.DIALOG_FORM_EDIT_PRODUCT
+                    ) as ProductEditDialog?)?.dismiss()
                 }
+                initRequest()
+
             }
 
             isAddedInventory.observe(viewLifecycleOwner) {

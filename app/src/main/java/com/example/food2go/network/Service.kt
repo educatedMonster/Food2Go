@@ -2,7 +2,6 @@ package com.example.food2go.network
 
 import androidx.databinding.library.BuildConfig
 import com.example.food2go.constants.ServerConst.API_SERVER_URL
-import com.example.food2go.domain.ListNetworktest
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -101,7 +100,7 @@ interface AppService {
     fun onAddProductListAsync(
         @Header("Authorization") bearer: String,
         @PartMap params: HashMap<String, RequestBody>,
-    ): Deferred<ListNetworktest>
+    ): Deferred<ListNetworkTest>
 
     @Multipart
     @POST("product/upload/{id}")
@@ -182,12 +181,6 @@ interface AppService {
         @Path("weeklypayment_id") weeklypayment_id: Long,
         @Part params: MultipartBody.Part,
     ): Deferred<Any>
-
-
-    //Todo
-//    /reports/salesReport
-//    /reports/eodReport
-
     //endregion
 
     // region pusher
@@ -197,6 +190,22 @@ interface AppService {
         @Header("Authorization") bearer: String,
         @PartMap params: HashMap<String, RequestBody>,
     ): Deferred<Any>
+    //endregion
+
+    // region report
+    @Multipart
+    @POST("reports/salesReport")
+    fun onSalesReportAsync(
+        @Header("Authorization") bearer: String,
+        @PartMap params: HashMap<String, RequestBody>,
+    ): Deferred<ReportBaseNetwork>
+
+    @Multipart
+    @POST("reports/eodReport")
+    fun onEODReportAsync(
+        @Header("Authorization") bearer: String,
+        @PartMap params: HashMap<String, RequestBody>,
+    ): Deferred<ReportBaseNetwork>
     //endregion
 
 }

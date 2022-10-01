@@ -1,10 +1,12 @@
 package com.example.food2go.screens.product_and_inventory
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.ActionBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
@@ -15,7 +17,7 @@ import com.example.food2go.R
 import com.example.food2go.constants.DialogTag
 import com.example.food2go.constants.UserConst
 import com.example.food2go.databinding.ActivityProductAndInventoryBinding
-import com.example.food2go.databinding.LayoutCustomToolbarInventoryBinding
+import com.example.food2go.databinding.LayoutCustomToolbarSearchBinding
 import com.example.food2go.screens.BaseActivity
 import com.example.food2go.screens.product_and_inventory.inventory.FragmentInventory
 import com.example.food2go.screens.product_and_inventory.inventory.InventoryViewModel
@@ -34,7 +36,7 @@ import timber.log.Timber
 class ProductAndInventoryActivity : BaseActivity() {
 
     private lateinit var binding: ActivityProductAndInventoryBinding
-    private lateinit var toolbarAddBinding: LayoutCustomToolbarInventoryBinding
+    private lateinit var toolbarAddBinding: LayoutCustomToolbarSearchBinding
 
     // TODO: Use the ViewModel
     private val inventoryViewModel: InventoryViewModel by lazy {
@@ -64,6 +66,19 @@ class ProductAndInventoryActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         initRequest()
+    }
+
+    override fun shouldRegisterForActivityResult(): Boolean {
+        return true // this will override the BaseActivity method and we can use onActivityResult
+    }
+
+    override fun onActivityResult(requestCode: Int, result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                // ToDo : requestCode here
+
+            }
+        }
     }
 
     /**
@@ -109,13 +124,12 @@ class ProductAndInventoryActivity : BaseActivity() {
             mActionBar!!.setDisplayUseLogoEnabled(true)
             toolbarAddBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(this),
-                R.layout.layout_custom_toolbar_inventory,
+                R.layout.layout_custom_toolbar_search,
                 null,
                 false
             )
             toolbarAddBinding.textViewTitle.text = getString(R.string.title_nav_drawer_inventory)
             toolbarAddBinding.lifecycleOwner = this
-            toolbarAddBinding.inventoryViewModel = inventoryViewModel
             mActionBar!!.customView = toolbarAddBinding.root
         } else {
             throw IllegalArgumentException(getString(R.string.error_message_illegal_argument_exception))

@@ -16,14 +16,13 @@ import retrofit2.HttpException
 import timber.log.Timber
 
 class EmptyRepository(
-    private val sharedPrefs: SharedPrefs,
+    sharedPrefs: SharedPrefs,
 ) {
     private val token = sharedPrefs.getString(UserConst.TOKEN)!!
     private val userid = sharedPrefs.getString(UserConst.USER_ID)!!
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
-
 
     suspend fun onTriggerPusher(data: Any, event: String? = PUSHER_ORDER_PIPELINE_EVENT, channelName: String? = PUSHER_MY_CHANNEL ) {
         withContext(Dispatchers.IO) {

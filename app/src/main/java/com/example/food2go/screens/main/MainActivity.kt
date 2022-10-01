@@ -1,10 +1,12 @@
 package com.example.food2go.screens.main
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.MenuItem
+import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -25,6 +27,7 @@ import com.example.food2go.screens.main.fragment.myshop.MyShopFragment
 import com.example.food2go.screens.main.fragment.order.OrderFragment
 import com.example.food2go.screens.product_and_inventory.ProductAndInventoryActivity
 import com.example.food2go.screens.profile.ProfileSettingActivity
+import com.example.food2go.screens.report.ReportActivity
 import com.example.food2go.screens.test_order.test_order.TestOrderFragment
 import com.example.food2go.screens.weekly_payment.WeeklyPaymentActivity
 import com.example.food2go.utilities.dialog.ConfigureDialog
@@ -90,6 +93,19 @@ class MainActivity : BaseActivity(),
     override fun onResume() {
         super.onResume()
         initRequest()
+    }
+
+    override fun shouldRegisterForActivityResult(): Boolean {
+        return true // this will override the BaseActivity method and we can use onActivityResult
+    }
+
+    override fun onActivityResult(requestCode: Int, result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                // ToDo : requestCode here
+
+            }
+        }
     }
 
     /**
@@ -260,16 +276,20 @@ class MainActivity : BaseActivity(),
             /**
              * Drawer Navigation View
              */
-            R.id.nav_weekly_payment -> {
-                proceedToActivity(WeeklyPaymentActivity::class.java)
-                setFocus(false)
-            }
             R.id.nav_my_shop -> {
                 proceedToActivity(ProfileSettingActivity::class.java)
                 setFocus(false)
             }
             R.id.nav_inventory -> {
                 proceedToActivity(ProductAndInventoryActivity::class.java)
+                setFocus(false)
+            }
+            R.id.nav_weekly_payment -> {
+                proceedToActivity(WeeklyPaymentActivity::class.java)
+                setFocus(false)
+            }
+            R.id.nav_report -> {
+                proceedToActivity(ReportActivity::class.java)
                 setFocus(false)
             }
             R.id.nav_logout -> {

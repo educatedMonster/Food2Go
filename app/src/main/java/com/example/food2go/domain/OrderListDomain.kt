@@ -50,7 +50,7 @@ data class OrderDomain (
     private val netTotal = (total?.toDouble() ?: 0.0)
     private val netTotal2 = netTotal + deliveryCharge.toDouble() + convenienceFee.toDouble()
     val netTotalString = netTotal2.toString()
-    val showButton = !proofURL.isNullOrEmpty()
+    val showButton = !proofURL.isNullOrEmpty() || modeOfPayment.matches("gcash".toRegex())
     val showNote = !note.isNullOrEmpty()
     val isPending = status.matches(OrderConst.ORDER_PENDING.toRegex())
     val isPrepareToDelivery = status.matches(OrderConst.ORDER_PREPARING.toRegex())

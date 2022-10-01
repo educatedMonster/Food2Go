@@ -89,9 +89,9 @@ data class UserShopDomain(
 fun timeAMPM(time: String): String{
     var displayTime = ""
     try {
-        val sdf = SimpleDateFormat("H:mm")
+        val sdf = SimpleDateFormat("H:mm a")
         val dateObj: Date = sdf.parse(time)
-        displayTime = SimpleDateFormat("K:mm a").format(dateObj)
+        displayTime = SimpleDateFormat("H:mm a").format(dateObj)
     } catch (e: ParseException) {
         e.printStackTrace()
     }

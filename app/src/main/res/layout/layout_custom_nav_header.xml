@@ -70,6 +70,19 @@
                 android:textSize="@dimen/text_size_normal_small_light"
                 tools:text="@string/title_layout_nav_header_email" />
 
+            <TextView
+                android:id="@+id/uid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/aileron_regular"
+                android:gravity="end"
+                android:maxLines="1"
+                android:text="@{mainViewModel.profile.uidString}"
+                android:textColor="@color/colorOnSecondary"
+                android:textSize="@dimen/text_size_normal_small_light"
+                tools:text="UID-#" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
